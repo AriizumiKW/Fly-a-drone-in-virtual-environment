@@ -60,10 +60,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Main\Script\ControlUnit.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonBack.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonExit.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonSetting.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonStart.cs" />
+    <Compile Include="Assets\Main\Script\InterfaceManager\ChoiceboxSky.cs" />
+    <Compile Include="Assets\Main\Script\InterfaceManager\SoundLevelSetting.cs" />
+    <Compile Include="Assets\Main\Script\StableCamera.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\CameraTeleportEffect.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\ColliderProxy.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\DroneDistanceLimit.cs" />
@@ -329,6 +333,9 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="PA_DronePack">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Scripts/cmpl/PA_DronePack.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
@@ -337,9 +344,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="PA_DronePack">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Scripts/cmpl/PA_DronePack.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

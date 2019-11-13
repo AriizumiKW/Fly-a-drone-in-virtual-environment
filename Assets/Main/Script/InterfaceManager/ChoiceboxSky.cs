@@ -13,10 +13,12 @@ public class ChoiceboxSky : MonoBehaviour
     public Button[] mainMenuButtons = new Button[4]; // button on main menu
     public Button mm; // start with manual mode
     public Button sd; // start with self-driving mode
-    public GameObject canvas; // the canvas
+    public Button backBtn; // button back
+    public GameObject mainMenu; // the main menu
     private GameObject camera; // the main camera
     public InputField massField; // inputfield for mass
     public InputField nameField; // inputfield for name
+    public InterfaceManager globalInterfaceManager; // the master UI controller
   
     public Material[] skyboxs = new Material[6];
     private const int NORMAL_SKY = 0;
@@ -146,6 +148,11 @@ public class ChoiceboxSky : MonoBehaviour
         }
         hideMainMenu();
         camera.GetComponent<Skybox>().material = skyboxs[skyNum];
+        globalInterfaceManager.setLock(false);
+        globalInterfaceManager.setDroneName(name);
+        globalInterfaceManager.setMass(mass);
+        globalInterfaceManager.startGameWithMode(InterfaceManager.MANUAL_MODE);
+        // initialize a simulation job
 
         Debug.Log("mass: " + mass);
         Debug.Log("name: " + name);
@@ -175,6 +182,10 @@ public class ChoiceboxSky : MonoBehaviour
         }
         hideMainMenu();
         camera.GetComponent<Skybox>().material = skyboxs[skyNum];
+        globalInterfaceManager.setLock(false);
+        globalInterfaceManager.setDroneName(name);
+        globalInterfaceManager.setMass(mass);
+        globalInterfaceManager.startGameWithMode(InterfaceManager.SELF_DRIVING_MODE);
 
         Debug.Log("mass: " + mass);
         Debug.Log("name: " + name);
@@ -195,7 +206,8 @@ public class ChoiceboxSky : MonoBehaviour
             btn.gameObject.SetActive(true);
         }
         this.gameObject.SetActive(false);
-        canvas.SetActive(false);
+        backBtn.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
     }
 
     public void setSoundLevel(float newSoundLevel)

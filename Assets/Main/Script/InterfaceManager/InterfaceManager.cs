@@ -139,4 +139,9 @@ public class InterfaceManager : MonoBehaviour
         soundLevel = soundLevelSlider.value;
         soundLevelText.text = soundLevel.ToString();
     }
+
+    public void updateRotationText(float x, float y, float z)
+    {
+        rotationText.text = "Rotation: " + "(" + x.ToString() + " ," + y.ToString() + " ," + z.ToString() + ").";
+    }
 }

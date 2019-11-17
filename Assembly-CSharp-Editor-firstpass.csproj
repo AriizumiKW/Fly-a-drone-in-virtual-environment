@@ -74,18 +74,6 @@
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -95,11 +83,17 @@
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.CollabProxy.Editor">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.multiplayer-weaver.Editor">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
@@ -121,6 +115,12 @@
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.DataPrivacy">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.XR.LegacyInputHelpers">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
@@ -340,6 +340,12 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="DroneControllerPlugin">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="DroneControllerEditorPlugin">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Editor/DroneControllerEditorPlugin.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

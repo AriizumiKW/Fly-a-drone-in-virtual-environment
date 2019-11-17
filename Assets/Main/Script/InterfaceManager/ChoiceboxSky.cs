@@ -154,10 +154,12 @@ public class ChoiceboxSky : MonoBehaviour
         globalInterfaceManager.startGameWithMode(InterfaceManager.MANUAL_MODE);
         // initialize a simulation job
 
+        /*
         Debug.Log("mass: " + mass);
         Debug.Log("name: " + name);
         Debug.Log("mode: manual mode");
         Debug.Log("sound: " + soundLevel + " %");
+        */
     }
 
     void OnClickSelfDrivingModeButton()
@@ -187,10 +189,12 @@ public class ChoiceboxSky : MonoBehaviour
         globalInterfaceManager.setMass(mass);
         globalInterfaceManager.startGameWithMode(InterfaceManager.SELF_DRIVING_MODE);
 
+        /*
         Debug.Log("mass: " + mass);
         Debug.Log("name: " + name);
         Debug.Log("mode: self-driving mode");
         Debug.Log("sound: " + soundLevel + " %");
+        */
     }
     
     void hideMainMenu()

@@ -15,7 +15,7 @@ public class ChoiceboxSky : MonoBehaviour
     public Button sd; // start with self-driving mode
     public Button backBtn; // button back
     public GameObject mainMenu; // the main menu
-    private GameObject camera; // the main camera
+    private GameObject mainCamera; // the main camera
     public InputField massField; // inputfield for mass
     public InputField nameField; // inputfield for name
     public InterfaceManager globalInterfaceManager; // the master UI controller
@@ -41,7 +41,7 @@ public class ChoiceboxSky : MonoBehaviour
             switch (i)
             {
                 case NORMAL_SKY:
-                    entry.callback.AddListener((eventData) => {OnClick_NORMAL(); });
+                    entry.callback.AddListener((eventData) => { OnClick_NORMAL(); });
                     break;
                 case CLOUDY_SKY:
                     entry.callback.AddListener((eventData) => { OnClick_CLOUDY(); });
@@ -66,7 +66,7 @@ public class ChoiceboxSky : MonoBehaviour
         }
         mm.onClick.AddListener(OnClickManualModeButton);
         sd.onClick.AddListener(OnClickSelfDrivingModeButton);
-        camera = GameObject.FindGameObjectWithTag("MainCamera");
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 
         currentChoosedSky = NORMAL_SKY; // by default, it is normal sky.
         soundLevel = 0.5f;
@@ -147,7 +147,7 @@ public class ChoiceboxSky : MonoBehaviour
             return;
         }
         hideMainMenu();
-        camera.GetComponent<Skybox>().material = skyboxs[skyNum];
+        mainCamera.GetComponent<Skybox>().material = skyboxs[skyNum];
         globalInterfaceManager.setLock(false);
         globalInterfaceManager.setDroneName(name);
         globalInterfaceManager.setMass(mass);
@@ -183,7 +183,7 @@ public class ChoiceboxSky : MonoBehaviour
             return;
         }
         hideMainMenu();
-        camera.GetComponent<Skybox>().material = skyboxs[skyNum];
+        mainCamera.GetComponent<Skybox>().material = skyboxs[skyNum];
         globalInterfaceManager.setLock(false);
         globalInterfaceManager.setDroneName(name);
         globalInterfaceManager.setMass(mass);

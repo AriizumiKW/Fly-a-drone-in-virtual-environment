@@ -13,6 +13,7 @@ public class InterfaceManager : MonoBehaviour
     public GameObject escMenu; // gameobject: ESCMenu
     public GameObject[] soundSetting = new GameObject[3]; // Text-soundLevel, Text-sound, Slider-sound
     public Slider soundLevelSlider;
+    public PowerfulEngine engine; // PowerfulEngine of GameObject "Drone"
 
     // UIText in debug interface
     public Text droneNameText;
@@ -119,6 +120,8 @@ public class InterfaceManager : MonoBehaviour
     public void setMass(float mass)
     {
         this.mass = mass;
+        engine.resetDrone(mass);
+
         massText.text = "Mass: " + mass.ToString();
     }
 

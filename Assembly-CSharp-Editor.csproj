@@ -319,6 +319,12 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="DroneControllerEditorPlugin">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Editor/DroneControllerEditorPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="DroneControllerPlugin">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="PA_DronePackEditor">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Editor/cmpl/PA_DronePackEditor.dll</HintPath>
     </Reference>
@@ -339,12 +345,6 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="DroneControllerPlugin">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
-    </Reference>
-    <Reference Include="DroneControllerEditorPlugin">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Editor/DroneControllerEditorPlugin.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

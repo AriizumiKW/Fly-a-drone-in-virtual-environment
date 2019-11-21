@@ -48,28 +48,27 @@ public class PowerfulEngine : MonoBehaviour
         // manual mode. This function invoked once pre frame
         if (Input.GetKey(KeyCode.W))
         {
-            float radian = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(0, 0, 1) * forceMag * radian);
-            //flyPose.setRotationXAxis(radian);
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(0, 0, 1) * forceMag * cos);
+            flyPose.setRotationXAxis(cos);
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            float radian = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(0, 0, -1) * forceMag * radian);
-            //flyPose.setRotationXAxis(-radian);
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(0, 0, -1) * forceMag * cos);
+            flyPose.setRotationXAxis(-cos);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            float radian = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(-1, 0, 0) * forceMag * radian);
-            //flyPose.setRotationZAxis(radian);
-
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(-1, 0, 0) * forceMag * cos);
+            flyPose.setRotationZAxis(cos);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            float radian = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(1, 0, 0) * forceMag * radian);
-            //flyPose.setRotationZAxis(-radian);
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(1, 0, 0) * forceMag * cos);
+            flyPose.setRotationZAxis(-cos);
         }
         if (Input.GetKey(KeyCode.Space))
         {

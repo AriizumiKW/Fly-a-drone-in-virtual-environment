@@ -45,8 +45,16 @@ public class ViewController : MonoBehaviour
             {
                 scrollView();
                 changeRotation();
+                //stableCameraInTP();!!!!!!!!!
             }
         }
+    }
+
+    private Vector3 ZERO_V3 = new Vector3(0, 0, 0);
+    void stableCameraInTP()
+    {
+        // stabilize rotation
+        transform.eulerAngles = ZERO_V3;
     }
 
     void changeToFP()

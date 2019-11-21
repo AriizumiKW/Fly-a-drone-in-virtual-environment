@@ -20,7 +20,8 @@ public class InterfaceManager : MonoBehaviour
     public Text modeText;
     public Text massText;
     public Text possitionText;
-    public Text speedAccelerationText;
+    public Text speedText;
+    public Text accelerationText;
     public Text rotationText;
     public Text gameLockText;
     public Text soundLevelText;
@@ -146,5 +147,13 @@ public class InterfaceManager : MonoBehaviour
     public void updateRotationText(float x, float y, float z)
     {
         rotationText.text = "Rotation: " + "(" + x.ToString() + " ," + y.ToString() + " ," + z.ToString() + ").";
+    }
+
+    public void updateVelocityAcceleration(Vector3 v, Vector3 a)
+    {
+        string vText = "Velocity: " + "(" + v.x.ToString("0.00") + ", " + v.y.ToString("0.00") + ", " + v.z.ToString("0.00") + ")";
+        string aText = "Acceleration: " + "(" + a.x.ToString("0.00") + ", " + a.y.ToString("0.00") + ", " + a.z.ToString("0.00") + ")";
+        speedText.text = vText;
+        accelerationText.text = aText;
     }
 }

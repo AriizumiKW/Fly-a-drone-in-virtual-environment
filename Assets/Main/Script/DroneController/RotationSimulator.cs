@@ -16,45 +16,53 @@ public class RotationSimulator : MonoBehaviour
     {
         engine = this.GetComponent<PowerfulEngine>();
         currentRotation = transform.eulerAngles;
-        targetRotation = new Vector3(0, 0, 21);
+        //targetRotation = new Vector3(0, 0, 21);
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
         // make rotation more smoothly
-        
-        currentRotation = transform.eulerAngles;
-        if(currentRotation.x < targetRotation.x)
+        if (uiManager.getLock())
         {
-            if(targetRotation.x - currentRotation.x > 5)
-            {
-                transform.eulerAngles = currentRotation + new Vector3(0.2f, 0, 0);
-            }
-            
+            return;
         }
-        else if (currentRotation.x > targetRotation.x)
+
+        if(targetRotation.x < 0)
         {
-            if (currentRotation.x - targetRotation.x > 5)
+            if(Mathf.Abs(targetRotation.x - currentRotation.x) > 3)
             {
-                transform.eulerAngles = currentRotation - new Vector3(0.2f, 0, 0);
+                currentRotation = currentRotation - new Vector3(1, 0, 0);
+                transform.eulerAngles = currentRotation;
             }
         }
-        if(currentRotation.z < targetRotation.z)
+        else
         {
-            if (targetRotation.z - currentRotation.z > 5)
+            if(Mathf.Abs(targetRotation.x - currentRotation.x) > 3)
             {
-                transform.eulerAngles = currentRotation + new Vector3(0, 0, 0.2f);
+                currentRotation = currentRotation + new Vector3(1, 0, 0);
+                transform.eulerAngles = currentRotation;
             }
         }
-        else if (currentRotation.z > targetRotation.z)
+
+        if (targetRotation.z < 0)
         {
-            if (currentRotation.z - targetRotation.z > 5)
+            if (Mathf.Abs(targetRotation.z - currentRotation.z) > 3)
             {
-                transform.eulerAngles = currentRotation - new Vector3(0, 0, 0.2f);
+                currentRotation = currentRotation - new Vector3(0, 0, 1);
+                transform.eulerAngles = currentRotation;
             }
         }
-        Debug.Log(currentRotation+"::"+targetRotation);
+        else
+        {
+            if (Mathf.Abs(targetRotation.z - currentRotation.z) > 3)
+            {
+                currentRotation = currentRotation + new Vector3(0, 0, 1);
+                transform.eulerAngles = currentRotation;
+            }
+        }
+
+        uiManager.updateRotationText(currentRotation.x,currentRotation.y,currentRotation.z);
         
         //transform.eulerAngles = targetRotation;
     }
@@ -62,12 +70,30 @@ public class RotationSimulator : MonoBehaviour
     public void setRotationXAxis(float radian)
     {
         float angle = radian * 180 / Mathf.PI;
+        
+        if(angle >= 23)
+        {
+            angle = 23;
+        }
+        else if(angle < -23)
+        {
+            angle = -23;
+        }
         targetRotation.x = angle;
     }
 
     public void setRotationZAxis(float radian)
     {
         float angle = radian * 180 / Mathf.PI;
+
+        if(angle >= 23)
+        {
+            angle = 23;
+        }
+        else if(angle <= -23)
+        {
+            angle = -23;
+        }
         targetRotation.z = angle;
     }
     /*

@@ -76,6 +76,9 @@
     <Compile Include="Assets\Main\Script\InterfaceManager\InterfaceManager.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\SoundLevelSetting.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\SpeedDetector.cs" />
+    <Compile Include="Assets\Main\Script\ObstacleMaker\MazeMaker.cs" />
+    <Compile Include="Assets\Main\Script\ObstacleMaker\Wall.cs" />
+    <Compile Include="Assets\Main\Script\UnitTester.cs" />
     <Compile Include="Assets\Main\Script\ViewController\ViewController.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\CameraTeleportEffect.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\ColliderProxy.cs" />

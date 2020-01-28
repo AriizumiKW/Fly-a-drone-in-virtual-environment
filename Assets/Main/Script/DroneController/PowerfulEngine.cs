@@ -15,7 +15,7 @@ public class PowerfulEngine : MonoBehaviour
     private const int LEFT = 2;
     private const int RIGHT = 3;
 
-    private float forceMag; // magnitude of force
+    private float propellerAcce; // accelaration of propeller
     private float mass;
 
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class PowerfulEngine : MonoBehaviour
     {
         physics = this.GetComponent<Rigidbody>();
         flyPose = this.GetComponent<RotationSimulator>();
-        forceMag = 15.0f; // 测试用，forceMag can be modified by users
+        propellerAcce = 5.0f; // 测试用，forceMag can be modified by users
     }
 
     // FixedUpdate is called once per frame
@@ -34,10 +34,12 @@ public class PowerfulEngine : MonoBehaviour
             // if the game is locked, the drone state will never change
             if(uiManager.getGameMode() == InterfaceManager.MANUAL_MODE)
             {
+                // manual mode, the drone can be controlled by user
                 waspFly_PerFrame();
             }
             else if(uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
             {
+                // in self driving mode, the drone will be "controlled" ONLY by self-driving features
                 selfDriving_PerFrame();
             }
         }
@@ -49,27 +51,40 @@ public class PowerfulEngine : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(0, 0, 1) * forceMag * cos);
+            physics.AddForce(new Vector3(0, 0, 1) * propellerAcce * mass * cos);
             flyPose.setRotationXAxis(cos);
         }
         else if (Input.GetKey(KeyCode.S))
         {
             float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(0, 0, -1) * forceMag * cos);
+            physics.AddForce(new Vector3(0, 0, -1) * propellerAcce * mass * cos);
             flyPose.setRotationXAxis(-cos);
         }
+        else
+        {
+            // recover rotation
+            flyPose.setRotationXAxis(0);
+        }
+
         if (Input.GetKey(KeyCode.A))
         {
             float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(-1, 0, 0) * forceMag * cos);
+            physics.AddForce(new Vector3(-1, 0, 0) * propellerAcce * mass * cos);
             flyPose.setRotationZAxis(cos);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(1, 0, 0) * forceMag * cos);
+            physics.AddForce(new Vector3(1, 0, 0) * propellerAcce * mass * cos);
             flyPose.setRotationZAxis(-cos);
         }
+        else
+        {
+            // recover rotation
+            flyPose.setRotationZAxis(0);
+        }
+        
+
         if (Input.GetKey(KeyCode.Space))
         {
             //physics.AddForce(new Vector3(0,1,0) * mass * 12.0f);
@@ -84,7 +99,7 @@ public class PowerfulEngine : MonoBehaviour
     private float calculateTiltedAngle()
     {
         // simulate tilted and return the value of angle
-        float theta = Mathf.Atan((float)(mass * 9.8 / forceMag));
+        float theta = Mathf.Atan((float)( 9.8 / propellerAcce)); // accelaration of gravity is 9.8
         //Debug.Log(theta*180/Mathf.PI);
         return theta;
     }
@@ -95,14 +110,14 @@ public class PowerfulEngine : MonoBehaviour
         this.mass = mass;
     }
 
-    public void setForceMagnitude(float force)
+    public void setAccelaration(float acce)
     {
-        this.forceMag = force;
+        this.propellerAcce = acce;
     }
 
-    public float getForceMagnitude()
+    public float getAccelaration()
     {
-        return this.forceMag;
+        return this.propellerAcce;
     }
     
 }

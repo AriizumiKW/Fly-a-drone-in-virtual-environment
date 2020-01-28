@@ -23,23 +23,43 @@ public class RotationSimulator : MonoBehaviour
     private void FixedUpdate()
     {
         // make rotation more smoothly
+
         if (uiManager.getLock())
         {
+            // if game lock, stop rotate
             return;
         }
 
         if(targetRotation.x < 0)
         {
-            if(Mathf.Abs(targetRotation.x - currentRotation.x) > 3)
+            if(Mathf.Abs(targetRotation.x - currentRotation.x) > 3) // avoid shaking
             {
+                // x-coordinate minus 1 per frame
                 currentRotation = currentRotation - new Vector3(1, 0, 0);
                 transform.eulerAngles = currentRotation;
             }
         }
+        else if(targetRotation.x == 0)
+        {
+            if (Mathf.Abs(targetRotation.x - currentRotation.x) > 1.5)
+            {
+                if(currentRotation.x > 0)
+                {
+                    currentRotation = currentRotation - new Vector3(1, 0, 0);
+                    transform.eulerAngles = currentRotation;
+                }
+                else
+                {
+                    currentRotation = currentRotation + new Vector3(1, 0, 0);
+                    transform.eulerAngles = currentRotation;
+                }
+            }
+        }
         else
         {
-            if(Mathf.Abs(targetRotation.x - currentRotation.x) > 3)
+            if(Mathf.Abs(targetRotation.x - currentRotation.x) > 3) // avoid shaking
             {
+                // x-coordinate plus 1 per frame
                 currentRotation = currentRotation + new Vector3(1, 0, 0);
                 transform.eulerAngles = currentRotation;
             }
@@ -53,6 +73,24 @@ public class RotationSimulator : MonoBehaviour
                 transform.eulerAngles = currentRotation;
             }
         }
+        else if (targetRotation.z == 0)
+        {
+            //Debug.Log(targetRotation.z);
+            if (Mathf.Abs(targetRotation.z - currentRotation.z) > 1.5)
+            {
+                //Debug.Log(currentRotation.z);
+                if (currentRotation.z > 0)
+                {
+                    currentRotation = currentRotation - new Vector3(0, 0, 1);
+                    transform.eulerAngles = currentRotation;
+                }
+                else
+                {
+                    currentRotation = currentRotation + new Vector3(0, 0, 1);
+                    transform.eulerAngles = currentRotation;
+                }
+            }
+        }
         else
         {
             if (Mathf.Abs(targetRotation.z - currentRotation.z) > 3)
@@ -63,7 +101,6 @@ public class RotationSimulator : MonoBehaviour
         }
 
         uiManager.updateRotationText(currentRotation.x,currentRotation.y,currentRotation.z);
-        
         //transform.eulerAngles = targetRotation;
     }
 
@@ -71,6 +108,7 @@ public class RotationSimulator : MonoBehaviour
     {
         float angle = radian * 180 / Mathf.PI;
         
+        // make sure the rotation angle not too big
         if(angle >= 23)
         {
             angle = 23;
@@ -96,6 +134,7 @@ public class RotationSimulator : MonoBehaviour
         }
         targetRotation.z = angle;
     }
+
     /*
     private void updateRotation(int direction, float radian)
     {

@@ -45,18 +45,23 @@ public class ViewController : MonoBehaviour
             {
                 scrollView();
                 changeRotation();
-                //stableCameraInTP();!!!!!!!!!
+                //stableCameraInTP();
             }
         }
     }
-
-    private Vector3 ZERO_V3 = new Vector3(0, 0, 0);
+    /*
     void stableCameraInTP()
     {
         // stabilize rotation
-        transform.eulerAngles = ZERO_V3;
+        
+        float x = transform.localEulerAngles.x;
+        float y = transform.localEulerAngles.y;
+        float z = transform.localEulerAngles.z;
+        transform.eulerAngles = new Vector3(0, 0, 0);
+        
+        Debug.Log(transform.localEulerAngles+":"+transform.eulerAngles);
     }
-
+    */
     void changeToFP()
     {
         // change to first personal perspective

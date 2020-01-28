@@ -62,8 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Main\Script\Abandoned Script\ControlUnit.cs" />
-    <Compile Include="Assets\Main\Script\Abandoned Script\StableCamera.cs" />
+    <Compile Include="Assets\Main\Script\Abandoned Script Backup\ControlUnit.cs" />
+    <Compile Include="Assets\Main\Script\Abandoned Script Backup\StableCamera.cs" />
     <Compile Include="Assets\Main\Script\DroneController\PowerfulEngine.cs" />
     <Compile Include="Assets\Main\Script\DroneController\RotationSimulator.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonBack.cs" />

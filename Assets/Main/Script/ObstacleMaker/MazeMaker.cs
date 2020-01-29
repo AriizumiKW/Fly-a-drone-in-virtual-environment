@@ -31,75 +31,80 @@ public class MazeMaker : MonoBehaviour
         return (rowNum - 1) * 9 + columnNum;
     }
 
-    // to avoid infinite loop
     const int FLAG_NO_CONSTRAINT = 0;
     const int FLAG_BAN_UP = 1;
     const int FLAG_BAN_DOWN = 2;
     const int FLAG_BAN_LEFT = 3;
-    const int FLAG_BAN_RIGHT = 4;
+    const int FLAG_BAN_RIGHT = 4; // to avoid infinite loop
+    const int CONNECT = 1;
+    const int STRONG_CONNECT = 2;
     private Boolean depthFirstSearch(int nodeOneRowNum, int nodeOneColumnNum, int nodeTwoRowNum, int nodeTwoColumnNum, int flag)
     {
-        // DFS algorithm to search a tree, use recursion and dynamic programming
-        // return true if two nodes are connected, else false
-        Debug.Log("Search:" + nodeOneRowNum + ":" + nodeOneColumnNum + "-" + nodeTwoRowNum + ":" + nodeTwoColumnNum +".."+flag);
+        /*
+         * DFS algorithm to search a tree, use recursion and dynamic programming
+         * return true if two nodes are connected, else false 
+         * formula of recursion and how dynamic programming : DFS(node1,node2) = DFS(node1's upward,node2) or DFS(node1's downward,node2) or
+         *   DFS(node1's left,node2) or DFS(node1's right,node2)
+        */
+        //Debug.Log("Search:" + nodeOneRowNum + ":" + nodeOneColumnNum + "-" + nodeTwoRowNum + ":" + nodeTwoColumnNum +".."+flag);
         int nodeOneID = getNodeID(nodeOneRowNum, nodeOneColumnNum);
         int nodeTwoID = getNodeID(nodeTwoRowNum, nodeTwoColumnNum);
-        if(connectMatrix[nodeOneID - 1,nodeTwoID - 1] != 1 && connectMatrix[nodeOneID - 1, nodeTwoID - 1] != 2)
+        if(connectMatrix[nodeOneID - 1,nodeTwoID - 1] != CONNECT && connectMatrix[nodeOneID - 1, nodeTwoID - 1] != STRONG_CONNECT)
         {
             int nodeOneAdjacentNodeID;
             
             if(nodeOneColumnNum != 9 && flag != FLAG_BAN_RIGHT)
             {
-                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum, nodeOneColumnNum + 1);
-                if(connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == 2)
+                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum, nodeOneColumnNum + 1); // moving towards "right"
+                if (connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == STRONG_CONNECT)
                 { // right adjacent node
                     Boolean subResult = depthFirstSearch(nodeOneRowNum, nodeOneColumnNum + 1, nodeTwoRowNum, nodeTwoColumnNum, FLAG_BAN_LEFT);
                     if (subResult)
                     {
-                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = 1; // dynamic programming
-                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = 1;
+                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = CONNECT; // dynamic programming
+                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = CONNECT; // connect matrix should be symmetric
                         return true;
                     }
                 }
             }
             if(nodeOneColumnNum != 1 && flag != FLAG_BAN_LEFT)
             {
-                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum, nodeOneColumnNum - 1);
-                if (connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == 2)
+                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum, nodeOneColumnNum - 1); // moving towards"left"
+                if (connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == STRONG_CONNECT)
                 { // left adjacent node
                     Boolean subResult = depthFirstSearch(nodeOneRowNum, nodeOneColumnNum - 1, nodeTwoRowNum, nodeTwoColumnNum, FLAG_BAN_RIGHT);
                     if (subResult)
                     {
-                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = 1; // dynamic programming
-                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = 1;
+                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = CONNECT; // dynamic programming
+                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = CONNECT;
                         return true;
                     }
                 }
             }
             if(nodeOneRowNum != 7 && flag != FLAG_BAN_DOWN)
             {
-                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum + 1, nodeOneColumnNum);
-                if (connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == 2)
+                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum + 1, nodeOneColumnNum); // moving towards "down"
+                if (connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == STRONG_CONNECT)
                 { // down adjacent node
                     Boolean subResult = depthFirstSearch(nodeOneRowNum + 1, nodeOneColumnNum, nodeTwoRowNum, nodeTwoColumnNum, FLAG_BAN_UP);
                     if (subResult)
                     {
-                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = 1; // dynamic programming
-                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = 1;
+                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = CONNECT; // dynamic programming
+                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = CONNECT;
                         return true;
                     }
                 }
             }
             if(nodeOneRowNum != 1 && flag != FLAG_BAN_UP)
             {
-                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum - 1, nodeOneColumnNum);
+                nodeOneAdjacentNodeID = getNodeID(nodeOneRowNum - 1, nodeOneColumnNum); // moving towards "up"
                 if (connectMatrix[nodeOneAdjacentNodeID - 1, nodeOneID - 1] == 2)
                 { // up adjacent node
                     Boolean subResult = depthFirstSearch(nodeOneRowNum - 1, nodeOneColumnNum, nodeTwoRowNum, nodeTwoColumnNum, FLAG_BAN_DOWN);
                     if (subResult)
                     {
-                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = 1; // dynamic programming
-                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = 1;
+                        connectMatrix[nodeOneAdjacentNodeID - 1, nodeTwoID - 1] = CONNECT; // dynamic programming
+                        connectMatrix[nodeTwoID - 1, nodeOneAdjacentNodeID - 1] = CONNECT;
                         return true;
                     }
                 }
@@ -168,7 +173,7 @@ public class MazeMaker : MonoBehaviour
                 int nodeTwoID = getNodeID(nodeTwoRow, nodeTwoColumn);
                 connectMatrix[nodeOneID - 1, nodeTwoID - 1] = 2;
                 connectMatrix[nodeTwoID - 1, nodeOneID - 1] = 2;
-                Debug.Log("Delete:" + nodeOneRow + ":" + nodeOneColumn + "-" + nodeTwoRow + ":" + nodeTwoColumn);
+                //Debug.Log("Delete:" + nodeOneRow + ":" + nodeOneColumn + "-" + nodeTwoRow + ":" + nodeTwoColumn);
             }
         }
     }

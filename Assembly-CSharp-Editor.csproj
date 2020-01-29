@@ -325,6 +325,9 @@
     <Reference Include="DroneControllerPlugin">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
     </Reference>
+    <Reference Include="OpenCvSharp">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Plugins/OpenCvSharp.dll</HintPath>
+    </Reference>
     <Reference Include="PA_DronePackEditor">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Editor/cmpl/PA_DronePackEditor.dll</HintPath>
     </Reference>

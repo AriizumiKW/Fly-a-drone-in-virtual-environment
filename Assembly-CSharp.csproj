@@ -78,6 +78,7 @@
     <Compile Include="Assets\Main\Script\InterfaceManager\SpeedDetector.cs" />
     <Compile Include="Assets\Main\Script\ObstacleMaker\MazeMaker.cs" />
     <Compile Include="Assets\Main\Script\ObstacleMaker\Wall.cs" />
+    <Compile Include="Assets\Main\Script\OpenCVDemo.cs" />
     <Compile Include="Assets\Main\Script\UnitTester.cs" />
     <Compile Include="Assets\Main\Script\ViewController\ViewController.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\CameraTeleportEffect.cs" />
@@ -365,6 +366,9 @@
     </Reference>
     <Reference Include="DroneControllerPlugin">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp">
+      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Plugins/OpenCvSharp.dll</HintPath>
     </Reference>
     <Reference Include="PA_DronePack">
       <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Scripts/cmpl/PA_DronePack.dll</HintPath>

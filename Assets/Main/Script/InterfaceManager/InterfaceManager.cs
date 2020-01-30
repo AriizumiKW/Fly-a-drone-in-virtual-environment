@@ -34,12 +34,14 @@ public class InterfaceManager : MonoBehaviour
     private string droneName; // name of the drone. It is given by users.
     private float mass; // the mass of drone.
 
+    private void Awake()
+    {
+        gameLock = true;
+        gameMode = NOT_START;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        gameLock = true;
-        gameMode = 0;
-
         initSoundSlider();
     }
 

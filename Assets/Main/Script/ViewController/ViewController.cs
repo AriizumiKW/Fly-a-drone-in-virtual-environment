@@ -8,6 +8,8 @@ public class ViewController : MonoBehaviour
 
     public InterfaceManager uiManager; // global interface manager
     public Transform dronePosition; // drone's position
+    public Camera stereoCameraLeft;
+    public Camera stereoCameraRight;
 
     private const float ROTATE_SPEED = 2.0f;
     private const float SCROLL_SPEED = 3.0f;
@@ -23,6 +25,11 @@ public class ViewController : MonoBehaviour
     void Start()
     {
         perspectiveMode = THIRD_PERSONAL_PERSPECTIVE;
+        Camera thisCam = this.gameObject.GetComponent<Camera>();
+        thisCam.enabled = true; // set main camera
+        stereoCameraLeft.enabled = false;
+        stereoCameraRight.enabled = false;
+        //Debug.Log(Camera.main.gameObject.name);
     }
 
     void Update()

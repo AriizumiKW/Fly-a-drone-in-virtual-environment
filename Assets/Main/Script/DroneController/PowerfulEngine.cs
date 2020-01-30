@@ -29,6 +29,7 @@ public class PowerfulEngine : MonoBehaviour
     // FixedUpdate is called once per frame
     void FixedUpdate()
     {
+        //Debug.Log(uiManager.getLock());
         if (!uiManager.getLock())
         {
             // if the game is locked, the drone state will never change

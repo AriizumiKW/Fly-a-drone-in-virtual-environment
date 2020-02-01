@@ -81,6 +81,7 @@
     <Compile Include="Assets\Main\Script\OpenCVDemo.cs" />
     <Compile Include="Assets\Main\Script\StereoCamera\DistanceCounter.cs" />
     <Compile Include="Assets\Main\Script\StereoCamera\ImageStreamCapturer.cs" />
+    <Compile Include="Assets\Main\Script\StereoCamera\LaserLightSimulator.cs" />
     <Compile Include="Assets\Main\Script\UnitTester.cs" />
     <Compile Include="Assets\Main\Script\ViewController\ViewController.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\CameraTeleportEffect.cs" />

@@ -42,7 +42,7 @@ public class ImageStreamCapturer : MonoBehaviour
         //Debug.Log(t.width + ":" + t.height);
         //Debug.Log(uiManager.getLock());
         StartCoroutine("imageCapturedThread");
-        Invoke("stopImageCapturedThread", 12);
+        //Invoke("stopImageCapturedThread", 12);
     }
 
     // Update is called once per frame
@@ -68,7 +68,6 @@ public class ImageStreamCapturer : MonoBehaviour
             if (!uiManager.getLock())
             {
                 captureCameraImageAsMat();
-                yield break;
             }
         }
     }
@@ -97,7 +96,7 @@ public class ImageStreamCapturer : MonoBehaviour
         byte[] bytes = image.EncodeToPNG();
         outputImageFile(image);
         // form an image, convert image from "Texture2D" type (A type of image in Unity) to "Mat" type (A type of image in OpenCvSharp)
-        this.capturedImage = Mat.FromImageData(image.EncodeToPNG());
+        this.capturedImage = Mat.FromImageData(bytes);
         sendImageToDistanceCounter(capturedImage);
     }
 

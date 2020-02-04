@@ -8,7 +8,7 @@ public class PowerfulEngine : MonoBehaviour
 
     public InterfaceManager uiManager;
     private Rigidbody physics;
-    private RotationSimulator flyPose;
+    private TiltSimulator flyPose;
 
     private const int FORWARDS = 0;
     private const int BACKWARDS = 1;
@@ -21,8 +21,12 @@ public class PowerfulEngine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        toUp = false;
+        toDown = false;
+        toLeft = false;
+        toRight = false;
         physics = this.GetComponent<Rigidbody>();
-        flyPose = this.GetComponent<RotationSimulator>();
+        flyPose = this.GetComponent<TiltSimulator>();
         propellerAcce = 5.0f; // 测试用，forceMag can be modified by users
     }
 
@@ -84,17 +88,57 @@ public class PowerfulEngine : MonoBehaviour
             // recover rotation
             flyPose.setRotationZAxis(0);
         }
-        
-
+        /*
         if (Input.GetKey(KeyCode.Space))
         {
             //physics.AddForce(new Vector3(0,1,0) * mass * 12.0f);
         }
+        */
     }
+
+    private bool toUp;
+    private bool toDown;
+    private bool toLeft;
+    private bool toRight;
 
     private void selfDriving_PerFrame()
     {
-        // self driving features!!!!!!!!!!!!!!!!!!!!!!!
+        // self driving features
+        if (toUp)
+        {
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(0, 0, 1) * propellerAcce * mass * cos);
+            flyPose.setRotationXAxis(cos);
+        }
+        else if (toDown)
+        {
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(0, 0, -1) * propellerAcce * mass * cos);
+            flyPose.setRotationXAxis(-cos);
+        }
+        else
+        {
+            // recover rotation
+            flyPose.setRotationXAxis(0);
+        }
+
+        if (toLeft)
+        {
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(-1, 0, 0) * propellerAcce * mass * cos);
+            flyPose.setRotationZAxis(cos);
+        }
+        else if (toRight)
+        {
+            float cos = Mathf.Cos(calculateTiltedAngle());
+            physics.AddForce(new Vector3(1, 0, 0) * propellerAcce * mass * cos);
+            flyPose.setRotationZAxis(-cos);
+        }
+        else
+        {
+            // recover rotation
+            flyPose.setRotationZAxis(0);
+        }
     }
 
     private float calculateTiltedAngle()
@@ -103,6 +147,29 @@ public class PowerfulEngine : MonoBehaviour
         float theta = Mathf.Atan((float)( 9.8 / propellerAcce)); // accelaration of gravity is 9.8
         //Debug.Log(theta*180/Mathf.PI);
         return theta;
+    }
+
+    private IEnumerator stateToFalseThread(int whichState, float time)
+    {
+        yield return new WaitForSeconds(time); // wait for time seconds
+        switch (whichState)
+        {
+            case FORWARDS:
+                toUp = false;
+                break;
+            case BACKWARDS:
+                toDown = false;
+                break;
+            case LEFT:
+                toLeft = false;
+                break;
+            case RIGHT:
+                toRight = false;
+                break;
+            default:
+                Debug.LogError("PowerfulEngine: direction_not_found_error");
+                break;
+        }
     }
 
     public void resetDrone(float mass)
@@ -120,5 +187,32 @@ public class PowerfulEngine : MonoBehaviour
     {
         return this.propellerAcce;
     }
-    
+
+    public void goUp(float time)
+    {
+        this.toUp = true;
+        IEnumerator instance = stateToFalseThread(FORWARDS, time);
+        StartCoroutine(instance);
+    }
+
+    public void goDown(float time)
+    {
+        this.toDown = true;
+        IEnumerator instance = stateToFalseThread(BACKWARDS, time);
+        StartCoroutine(instance);
+    }
+
+    public void goLeft(float time)
+    {
+        this.toLeft = true;
+        IEnumerator instance = stateToFalseThread(LEFT, time);
+        StartCoroutine(instance);
+    }
+
+    public void goRight(float time)
+    {
+        this.toRight = true;
+        IEnumerator instance = stateToFalseThread(RIGHT, time);
+        StartCoroutine(instance);
+    }
 }

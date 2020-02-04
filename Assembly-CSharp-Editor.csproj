@@ -11,7 +11,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{20D1FE17-4B10-6B5C-85ED-9870894D6BA9}</ProjectGuid>
+    <ProjectGuid>{813BE79D-05DC-68AD-D54A-94484D49ED1A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -68,67 +68,67 @@
     <Compile Include="Assets\ProfessionalAssets\DronePack\Editor\PA_DroneControllerEditor.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Editor\PA_ObjectIDEditor.cs" />
     <Reference Include="UnityEditor.TestRunner">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TestRunner">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.multiplayer-weaver.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XR.LegacyInputHelpers">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.SpatialTracking">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.XR.LegacyInputHelpers">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -320,37 +320,37 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="DroneControllerEditorPlugin">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Editor/DroneControllerEditorPlugin.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Assets/Drones Pack/DroneController/Editor/DroneControllerEditorPlugin.dll</HintPath>
     </Reference>
     <Reference Include="DroneControllerPlugin">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Assets/Drones Pack/DroneController/Plugins/DroneController/DroneControllerPlugin.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/Plugins/OpenCvSharp.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Assets/Plugins/OpenCvSharp.dll</HintPath>
     </Reference>
     <Reference Include="PA_DronePackEditor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Editor/cmpl/PA_DronePackEditor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Assets/ProfessionalAssets/DronePack/Editor/cmpl/PA_DronePackEditor.dll</HintPath>
     </Reference>
     <Reference Include="PA_DronePack">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Assets/ProfessionalAssets/DronePack/Scripts/cmpl/PA_DronePack.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Assets/ProfessionalAssets/DronePack/Scripts/cmpl/PA_DronePack.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>E:/UnityProject/Virtual Flying Drone/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
+      <HintPath>D:/workplace/Fly-a-drone-in-virtual-environment/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.12f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -709,15 +709,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{C05DA789-F71B-BF83-CE99-F7E93474B1D2}</Project>
+      <Project>{DA2329E7-30E3-BAC2-2645-455880864BA3}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{9F26D569-C5F3-A93E-ED81-D801136484FD}</Project>
+      <Project>{CB92FB11-179E-87CF-2747-14D5F413E05D}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="Assembly-CSharp-Editor-firstpass.csproj">
-      <Project>{E130E751-99B1-005D-C302-1A34347B5E9F}</Project>
+      <Project>{BADD18F9-279C-2E80-B44F-1F111BA36B21}</Project>
       <Name>Assembly-CSharp-Editor-firstpass</Name>
     </ProjectReference>
   </ItemGroup>

@@ -38,7 +38,7 @@ public class DistanceCounter : MonoBehaviour
 
         drawLineInUnity(distance);
         timer += Time.deltaTime;
-        if (timer >= 1.0f) // run once per second
+        if (timer >= 0.3f) // run once per 0.3 second
         {
             Point leftMatchingPoint = matchLeftImage(); 
             Point rightMatchingPoint = matchRightImagePointByLeftImagePoint(leftMatchingPoint);
@@ -121,4 +121,8 @@ public class DistanceCounter : MonoBehaviour
         rightImg = image;
     }
 
+    public float getDistance()
+    {
+        return this.distance;
+    }
 }

@@ -63,7 +63,7 @@ public class ImageStreamCapturer : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             //Debug.Log(uiManager.getLock());
             if (!uiManager.getLock())
             {

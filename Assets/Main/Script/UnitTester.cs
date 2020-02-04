@@ -10,8 +10,12 @@ public class UnitTester : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Tuple<int, int, int, int> t = countAdjacentNodes();
+        //Tuple<int, int, int, int> t = countAdjacentNodes();
         //Debug.Log(t);
+        float theta = Mathf.Atan(1.732f);
+        Debug.Log(theta);
+        float alpha = Mathf.Sin(theta);
+        Debug.Log(alpha);
     }
 
     // Update is called once per frame

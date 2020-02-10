@@ -56,6 +56,18 @@ public class RRTNode
         return this.father;
     }
 
+    public float distanceTo(RRTNode other)
+    {
+        float distanceSquare = Mathf.Pow(other.X() - x, 2) + Mathf.Pow(other.Z() - z, 2);
+        return Mathf.Sqrt(distanceSquare);
+    }
+
+    public float distanceTo(float otherX, float otherZ)
+    {
+        float distanceSquare = Mathf.Pow(otherX - x, 2) + Mathf.Pow(otherZ - z, 2);
+        return Mathf.Sqrt(distanceSquare);
+    }
+
     public List<RRTNode> Children()
     {
         return this.children;

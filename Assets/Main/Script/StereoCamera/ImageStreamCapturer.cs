@@ -94,7 +94,7 @@ public class ImageStreamCapturer : MonoBehaviour
         thisStereoCamera.targetTexture = null;
         RenderTexture.active = null;
         byte[] bytes = image.EncodeToPNG();
-        outputImageFile(image);
+        //outputImageFile(image);
         // form an image, convert image from "Texture2D" type (A type of image in Unity) to "Mat" type (A type of image in OpenCvSharp)
         this.capturedImage = Mat.FromImageData(bytes);
         sendImageToDistanceCounter(capturedImage);

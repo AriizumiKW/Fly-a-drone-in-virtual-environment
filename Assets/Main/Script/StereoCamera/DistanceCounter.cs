@@ -7,7 +7,7 @@ public class DistanceCounter : MonoBehaviour
 {
     public const float FOCAL_LENGTH = 20.0f; // millimeters
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
-    public const float COEFF = 0.021f; // coefficient
+    public float COEFF = 0.0208f; // coefficient
     public InterfaceManager uiManager;
     //public Texture2D templateTexture2DFormat;
 
@@ -42,8 +42,10 @@ public class DistanceCounter : MonoBehaviour
         {
             Point leftMatchingPoint = matchLeftImage(); 
             Point rightMatchingPoint = matchRightImagePointByLeftImagePoint(leftMatchingPoint);
-            distance = countParallax(leftMatchingPoint, rightMatchingPoint);
-            //Debug.Log(distance);
+            distance = countDistance(leftMatchingPoint, rightMatchingPoint);
+            //outputImageFile(leftImg, leftMatchingPoint, 1); // only 4 test
+            //outputImageFile(rightImg, rightMatchingPoint, 2);
+            //Debug.Log(distance+"?");
             timer = 0;
         }
     }
@@ -88,17 +90,18 @@ public class DistanceCounter : MonoBehaviour
         Cv2.ImWrite(Application.persistentDataPath + "/right_roi.png", rightImg);
         Cv2.ImWrite(Application.persistentDataPath + "/right_img_roi.png", rightImage_roi);
         */
-        return new Point(minLoc.X + template.Cols / 2, minLoc.Y + template.Rows / 2); // center point of matcing rectangle
+        return new Point(minLoc.X + template.Cols / 2, height); // center point of matcing rectangle
     }
 
-    private float countParallax(Point leftPoint, Point rightPoint)
+    private float countDistance(Point leftPoint, Point rightPoint)
     {
-        float parallexInPixel = leftPoint.X - rightPoint.X;
+        float disparityInPixel = Mathf.Abs(leftPoint.X - rightPoint.X);
         /*
         Debug.Log(leftPoint + ":" + rightPoint);
-        Debug.Log(parallexInPixel);
+        Debug.Log(disparityInPixel);
         */
-        float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / parallexInPixel;
+        //Debug.Log(disparityInPixel);
+        float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / disparityInPixel;
         //Debug.Log(parallexInPixel);
         return distance;
     }
@@ -109,6 +112,29 @@ public class DistanceCounter : MonoBehaviour
         Vector3 forwardDirection = this.transform.forward;
         Vector3 endPoint = laserPosition + forwardDirection * distance;
         Debug.DrawLine(laserPosition, endPoint);
+    }
+
+    private void outputImageFile(Mat image, Point center, int type)
+    {
+        // use for testing only
+        // type=1, left image. type=2, right image
+        Mat image2 = image;
+        Cv2.Circle(image2, center, 2, new Scalar(0, 255, 0));
+
+        string filename;
+        if (type == 1)
+        {
+            filename = Application.persistentDataPath + "/a left img-match.png";
+        }
+        else if (type == 2)
+        {
+            filename = Application.persistentDataPath + "/a right img-match.png";
+        }
+        else
+        {
+            filename = Application.persistentDataPath + "/no tag.png-match";
+        }
+        Cv2.ImWrite(filename, image2);
     }
 
     public void setLeftImage(Mat image)

@@ -27,7 +27,7 @@ public class DistanceCounter : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    public void countDistance()
     {
         if (uiManager.getLock()) // if locked, do nothing
         {
@@ -37,16 +37,23 @@ public class DistanceCounter : MonoBehaviour
         //Point matchPoint = matchingLeftImage();
 
         drawLineInUnity(distance);
-        timer += Time.deltaTime;
-        if (timer >= 0.3f) // run once per 0.3 second
+        if (leftAlready && rightAlready) // run once per 0.3 second
         {
             Point leftMatchingPoint = matchLeftImage(); 
             Point rightMatchingPoint = matchRightImagePointByLeftImagePoint(leftMatchingPoint);
-            distance = countDistance(leftMatchingPoint, rightMatchingPoint);
+            float disparityInPixel = Mathf.Abs(leftMatchingPoint.X - rightMatchingPoint.X);
+            /*
+            Debug.Log(leftPoint + ":" + rightPoint);
+            Debug.Log(disparityInPixel);
+            */
+            //Debug.Log(disparityInPixel);
+            distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / disparityInPixel;
+            this.leftAlready = false;
+            this.rightAlready = false;
+            //Debug.Log(parallexInPixel);
             //outputImageFile(leftImg, leftMatchingPoint, 1); // only 4 test
             //outputImageFile(rightImg, rightMatchingPoint, 2);
             //Debug.Log(distance+"?");
-            timer = 0;
         }
     }
 
@@ -93,19 +100,6 @@ public class DistanceCounter : MonoBehaviour
         return new Point(minLoc.X + template.Cols / 2, height); // center point of matcing rectangle
     }
 
-    private float countDistance(Point leftPoint, Point rightPoint)
-    {
-        float disparityInPixel = Mathf.Abs(leftPoint.X - rightPoint.X);
-        /*
-        Debug.Log(leftPoint + ":" + rightPoint);
-        Debug.Log(disparityInPixel);
-        */
-        //Debug.Log(disparityInPixel);
-        float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / disparityInPixel;
-        //Debug.Log(parallexInPixel);
-        return distance;
-    }
-
     private void drawLineInUnity(float distance) // doesn't make any sense, except debug and test
     {
         Vector3 laserPosition = this.transform.position + new Vector3(0, 0, 1);
@@ -137,14 +131,18 @@ public class DistanceCounter : MonoBehaviour
         Cv2.ImWrite(filename, image2);
     }
 
+    private bool leftAlready = false;
+    private bool rightAlready = false;
     public void setLeftImage(Mat image)
     {
         leftImg = image;
+        leftAlready = true;
     }
 
     public void setRightImage(Mat image)
     {
         rightImg = image;
+        rightAlready = true;
     }
 
     public float getDistance()

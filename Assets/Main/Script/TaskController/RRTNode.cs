@@ -17,7 +17,6 @@ public class RRTNode
         // node without father, that is, the root
         x = theX;
         z = theZ;
-        father = null;
         distanceToFather = 0;
         nodeID = z * 500 + x;
     }

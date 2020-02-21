@@ -63,11 +63,12 @@ public class ImageStreamCapturer : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.15f);
             //Debug.Log(uiManager.getLock());
             if (!uiManager.getLock())
             {
                 captureCameraImageAsMat();
+                distanceCounter.countDistance();
             }
         }
     }
@@ -97,10 +98,18 @@ public class ImageStreamCapturer : MonoBehaviour
         //outputImageFile(image);
         // form an image, convert image from "Texture2D" type (A type of image in Unity) to "Mat" type (A type of image in OpenCvSharp)
         this.capturedImage = Mat.FromImageData(bytes);
-        sendImageToDistanceCounter(capturedImage);
+
+        if (cameraType == LEFT_CAMERA) // send image to DistanceCounter
+        {
+            distanceCounter.setLeftImage(capturedImage);
+        }
+        else
+        {
+            distanceCounter.setRightImage(capturedImage);
+        }
     }
 
-    private void outputImageFile(Texture2D image)
+    private void outputImageFile(Texture2D image) // use to test
     {
         string filename;
         if(cameraType == LEFT_CAMERA)
@@ -117,18 +126,6 @@ public class ImageStreamCapturer : MonoBehaviour
         }
         byte[] bytes = image.EncodeToPNG();
         System.IO.File.WriteAllBytes(filename, bytes);
-    }
-
-    private void sendImageToDistanceCounter(Mat image)
-    {
-        if (cameraType == LEFT_CAMERA)
-        {
-            distanceCounter.setLeftImage(image);
-        }
-        else
-        {
-            distanceCounter.setRightImage(image);
-        }
     }
 
     public Mat getImage()

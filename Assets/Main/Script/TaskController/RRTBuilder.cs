@@ -13,6 +13,7 @@ public class RRTBuilder : MonoBehaviour
     private RotationSimulator rotation;
 
     private RRTNode root; // the root of the tree
+    private RRTDrawer demoGraph;
     private List<RRTNode> theRRT; // Rapidly-exploring Random Tree
     private float timer;
 
@@ -21,12 +22,22 @@ public class RRTBuilder : MonoBehaviour
     {
         distanceCounter = this.gameObject.GetComponent<DistanceCounter>();
         rotation = this.gameObject.GetComponent<RotationSimulator>();
+        demoGraph = this.gameObject.GetComponent<RRTDrawer>();
         root = new RRTNode(50, 75);
         theRRT = new List<RRTNode>();
         theRRT.Add(root);
+        demoGraph.addRootNode(root);
+
+        flag = false;
+        randomPosition = (0, 0);
+        minDisNode = new RRTNode(50, 75);
     }
 
     // Update is called once per frame
+
+    private RRTNode minDisNode;
+    private (float, float) randomPosition;
+    private bool flag;
     void FixedUpdate()
     {
         if (uiManager.getLock()) // if locked, do nothing
@@ -38,8 +49,38 @@ public class RRTBuilder : MonoBehaviour
         if (timer >= 0.5f) // run per 0.5 second
         {
             timer = 0;
-            (float, float) randomPosition = randomPoint(); // randomly select a point with distance EPS
-            RRTNode minDisNode = root;
+
+            if (flag) // ignore at the first run time
+            {
+                float angleInRadian = (float) Math.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
+                float angle = angleInRadian * 180 / Mathf.PI; // caculate drone rotation
+                float newX = (EPS * Mathf.Cos(angleInRadian)) + this.minDisNode.X();
+                float newZ = (EPS * Mathf.Sin(angleInRadian)) + this.minDisNode.Z();
+                rotation.setRotatedAngle(90 - angle);
+                letDroneFlyToPosition(this.minDisNode.X(), this.minDisNode.Z());
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - angle, transform.eulerAngles.z); // 测试用，功能等于上上行
+                if (distanceCounter.getDistance() >= EPS*2)
+                { // success
+                    RRTNode newNode = new RRTNode(newX, newZ, this.minDisNode);
+                    theRRT.Add(newNode);
+                    demoGraph.addNode(newNode);
+                    demoGraph.drawPoint((int)randomPosition.Item1, (int)randomPosition.Item2);
+                }
+                /*
+                else // fail, and discard
+                {
+                    demoGraph.drawPoint((int)randomPosition.Item1, (int)randomPosition.Item2);
+                    demoGraph.drawLine((int)randomPosition.Item1, (int)randomPosition.Item2, (int)newX, (int)newZ);
+                }
+                */
+            }
+            else
+            {
+                this.flag = true;
+            }
+
+            randomPosition = randomPoint(); // randomly select a point with distance EPS
+            minDisNode = root;
             float minDistance = minDisNode.distanceTo(randomPosition.Item1, randomPosition.Item2);
             foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
             {
@@ -49,32 +90,21 @@ public class RRTBuilder : MonoBehaviour
                     minDisNode = node;
                 }
             }
-            float angleInRadian = Mathf.Atan(randomPosition.Item2 - minDisNode.Z() / randomPosition.Item1 - minDisNode.X());
-            float angle = angleInRadian * 180 / Mathf.PI; // caculate drone rotation
-            float newX = EPS * Mathf.Cos(angleInRadian) + minDisNode.X();
-            float newZ = EPS * Mathf.Sin(angleInRadian) + minDisNode.Z();
 
-            rotation.setRotatedAngle(90 - angle);
-            letDroneFlyToPosition(minDisNode.X(), minDisNode.Z());
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - angle, transform.eulerAngles.z);
-            if(distanceCounter.getDistance() <= EPS)
-            {
-                RRTNode newNode = new RRTNode(randomPosition.Item1, randomPosition.Item2, minDisNode);
-                theRRT.Add(newNode);
-            }
-            
+            //Debug.Log(randomPosition.Item2 - minDisNode.Z() / randomPosition.Item1 - minDisNode.X());
+            //Debug.Log(angle);
         }
     }
     
     private (float,float) randomPoint()
     {
-        int randomX = UnityEngine.Random.Range(30, 470); // range: [30,470)
+        int randomX = UnityEngine.Random.Range(25, 475); // range: [25,475)
 
         byte[] randomBytes = new byte[4];
         RNGCryptoServiceProvider rngCrypto = new RNGCryptoServiceProvider();
         rngCrypto.GetBytes(randomBytes);
         int randomZ = BitConverter.ToInt32(randomBytes, 0);
-        randomZ = (randomZ % 340) + 55; // range: [55,395)
+        randomZ = Mathf.Abs(randomZ % 350) + 50; // range: [50,400)
 
         return (randomX, randomZ);
     }

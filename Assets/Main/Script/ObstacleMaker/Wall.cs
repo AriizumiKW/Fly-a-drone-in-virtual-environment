@@ -40,6 +40,26 @@ public class Wall
         // 3rd & 4th numbers are the coordinate of the second adjacent node
     }
 
+    public (int,int,int, int) getEndpointsCoordinate()
+    {
+        int x1, x2, z1, z2;
+        if(type == TYPE_HORIZONTAL_WALL)
+        {
+            x1 = this.coordX + 25;
+            x2 = this.coordX - 25;
+            z1 = this.coordZ;
+            z2 = this.coordZ;
+        }
+        else
+        {
+            x1 = this.coordX;
+            x2 = this.coordX;
+            z1 = this.coordZ + 25;
+            z2 = this.coordZ - 25;
+        }
+        return (x1, z1, x2, z2);
+    }
+
     public void breakThisWall()
     {
         thisWall.SetActive(false);

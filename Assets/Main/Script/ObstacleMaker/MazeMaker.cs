@@ -7,6 +7,7 @@ public class MazeMaker : MonoBehaviour
 {
     Transform[] children;
     LinkedList<Wall> walls = new LinkedList<Wall>();
+    RRTDrawer demoGraph;
     private int[,] connectMatrix = new int[63, 63]; 
     // connect matrix, show if two nodes connect with each other
     // =0, two nodes are not connected
@@ -16,6 +17,7 @@ public class MazeMaker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        demoGraph = GameObject.FindGameObjectWithTag("Player").GetComponent<RRTDrawer>();
         children = GetComponentsInChildren<Transform>();
         resetMaze();
     }
@@ -127,7 +129,7 @@ public class MazeMaker : MonoBehaviour
         }
 
         walls.Clear();
-        foreach (Transform child in children)
+        foreach (Transform child in children) // get reference of wall-object
         {
             // initialize LinkedList
             string tag = child.gameObject.tag;
@@ -174,6 +176,11 @@ public class MazeMaker : MonoBehaviour
                 connectMatrix[nodeOneID - 1, nodeTwoID - 1] = 2;
                 connectMatrix[nodeTwoID - 1, nodeOneID - 1] = 2;
                 //Debug.Log("Delete:" + nodeOneRow + ":" + nodeOneColumn + "-" + nodeTwoRow + ":" + nodeTwoColumn);
+            }
+            else
+            {
+                (int, int, int, int) info = aWall.getEndpointsCoordinate();
+                demoGraph.drawWall(info.Item1, info.Item2, info.Item3, info.Item4);
             }
         }
     }

@@ -37,7 +37,7 @@ public class DistanceCounter : MonoBehaviour
         //Point matchPoint = matchingLeftImage();
 
         drawLineInUnity(distance);
-        if (leftAlready && rightAlready) // run once per 0.3 second
+        if (leftAlready && rightAlready)
         {
             Point leftMatchingPoint = matchLeftImage(); 
             Point rightMatchingPoint = matchRightImagePointByLeftImagePoint(leftMatchingPoint);

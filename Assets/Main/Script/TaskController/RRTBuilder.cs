@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System;
 using UnityEngine;
+using OpenCvSharp;
 
 public class RRTBuilder : MonoBehaviour
 {
@@ -44,27 +45,24 @@ public class RRTBuilder : MonoBehaviour
         {
             return;
         }
-
         timer += Time.deltaTime;
-        if (timer >= 0.5f) // run per 0.5 second
+        if (timer >= 0.5) // run per 0.5 second
         {
             timer = 0;
 
-            if (flag) // ignore at the first run time
+            if (this.flag) // ignore at the first run time
             {
                 float angleInRadian = (float) Math.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
-                float angle = angleInRadian * 180 / Mathf.PI; // caculate drone rotation
                 float newX = (EPS * Mathf.Cos(angleInRadian)) + this.minDisNode.X();
                 float newZ = (EPS * Mathf.Sin(angleInRadian)) + this.minDisNode.Z();
-                rotation.setRotatedAngle(90 - angle);
-                letDroneFlyToPosition(this.minDisNode.X(), this.minDisNode.Z());
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - angle, transform.eulerAngles.z); // 测试用，功能等于上上行
-                if (distanceCounter.getDistance() >= EPS*2)
+                
+                Debug.Log(distanceCounter.getDistance());
+                if (distanceCounter.getDistance() >= EPS + 5.0f)
                 { // success
                     RRTNode newNode = new RRTNode(newX, newZ, this.minDisNode);
                     theRRT.Add(newNode);
                     demoGraph.addNode(newNode);
-                    demoGraph.drawPoint((int)randomPosition.Item1, (int)randomPosition.Item2);
+                    //demoGraph.drawLine((int)this.randomPosition.Item1, (int)this.randomPosition.Item2, (int)this.minDisNode.X(), (int)this.minDisNode.Z(), Scalar.Red);
                 }
                 /*
                 else // fail, and discard
@@ -79,17 +77,22 @@ public class RRTBuilder : MonoBehaviour
                 this.flag = true;
             }
 
-            randomPosition = randomPoint(); // randomly select a point with distance EPS
-            minDisNode = root;
-            float minDistance = minDisNode.distanceTo(randomPosition.Item1, randomPosition.Item2);
+            this.randomPosition = randomPoint(); // randomly select a point with distance EPS
+            this.minDisNode = root;
+            float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
             foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
             {
-                float distance = node.distanceTo(randomPosition.Item1, randomPosition.Item2);
+                float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
                 if (distance < minDistance)
                 {
-                    minDisNode = node;
+                    this.minDisNode = node;
                 }
             }
+            float angle = (float)Math.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X())) * 180 / Mathf.PI;
+
+            rotation.setRotatedAngle(90 - angle);
+            letDroneFlyToPosition(this.minDisNode.X(), this.minDisNode.Z());
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - angle, transform.eulerAngles.z); // 测试用，功能等于上上行
 
             //Debug.Log(randomPosition.Item2 - minDisNode.Z() / randomPosition.Item1 - minDisNode.X());
             //Debug.Log(angle);

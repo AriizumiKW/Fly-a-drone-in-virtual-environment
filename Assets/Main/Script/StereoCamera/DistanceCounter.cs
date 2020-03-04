@@ -37,15 +37,47 @@ public class DistanceCounter : MonoBehaviour
         //Point matchPoint = matchingLeftImage();
 
         drawLineInUnity(distance);
-        if (leftAlready && rightAlready)
+        /*
+        if (leftAlready && rightAlready) // 新版距离计算
+        {
+            Point2f[] leftMatchPoints =
+            {
+                new Point2f(54,31), //1,1
+                new Point2f(116,98), //2,2
+                new Point2f(180,162), //3,3
+                new Point2f(242,229), //4,4
+                new Point2f(304,294), //5,5
+                new Point2f(367,361), //6,6
+                new Point2f(304,31), //5,1
+                new Point2f(367,97), //6,2
+                new Point2f(428,162), //7,3
+            };
+
+            Point2f[] rightMatchPoints =
+            {
+                new Point2f(30,31), //1,1
+                new Point2f(92,97), //2,2
+                new Point2f(156,161), //3,3
+                new Point2f(217,228), //4,4
+                new Point2f(281,293), //5,5
+                new Point2f(343,360), //6,6
+                new Point2f(280,30), //5,1
+                new Point2f(343,96), //6,2
+                new Point2f(404,161), //7,3
+            };
+
+            InputArray left = InputArray.Create(leftMatchPoints);
+            InputArray right = InputArray.Create(rightMatchPoints);
+
+            fundMatrix = Cv2.FindFundamentalMat(left, right, FundamentalMatMethod.Point8);
+        }
+        */
+        
+        if (leftAlready && rightAlready) // 旧版距离计算
         {
             Point leftMatchingPoint = matchLeftImage(); 
             Point rightMatchingPoint = matchRightImagePointByLeftImagePoint(leftMatchingPoint);
             float disparityInPixel = Mathf.Abs(leftMatchingPoint.X - rightMatchingPoint.X);
-            /*
-            Debug.Log(leftPoint + ":" + rightPoint);
-            Debug.Log(disparityInPixel);
-            */
             //Debug.Log(disparityInPixel);
             distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / disparityInPixel;
             this.leftAlready = false;
@@ -55,6 +87,8 @@ public class DistanceCounter : MonoBehaviour
             //outputImageFile(rightImg, rightMatchingPoint, 2);
             //Debug.Log(distance+"?");
         }
+        
+        
     }
 
     private Point matchLeftImage()

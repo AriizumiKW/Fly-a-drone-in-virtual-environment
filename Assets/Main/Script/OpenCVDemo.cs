@@ -46,8 +46,8 @@ public class OpenCVDemo : MonoBehaviour
 
             fundMatrix = Cv2.FindFundamentalMat(left, right, FundamentalMatMethod.Point8);
             
-            float[] l_array = {378, 203, 1};
-            Point3d left_point = new Point3d(378, 203, 1);
+            float[] l_array = {47, 204, 1};
+            Point3d left_point = new Point3d(48, 204, 1);
 
             Mat leftP = new Mat();
             leftP.Add(left_point);
@@ -63,8 +63,8 @@ public class OpenCVDemo : MonoBehaviour
             Debug.Log(y1 + ":" + y2);
             */
             Cv2.ComputeCorrespondEpilines(leftP, 1, fundMatrix, epliline);
-            Debug.Log(epliline);
-            Debug.Log(epliline.At<Point3d>(0).ToString());
+            //Debug.Log(epliline);
+            //Debug.Log(epliline.At<Point3d>(0).ToString());
             double x = epliline.At<Point3d>(0).X;
             double y = epliline.At<Point3d>(0).Y;
             double z = epliline.At<Point3d>(0).Z;
@@ -73,6 +73,7 @@ public class OpenCVDemo : MonoBehaviour
             Mat rightImg = Cv2.ImRead(Application.persistentDataPath + "/R.png");
             Cv2.Line(rightImg, new Point(0, -z / y), new Point(1000, (-x * 1000 - z) / y), Scalar.Green);
             Cv2.ImWrite(Application.persistentDataPath + "/1233333.png", rightImg);
+            //Debug.Log(fundMatrix.ToString());
         }
     }
     // Update is called once per frame

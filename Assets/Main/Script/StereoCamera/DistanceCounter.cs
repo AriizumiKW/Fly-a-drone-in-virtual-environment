@@ -13,8 +13,8 @@ public class DistanceCounter : MonoBehaviour
 
     private float timer;
     private float distance;
-    private Mat leftImg;
-    private Mat rightImg;
+    private Mat leftImg; // 756 * 409 pixels
+    private Mat rightImg; // 756 * 409 pixels
     private Mat fundMatrix;
     private Mat template;
 
@@ -26,6 +26,11 @@ public class DistanceCounter : MonoBehaviour
         template = Cv2.ImRead(Application.persistentDataPath + "/template.png");
     }
 
+    void Start()
+    {
+        initFundMatrix();
+    }
+
     // Update is called once per frame
     public void countDistance()
     {
@@ -33,46 +38,19 @@ public class DistanceCounter : MonoBehaviour
         {
             return;
         }
+        //Debug.Log("kkkk");
         // count the distance
         //Point matchPoint = matchingLeftImage();
 
-        drawLineInUnity(distance);
-        /*
+        //drawLineInUnity(distance);
         if (leftAlready && rightAlready) // 新版距离计算
         {
-            Point2f[] leftMatchPoints =
-            {
-                new Point2f(54,31), //1,1
-                new Point2f(116,98), //2,2
-                new Point2f(180,162), //3,3
-                new Point2f(242,229), //4,4
-                new Point2f(304,294), //5,5
-                new Point2f(367,361), //6,6
-                new Point2f(304,31), //5,1
-                new Point2f(367,97), //6,2
-                new Point2f(428,162), //7,3
-            };
-
-            Point2f[] rightMatchPoints =
-            {
-                new Point2f(30,31), //1,1
-                new Point2f(92,97), //2,2
-                new Point2f(156,161), //3,3
-                new Point2f(217,228), //4,4
-                new Point2f(281,293), //5,5
-                new Point2f(343,360), //6,6
-                new Point2f(280,30), //5,1
-                new Point2f(343,96), //6,2
-                new Point2f(404,161), //7,3
-            };
-
-            InputArray left = InputArray.Create(leftMatchPoints);
-            InputArray right = InputArray.Create(rightMatchPoints);
-
-            fundMatrix = Cv2.FindFundamentalMat(left, right, FundamentalMatMethod.Point8);
+            leftAlready = false;
+            rightAlready = false;
+            //cutLeftImageToEightParts();
+            //Debug.Log("111211");
         }
-        */
-        
+        /*
         if (leftAlready && rightAlready) // 旧版距离计算
         {
             Point leftMatchingPoint = matchLeftImage(); 
@@ -87,8 +65,125 @@ public class DistanceCounter : MonoBehaviour
             //outputImageFile(rightImg, rightMatchingPoint, 2);
             //Debug.Log(distance+"?");
         }
-        
-        
+        */
+    }
+    private void initFundMatrix() // initialize fundamental matrix
+    {
+        Point2f[] leftMatchPoints =
+            {
+                new Point2f(54,31), //1,1
+                new Point2f(116,98), //2,2
+                new Point2f(180,162), //3,3
+                new Point2f(242,229), //4,4
+                new Point2f(304,294), //5,5
+                new Point2f(367,361), //6,6
+                new Point2f(304,31), //5,1
+                new Point2f(367,97), //6,2
+                new Point2f(428,162), //7,3
+            };
+        Point2f[] rightMatchPoints =
+            {
+                new Point2f(30,31), //1,1
+                new Point2f(92,98), //2,2
+                new Point2f(156,162), //3,3
+                new Point2f(217,229), //4,4
+                new Point2f(281,294), //5,5
+                new Point2f(343,361), //6,6
+                new Point2f(280,31), //5,1
+                new Point2f(343,97), //6,2
+                new Point2f(404,162), //7,3
+            };
+        InputArray leftInput = InputArray.Create(leftMatchPoints);
+        InputArray rightInput = InputArray.Create(rightMatchPoints);
+        this.fundMatrix = Cv2.FindFundamentalMat(leftInput, rightInput, FundamentalMatMethod.Point8);
+    }
+
+    Mat part1;
+    Mat part2;
+    Mat part3;
+    Mat part4;
+    Mat part5;
+    Mat part6;
+    Mat part7;
+    Mat part8;
+    Mat part1_centre;
+    Mat part2_centre;
+    Mat part3_centre;
+    Mat part4_centre;
+    Mat part5_centre;
+    Mat part6_centre;
+    Mat part7_centre;
+    Mat part8_centre;
+    Mat part1_epliline;
+    Mat part2_epliline;
+    Mat part3_epliline;
+    Mat part4_epliline;
+    Mat part5_epliline;
+    Mat part6_epliline;
+    Mat part7_epliline;
+    Mat part8_epliline;
+    private void cutLeftImageToEightParts() // step1, choose the centre region of left image, cut it into 8 equal parts
+    {
+        int topHeight = (int)(0.475 * leftImg.Rows);
+        int buttomHeight = (int)(0.525 * leftImg.Rows);
+        Mat leftImg_roi = leftImg.RowRange(topHeight, buttomHeight); // our region of interest, which is the centre region of left image
+        part1 = leftImg_roi.ColRange(0, (int)(0.125 * leftImg.Cols));
+        part2 = leftImg_roi.ColRange((int)(0.125 * leftImg.Cols), (int)(0.25 * leftImg.Cols));
+        part3 = leftImg_roi.ColRange((int)(0.25 * leftImg.Cols), (int)(0.375 * leftImg.Cols));
+        part4 = leftImg_roi.ColRange((int)(0.375 * leftImg.Cols), (int)(0.5 * leftImg.Cols));
+        part5 = leftImg_roi.ColRange((int)(0.5 * leftImg.Cols), (int)(0.625 * leftImg.Cols));
+        part6 = leftImg_roi.ColRange((int)(0.625 * leftImg.Cols), (int)(0.75 * leftImg.Cols));
+        part7 = leftImg_roi.ColRange((int)(0.75 * leftImg.Cols), (int)(0.875 * leftImg.Cols));
+        part8 = leftImg_roi.ColRange((int)(0.875 * leftImg.Cols), leftImg.Cols);
+        part1_centre = new Mat();
+        part2_centre = new Mat();
+        part3_centre = new Mat();
+        part4_centre = new Mat();
+        part5_centre = new Mat();
+        part6_centre = new Mat();
+        part7_centre = new Mat();
+        part8_centre = new Mat();
+        part1_centre.Add(new Point3d((int)(0.0625 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part2_centre.Add(new Point3d((int)(0.1875 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part3_centre.Add(new Point3d((int)(0.3125 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part4_centre.Add(new Point3d((int)(0.4375 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part5_centre.Add(new Point3d((int)(0.5625 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part6_centre.Add(new Point3d((int)(0.6875 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part7_centre.Add(new Point3d((int)(0.8125 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part8_centre.Add(new Point3d((int)(0.9375 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part1_epliline = new Mat();
+        part2_epliline = new Mat();
+        part3_epliline = new Mat();
+        part4_epliline = new Mat();
+        part5_epliline = new Mat();
+        part6_epliline = new Mat();
+        part7_epliline = new Mat();
+        part8_epliline = new Mat();
+        Cv2.ComputeCorrespondEpilines(part1_centre, 1, this.fundMatrix, part1_epliline);
+        Cv2.ComputeCorrespondEpilines(part2_centre, 1, this.fundMatrix, part2_epliline);
+        Cv2.ComputeCorrespondEpilines(part3_centre, 1, this.fundMatrix, part3_epliline);
+        Cv2.ComputeCorrespondEpilines(part4_centre, 1, this.fundMatrix, part4_epliline);
+        Cv2.ComputeCorrespondEpilines(part5_centre, 1, this.fundMatrix, part5_epliline);
+        Cv2.ComputeCorrespondEpilines(part6_centre, 1, this.fundMatrix, part6_epliline);
+        Cv2.ComputeCorrespondEpilines(part7_centre, 1, this.fundMatrix, part7_epliline);
+        Cv2.ComputeCorrespondEpilines(part8_centre, 1, this.fundMatrix, part8_epliline);
+        //findDisparity(part1, part1_epliline);
+    }
+
+    private void findDisparity(Mat templateFromLeftImg, Mat epliline)
+    {
+        Mat rightImg_roi = new Mat(templateFromLeftImg.Rows, 756, MatType.CV_8UC3);
+        double a = epliline.At<Point3d>(0).X;
+        double b = epliline.At<Point3d>(0).Y;
+        double c = epliline.At<Point3d>(0).Z; // ax+by+cz=0 (homogeneous coordinates)
+        for (int col = 0; col < 756; col++) // affine transformation
+        {
+            double y = (-c - a * col)/ b;
+            for (int row = (int)(y - rightImg_roi.Rows/2); row < (int)(y + rightImg_roi.Rows/2); row++)
+            {
+                rightImg_roi.Set<Vec3b>(row - (int)(y - rightImg_roi.Rows / 2), col, rightImg.Get<Vec3b>(row, col));
+            }
+        }
     }
 
     private Point matchLeftImage()

@@ -5,7 +5,8 @@ using OpenCvSharp;
 
 public class DistanceCounter : MonoBehaviour
 {
-    public const float FOCAL_LENGTH = 20.0f; // millimeters
+    public const float FOCAL_LENGTH = 15.0f; // millimeters
+    public const float FIELD_OF_VIEW = 77.3f; // field of view, in angle
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
     public float COEFF = 0.0208f; // coefficient
     public InterfaceManager uiManager;
@@ -16,14 +17,11 @@ public class DistanceCounter : MonoBehaviour
     private Mat leftImg; // 756 * 409 pixels
     private Mat rightImg; // 756 * 409 pixels
     private Mat fundMatrix;
-    private Mat template;
 
     // Start is called before the first frame update
     void Awake()
     {
         timer = 0;
-        //template = Mat.FromImageData(templateTexture2DFormat.EncodeToPNG()); // convert to OpenCv.Mat data type
-        template = Cv2.ImRead(Application.persistentDataPath + "/template.png");
     }
 
     void Start()
@@ -38,34 +36,26 @@ public class DistanceCounter : MonoBehaviour
         {
             return;
         }
-        //Debug.Log("kkkk");
-        // count the distance
-        //Point matchPoint = matchingLeftImage();
 
         //drawLineInUnity(distance);
         if (leftAlready && rightAlready) // 新版距离计算
         {
             leftAlready = false;
             rightAlready = false;
-            //cutLeftImageToEightParts();
-            //Debug.Log("111211");
+            cutLeftImageToEightParts();
+            findEplilines();
+            double[] disparities = findDisparity();
+            //drawLineInUnity((float)disparities[0], 1);
+            //drawLineInUnity((float)disparities[1], 2);
+            //drawLineInUnity((float)disparities[2], 3);
+            //drawLineInUnity((float)disparities[3], 4);
+            //drawLineInUnity((float)disparities[4], 5);
+            //drawLineInUnity((float)disparities[5], 6);
+            //drawLineInUnity((float)disparities[6], 7);
+            //drawLineInUnity((float)disparities[7], 8);
+            Debug.Log(string.Join("",disparities));
+            Debug.Log(disparities[0]);
         }
-        /*
-        if (leftAlready && rightAlready) // 旧版距离计算
-        {
-            Point leftMatchingPoint = matchLeftImage(); 
-            Point rightMatchingPoint = matchRightImagePointByLeftImagePoint(leftMatchingPoint);
-            float disparityInPixel = Mathf.Abs(leftMatchingPoint.X - rightMatchingPoint.X);
-            //Debug.Log(disparityInPixel);
-            distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / disparityInPixel;
-            this.leftAlready = false;
-            this.rightAlready = false;
-            //Debug.Log(parallexInPixel);
-            //outputImageFile(leftImg, leftMatchingPoint, 1); // only 4 test
-            //outputImageFile(rightImg, rightMatchingPoint, 2);
-            //Debug.Log(distance+"?");
-        }
-        */
     }
     private void initFundMatrix() // initialize fundamental matrix
     {
@@ -151,6 +141,10 @@ public class DistanceCounter : MonoBehaviour
         part6_centre.Add(new Point3d((int)(0.6875 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
         part7_centre.Add(new Point3d((int)(0.8125 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
         part8_centre.Add(new Point3d((int)(0.9375 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+    }
+
+    private void findEplilines() // step2, find eplilines for 8 centre points
+    {
         part1_epliline = new Mat();
         part2_epliline = new Mat();
         part3_epliline = new Mat();
@@ -167,10 +161,23 @@ public class DistanceCounter : MonoBehaviour
         Cv2.ComputeCorrespondEpilines(part6_centre, 1, this.fundMatrix, part6_epliline);
         Cv2.ComputeCorrespondEpilines(part7_centre, 1, this.fundMatrix, part7_epliline);
         Cv2.ComputeCorrespondEpilines(part8_centre, 1, this.fundMatrix, part8_epliline);
-        //findDisparity(part1, part1_epliline);
     }
 
-    private void findDisparity(Mat templateFromLeftImg, Mat epliline)
+    private double[] findDisparity() // step3, find each disparity for 8 centre point
+    {
+        double disparity1 = findMatchPoint(part1, part1_epliline).Item1 - part1_centre.At<Point3d>(0).X;
+        double disparity2 = findMatchPoint(part2, part2_epliline).Item1 - part2_centre.At<Point3d>(0).X;
+        double disparity3 = findMatchPoint(part3, part3_epliline).Item1 - part3_centre.At<Point3d>(0).X;
+        double disparity4 = findMatchPoint(part4, part4_epliline).Item1 - part4_centre.At<Point3d>(0).X;
+        double disparity5 = findMatchPoint(part5, part5_epliline).Item1 - part5_centre.At<Point3d>(0).X;
+        double disparity6 = findMatchPoint(part6, part6_epliline).Item1 - part6_centre.At<Point3d>(0).X;
+        double disparity7 = findMatchPoint(part7, part7_epliline).Item1 - part7_centre.At<Point3d>(0).X;
+        double disparity8 = findMatchPoint(part8, part8_epliline).Item1 - part8_centre.At<Point3d>(0).X;
+        double[] array = { disparity1, disparity2, disparity3, disparity4, disparity5, disparity6, disparity7, disparity8 };
+        return array;
+    }
+
+    private (double, double) findMatchPoint(Mat templateFromLeftImg, Mat epliline)
     {
         Mat rightImg_roi = new Mat(templateFromLeftImg.Rows, 756, MatType.CV_8UC3);
         double a = epliline.At<Point3d>(0).X;
@@ -184,62 +191,34 @@ public class DistanceCounter : MonoBehaviour
                 rightImg_roi.Set<Vec3b>(row - (int)(y - rightImg_roi.Rows / 2), col, rightImg.Get<Vec3b>(row, col));
             }
         }
-    }
-
-    private Point matchLeftImage()
-    {
-        // image matching
         Mat result = new Mat();
         double maxVal;
         double minVal;
         Point minLoc = new Point();
         Point maxLoc = new Point();
-        Cv2.MatchTemplate(leftImg, template, result, TemplateMatchModes.SqDiffNormed);
+        Cv2.MatchTemplate(rightImg_roi, templateFromLeftImg, result, TemplateMatchModes.SqDiffNormed);
         Cv2.MinMaxLoc(result, out minVal, out maxVal, out minLoc, out maxLoc);
-        //Debug.Log(minLoc);
-        /*
-        Cv2.Rectangle(leftImg, minLoc, new Point(minLoc.X + template.Cols, minLoc.Y + template.Rows), new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-        Cv2.ImWrite(Application.persistentDataPath + "/match.png", leftImg);
-        */
-        return new Point(minLoc.X + template.Cols / 2, minLoc.Y + template.Rows / 2); // center point of matcing rectangle
+        if(templateFromLeftImg == part1)
+        {
+            Cv2.Circle(rightImg_roi, minLoc.X + templateFromLeftImg.Cols / 2, minLoc.Y + templateFromLeftImg.Rows / 2, 2, Scalar.Red, -1, LineTypes.Link8);
+            Cv2.ImWrite(Application.persistentDataPath + "/test output.png", rightImg_roi);
+        }
+
+
+        return (minLoc.X + templateFromLeftImg.Cols / 2, minLoc.Y + templateFromLeftImg.Rows / 2); // center point of matcing rectangle
     }
 
-    private Point matchRightImagePointByLeftImagePoint(Point p)
+    private void drawLineInUnity(float distance, int whichPart)// use for testing only
     {
-        // parameter 'p': the center point of matching rectangle in left-image
-        int height = p.Y;
-        // Denote a=0,b=1,c=-1*height, ax + by + c = 0, which is eliline
-        int topHeight = height - (template.Rows / 2);
-        int buttomHeight = height + (template.Rows / 2);
-        Mat rightImage_roi = rightImg.RowRange(topHeight-1, buttomHeight);
-
-        Mat result = new Mat();
-        double maxVal;
-        double minVal;
-        Point minLoc = new Point();
-        Point maxLoc = new Point();
-        Cv2.MatchTemplate(rightImage_roi, template, result, TemplateMatchModes.SqDiffNormed);
-        Cv2.MinMaxLoc(result, out minVal, out maxVal, out minLoc, out maxLoc);
-        /*
-        Cv2.Rectangle(rightImg, new Point(0, topHeight - 1), new Point(p.X * 2, buttomHeight), new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-        Cv2.Rectangle(rightImage_roi, minLoc, new Point(minLoc.X + template.Cols, minLoc.Y + template.Rows), new Scalar(0, 255, 0), 2, LineTypes.Link8, 0);
-        Cv2.ImWrite(Application.persistentDataPath + "/right_roi.png", rightImg);
-        Cv2.ImWrite(Application.persistentDataPath + "/right_img_roi.png", rightImage_roi);
-        */
-        return new Point(minLoc.X + template.Cols / 2, height); // center point of matcing rectangle
-    }
-
-    private void drawLineInUnity(float distance) // doesn't make any sense, except debug and test
-    {
+        float angle = (whichPart / 8) * FIELD_OF_VIEW - (FIELD_OF_VIEW / 2);
         Vector3 laserPosition = this.transform.position + new Vector3(0, 0, 1);
-        Vector3 forwardDirection = this.transform.forward;
-        Vector3 endPoint = laserPosition + forwardDirection * distance;
+        Vector3 direction = Quaternion.AngleAxis(9.66f, new Vector3(0, -1, 0)) * this.transform.forward;
+        Vector3 endPoint = laserPosition + direction * distance;
         Debug.DrawLine(laserPosition, endPoint);
     }
 
-    private void outputImageFile(Mat image, Point center, int type)
+    private void outputImageFile(Mat image, Point center, int type)// use for testing only
     {
-        // use for testing only
         // type=1, left image. type=2, right image
         Mat image2 = image;
         Cv2.Circle(image2, center, 2, new Scalar(0, 255, 0));
@@ -258,6 +237,15 @@ public class DistanceCounter : MonoBehaviour
             filename = Application.persistentDataPath + "/no tag.png-match";
         }
         Cv2.ImWrite(filename, image2);
+    }
+
+    private void drawEpipolarLine(Mat plate, Mat epliline)// use for testing only
+    {
+        double x = epliline.At<Point3d>(0).X;
+        double y = epliline.At<Point3d>(0).Y;
+        double z = epliline.At<Point3d>(0).Z;
+        Cv2.Line(plate, new Point(0, -z / y), new Point(755, (-x * 755 - z) / y), Scalar.Green);
+        Cv2.ImWrite(Application.persistentDataPath + "/test output.png", plate);
     }
 
     private bool leftAlready = false;

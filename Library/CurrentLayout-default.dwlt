@@ -337,20 +337,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Main/Script/StereoCamera
+    - Assets/Main
   m_ViewMode: 1
   m_StartGridSize: 56
   m_LastFolders:
-  - Assets/Main/Script/StereoCamera
+  - Assets/Main
   m_LastFoldersGridSize: 56
   m_LastProjectPath: D:\workplace\Fly-a-drone-in-virtual-environment
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 79}
-    m_SelectedIDs: 1a330000
-    m_LastClickedID: 13082
-    m_ExpandedIDs: 00000000cc310000e832000052370000b43c0000c2420000d4500000d6500000d850000000ca9a3b
+    m_SelectedIDs: 52370000
+    m_LastClickedID: 14162
+    m_ExpandedIDs: 00000000cc310000e832000052370000b43c000002400000c2420000d4500000d6500000d850000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -403,8 +403,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 842e0000
-    m_LastClickedInstanceID: 11908
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c623000000000000
     m_RenameOverlay:
@@ -501,9 +501,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1cfbffff
-      m_LastClickedID: -1252
-      m_ExpandedIDs: 66fbffff
+      m_SelectedIDs: 484d0000
+      m_LastClickedID: 19784
+      m_ExpandedIDs: 66fbfffff8470000a24b0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -563,9 +563,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 47.10145, y: -5.8601265, z: 261.68054}
+    m_Target: {x: 49.28628, y: 18.057384, z: 95.322716}
     speed: 2
-    m_Value: {x: 47.10145, y: -5.8601265, z: 261.68054}
+    m_Value: {x: 49.28628, y: 18.057384, z: 95.322716}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -594,13 +594,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.060344763, y: 0.011235114, z: 0.0032309068, w: -0.9984617}
+    m_Target: {x: 0.45952797, y: -0.024282036, z: 0.0076422864, w: 0.8882335}
     speed: 2
-    m_Value: {x: -0.060323536, y: 0.011231162, z: 0.00322977, w: -0.9981105}
+    m_Value: {x: 0.45935056, y: -0.024272662, z: 0.007639336, w: 0.8878905}
   m_Size:
-    m_Target: 199.03052
+    m_Target: 70.76085
     speed: 2
-    m_Value: 199.03052
+    m_Value: 70.76085
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -675,7 +675,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1

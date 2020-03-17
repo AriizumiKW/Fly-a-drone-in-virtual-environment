@@ -56,8 +56,8 @@ public class RRTBuilder : MonoBehaviour
                 float newX = (EPS * Mathf.Cos(angleInRadian)) + this.minDisNode.X();
                 float newZ = (EPS * Mathf.Sin(angleInRadian)) + this.minDisNode.Z();
                 
-                Debug.Log(distanceCounter.getDistance());
-                if (distanceCounter.getDistance() >= EPS + 5.0f)
+                Debug.Log(distanceCounter.getDistance(1));
+                if (distanceCounter.getDistance(1) >= EPS + 5.0f)
                 { // success
                     RRTNode newNode = new RRTNode(newX, newZ, this.minDisNode);
                     theRRT.Add(newNode);

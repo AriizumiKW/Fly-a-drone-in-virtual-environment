@@ -10,8 +10,8 @@ public class ImageStreamCapturer : MonoBehaviour
     // this gameobject: StereoCamera-left or StereoCamera-right
     public const int LEFT_CAMERA = 1;
     public const int RIGHT_CAMERA = 2;
-    public const int SCREEN_WIDTH = 756;
-    public const int SCREEN_HEIGHT = 409;
+    public const int SCREEN_WIDTH = 800;
+    public const int SCREEN_HEIGHT = 450;
     public const float FOCAL_LENGTH = 20.0f;
 
     public InterfaceManager uiManager;
@@ -63,7 +63,7 @@ public class ImageStreamCapturer : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.4f);
             //Debug.Log(uiManager.getLock());
             if (!uiManager.getLock())
             {

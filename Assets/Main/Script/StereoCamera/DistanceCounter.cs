@@ -5,17 +5,19 @@ using OpenCvSharp;
 
 public class DistanceCounter : MonoBehaviour
 {
-    public const float FOCAL_LENGTH = 15.0f; // millimeters
-    public const float FIELD_OF_VIEW = 77.3f; // field of view, in angle
+    public const float FOCAL_LENGTH = 20.0f; // millimeters
+    public const float FIELD_OF_VIEW = 61.9f; // field of view, in angle
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
+    public const int SCREEN_WIDTH = 800;
+    public const int SCREEN_HEIGHT = 450;
     public float COEFF = 0.0208f; // coefficient
     public InterfaceManager uiManager;
     //public Texture2D templateTexture2DFormat;
 
     private float timer;
-    private float distance;
-    private Mat leftImg; // 756 * 409 pixels
-    private Mat rightImg; // 756 * 409 pixels
+    private float[] distances;
+    private Mat leftImg; // 800 * 450 pixels
+    private Mat rightImg; // 800 * 450 pixels
     private Mat fundMatrix;
 
     // Start is called before the first frame update
@@ -26,6 +28,7 @@ public class DistanceCounter : MonoBehaviour
 
     void Start()
     {
+        distances = new float[8];
         initFundMatrix();
     }
 
@@ -45,16 +48,12 @@ public class DistanceCounter : MonoBehaviour
             cutLeftImageToEightParts();
             findEplilines();
             double[] disparities = findDisparity();
-            //drawLineInUnity((float)disparities[0], 1);
-            //drawLineInUnity((float)disparities[1], 2);
-            //drawLineInUnity((float)disparities[2], 3);
-            //drawLineInUnity((float)disparities[3], 4);
-            //drawLineInUnity((float)disparities[4], 5);
-            //drawLineInUnity((float)disparities[5], 6);
-            //drawLineInUnity((float)disparities[6], 7);
-            //drawLineInUnity((float)disparities[7], 8);
-            Debug.Log(string.Join("",disparities));
-            Debug.Log(disparities[0]);
+            for(int i = 0; i <= 7; i++)
+            {
+                distances[i] = calculateDistance(disparities[i], i + 1);
+            }
+            Debug.Log(string.Join("", disparities));
+            Debug.Log(string.Join("",distances));
         }
     }
     private void initFundMatrix() // initialize fundamental matrix
@@ -117,14 +116,14 @@ public class DistanceCounter : MonoBehaviour
         int topHeight = (int)(0.475 * leftImg.Rows);
         int buttomHeight = (int)(0.525 * leftImg.Rows);
         Mat leftImg_roi = leftImg.RowRange(topHeight, buttomHeight); // our region of interest, which is the centre region of left image
-        part1 = leftImg_roi.ColRange(0, (int)(0.125 * leftImg.Cols));
-        part2 = leftImg_roi.ColRange((int)(0.125 * leftImg.Cols), (int)(0.25 * leftImg.Cols));
-        part3 = leftImg_roi.ColRange((int)(0.25 * leftImg.Cols), (int)(0.375 * leftImg.Cols));
-        part4 = leftImg_roi.ColRange((int)(0.375 * leftImg.Cols), (int)(0.5 * leftImg.Cols));
-        part5 = leftImg_roi.ColRange((int)(0.5 * leftImg.Cols), (int)(0.625 * leftImg.Cols));
-        part6 = leftImg_roi.ColRange((int)(0.625 * leftImg.Cols), (int)(0.75 * leftImg.Cols));
-        part7 = leftImg_roi.ColRange((int)(0.75 * leftImg.Cols), (int)(0.875 * leftImg.Cols));
-        part8 = leftImg_roi.ColRange((int)(0.875 * leftImg.Cols), leftImg.Cols);
+        part1 = leftImg_roi.ColRange((int)(0.1 * leftImg.Cols), (int)(0.2 * leftImg.Cols));
+        part2 = leftImg_roi.ColRange((int)(0.2 * leftImg.Cols), (int)(0.3 * leftImg.Cols));
+        part3 = leftImg_roi.ColRange((int)(0.3 * leftImg.Cols), (int)(0.4 * leftImg.Cols));
+        part4 = leftImg_roi.ColRange((int)(0.4 * leftImg.Cols), (int)(0.5 * leftImg.Cols));
+        part5 = leftImg_roi.ColRange((int)(0.5 * leftImg.Cols), (int)(0.6 * leftImg.Cols));
+        part6 = leftImg_roi.ColRange((int)(0.6 * leftImg.Cols), (int)(0.7 * leftImg.Cols));
+        part7 = leftImg_roi.ColRange((int)(0.7 * leftImg.Cols), (int)(0.8 * leftImg.Cols));
+        part8 = leftImg_roi.ColRange((int)(0.8 * leftImg.Cols), (int)(0.9 * leftImg.Cols));
         part1_centre = new Mat();
         part2_centre = new Mat();
         part3_centre = new Mat();
@@ -133,14 +132,14 @@ public class DistanceCounter : MonoBehaviour
         part6_centre = new Mat();
         part7_centre = new Mat();
         part8_centre = new Mat();
-        part1_centre.Add(new Point3d((int)(0.0625 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part2_centre.Add(new Point3d((int)(0.1875 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part3_centre.Add(new Point3d((int)(0.3125 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part4_centre.Add(new Point3d((int)(0.4375 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part5_centre.Add(new Point3d((int)(0.5625 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part6_centre.Add(new Point3d((int)(0.6875 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part7_centre.Add(new Point3d((int)(0.8125 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
-        part8_centre.Add(new Point3d((int)(0.9375 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part1_centre.Add(new Point3d((int)(0.15 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part2_centre.Add(new Point3d((int)(0.25 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part3_centre.Add(new Point3d((int)(0.35 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part4_centre.Add(new Point3d((int)(0.45 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part5_centre.Add(new Point3d((int)(0.55 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part6_centre.Add(new Point3d((int)(0.65 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part7_centre.Add(new Point3d((int)(0.75 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
+        part8_centre.Add(new Point3d((int)(0.85 * leftImg.Cols), (int)(leftImg.Height / 2), 1));
     }
 
     private void findEplilines() // step2, find eplilines for 8 centre points
@@ -179,11 +178,11 @@ public class DistanceCounter : MonoBehaviour
 
     private (double, double) findMatchPoint(Mat templateFromLeftImg, Mat epliline)
     {
-        Mat rightImg_roi = new Mat(templateFromLeftImg.Rows, 756, MatType.CV_8UC3);
+        Mat rightImg_roi = new Mat(templateFromLeftImg.Rows, SCREEN_WIDTH, MatType.CV_8UC3);
         double a = epliline.At<Point3d>(0).X;
         double b = epliline.At<Point3d>(0).Y;
         double c = epliline.At<Point3d>(0).Z; // ax+by+cz=0 (homogeneous coordinates)
-        for (int col = 0; col < 756; col++) // affine transformation
+        for (int col = 0; col < SCREEN_WIDTH; col++) // affine transformation
         {
             double y = (-c - a * col)/ b;
             for (int row = (int)(y - rightImg_roi.Rows/2); row < (int)(y + rightImg_roi.Rows/2); row++)
@@ -198,19 +197,26 @@ public class DistanceCounter : MonoBehaviour
         Point maxLoc = new Point();
         Cv2.MatchTemplate(rightImg_roi, templateFromLeftImg, result, TemplateMatchModes.SqDiffNormed);
         Cv2.MinMaxLoc(result, out minVal, out maxVal, out minLoc, out maxLoc);
+        /*
         if(templateFromLeftImg == part1)
         {
             Cv2.Circle(rightImg_roi, minLoc.X + templateFromLeftImg.Cols / 2, minLoc.Y + templateFromLeftImg.Rows / 2, 2, Scalar.Red, -1, LineTypes.Link8);
             Cv2.ImWrite(Application.persistentDataPath + "/test output.png", rightImg_roi);
         }
-
-
+        */
         return (minLoc.X + templateFromLeftImg.Cols / 2, minLoc.Y + templateFromLeftImg.Rows / 2); // center point of matcing rectangle
+    }
+
+    private float calculateDistance(double disparity, int whichPart)
+    {
+        float angle = (whichPart / 8) * FIELD_OF_VIEW - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
+        float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / (float)disparity;
+        return distance;
     }
 
     private void drawLineInUnity(float distance, int whichPart)// use for testing only
     {
-        float angle = (whichPart / 8) * FIELD_OF_VIEW - (FIELD_OF_VIEW / 2);
+        float angle = (whichPart / 8) * FIELD_OF_VIEW - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16);
         Vector3 laserPosition = this.transform.position + new Vector3(0, 0, 1);
         Vector3 direction = Quaternion.AngleAxis(9.66f, new Vector3(0, -1, 0)) * this.transform.forward;
         Vector3 endPoint = laserPosition + direction * distance;
@@ -244,7 +250,7 @@ public class DistanceCounter : MonoBehaviour
         double x = epliline.At<Point3d>(0).X;
         double y = epliline.At<Point3d>(0).Y;
         double z = epliline.At<Point3d>(0).Z;
-        Cv2.Line(plate, new Point(0, -z / y), new Point(755, (-x * 755 - z) / y), Scalar.Green);
+        Cv2.Line(plate, new Point(0, -z / y), new Point(SCREEN_WIDTH - 1, (-x * (SCREEN_WIDTH - 1) - z) / y), Scalar.Green);
         Cv2.ImWrite(Application.persistentDataPath + "/test output.png", plate);
     }
 
@@ -262,8 +268,8 @@ public class DistanceCounter : MonoBehaviour
         rightAlready = true;
     }
 
-    public float getDistance()
+    public float getDistance(int whichPart)
     {
-        return this.distance;
+        return distances[whichPart - 1];
     }
 }

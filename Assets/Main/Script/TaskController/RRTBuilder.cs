@@ -15,6 +15,7 @@ public class RRTBuilder : MonoBehaviour
 
     private RRTNode root; // the root of the tree
     private RRTDrawer demoGraph;
+    private MapBuilder map;
     private List<RRTNode> theRRT; // Rapidly-exploring Random Tree
     private float timer;
 
@@ -24,6 +25,7 @@ public class RRTBuilder : MonoBehaviour
         distanceCounter = this.gameObject.GetComponent<DistanceCounter>();
         rotation = this.gameObject.GetComponent<RotationSimulator>();
         demoGraph = this.gameObject.GetComponent<RRTDrawer>();
+        map = this.gameObject.GetComponent<MapBuilder>();
         root = new RRTNode(50, 75);
         theRRT = new List<RRTNode>();
         theRRT.Add(root);
@@ -50,27 +52,32 @@ public class RRTBuilder : MonoBehaviour
         {
             timer = 0;
 
+            float[] distances = new float[8];
+            for(int i=1; i<=8; i++)
+            {
+                distances[i - 1] = distanceCounter.getDistance(i);
+                if(distances[i - 1] <= 40.0f)
+                {
+                    float sightAngle = i * DistanceCounter.FIELD_OF_VIEW / 8 - (DistanceCounter.FIELD_OF_VIEW / 2) - (DistanceCounter.FIELD_OF_VIEW / 16);
+                    Vector3 currPosition = this.transform.position + new Vector3(0, 0, 1);
+                    Vector3 direction = Quaternion.AngleAxis(sightAngle + 180.0f, new Vector3(0, 1, 0)) * this.transform.forward;
+                    Vector3 endPoint = currPosition + direction * distances[i - 1];
+                    map.setAnObstacle(endPoint);
+                }
+            }
+
             if (this.flag) // ignore at the first run time
             {
                 float angleInRadian = (float) Math.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
                 float newX = (EPS * Mathf.Cos(angleInRadian)) + this.minDisNode.X();
                 float newZ = (EPS * Mathf.Sin(angleInRadian)) + this.minDisNode.Z();
                 
-                Debug.Log(distanceCounter.getDistance(1));
-                if (distanceCounter.getDistance(1) >= EPS + 5.0f)
+                if (distanceCounter.getDistance(1) >= EPS)
                 { // success
                     RRTNode newNode = new RRTNode(newX, newZ, this.minDisNode);
                     theRRT.Add(newNode);
                     demoGraph.addNode(newNode);
-                    //demoGraph.drawLine((int)this.randomPosition.Item1, (int)this.randomPosition.Item2, (int)this.minDisNode.X(), (int)this.minDisNode.Z(), Scalar.Red);
                 }
-                /*
-                else // fail, and discard
-                {
-                    demoGraph.drawPoint((int)randomPosition.Item1, (int)randomPosition.Item2);
-                    demoGraph.drawLine((int)randomPosition.Item1, (int)randomPosition.Item2, (int)newX, (int)newZ);
-                }
-                */
             }
             else
             {

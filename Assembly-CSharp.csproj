@@ -83,11 +83,11 @@
     <Compile Include="Assets\Main\Script\StereoCamera\DistanceCounter.cs" />
     <Compile Include="Assets\Main\Script\StereoCamera\ImageStreamCapturer.cs" />
     <Compile Include="Assets\Main\Script\StereoCamera\LaserLightSimulator.cs" />
+    <Compile Include="Assets\Main\Script\TaskController\MapBuilder.cs" />
+    <Compile Include="Assets\Main\Script\TaskController\MapObstacle.cs" />
     <Compile Include="Assets\Main\Script\TaskController\RRTBuilder.cs" />
     <Compile Include="Assets\Main\Script\TaskController\RRTDrawer.cs" />
     <Compile Include="Assets\Main\Script\TaskController\RRTNode.cs" />
-    <Compile Include="Assets\Main\Script\TaskController\RRTTree.cs" />
-    <Compile Include="Assets\Main\Script\UnitTester.cs" />
     <Compile Include="Assets\Main\Script\ViewController\ViewController.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\CameraTeleportEffect.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\ColliderProxy.cs" />

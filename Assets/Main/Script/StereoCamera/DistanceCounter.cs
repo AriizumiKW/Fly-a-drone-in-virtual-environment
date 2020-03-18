@@ -10,22 +10,17 @@ public class DistanceCounter : MonoBehaviour
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
     public const int SCREEN_WIDTH = 800;
     public const int SCREEN_HEIGHT = 450;
-    public float COEFF = 0.0208f; // coefficient
+    public float COEFF = 0.0275f; // coefficient
+    public int test = 0;
     public InterfaceManager uiManager;
     //public Texture2D templateTexture2DFormat;
 
-    private float timer;
     private float[] distances;
     private Mat leftImg; // 800 * 450 pixels
     private Mat rightImg; // 800 * 450 pixels
     private Mat fundMatrix;
 
     // Start is called before the first frame update
-    void Awake()
-    {
-        timer = 0;
-    }
-
     void Start()
     {
         distances = new float[8];
@@ -41,7 +36,7 @@ public class DistanceCounter : MonoBehaviour
         }
 
         //drawLineInUnity(distance);
-        if (leftAlready && rightAlready) // 新版距离计算
+        if (leftAlready && rightAlready)
         {
             leftAlready = false;
             rightAlready = false;
@@ -52,8 +47,9 @@ public class DistanceCounter : MonoBehaviour
             {
                 distances[i] = calculateDistance(disparities[i], i + 1);
             }
-            Debug.Log(string.Join("", disparities));
-            Debug.Log(string.Join("",distances));
+            drawLineInUnity(distances[test], test+1);
+            //Debug.Log(string.Join("", disparities));
+            //Debug.Log(string.Join("",distances));
         }
     }
     private void initFundMatrix() // initialize fundamental matrix
@@ -209,16 +205,16 @@ public class DistanceCounter : MonoBehaviour
 
     private float calculateDistance(double disparity, int whichPart)
     {
-        float angle = (whichPart / 8) * FIELD_OF_VIEW - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
+        //float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
         float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / (float)disparity;
         return distance;
     }
 
     private void drawLineInUnity(float distance, int whichPart)// use for testing only
     {
-        float angle = (whichPart / 8) * FIELD_OF_VIEW - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16);
+        float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16);
         Vector3 laserPosition = this.transform.position + new Vector3(0, 0, 1);
-        Vector3 direction = Quaternion.AngleAxis(9.66f, new Vector3(0, -1, 0)) * this.transform.forward;
+        Vector3 direction = Quaternion.AngleAxis(angle+180.0f, new Vector3(0, 1, 0)) * this.transform.forward;
         Vector3 endPoint = laserPosition + direction * distance;
         Debug.DrawLine(laserPosition, endPoint);
     }

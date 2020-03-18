@@ -7,10 +7,17 @@ using OpenCvSharp;
 
 public class OpenCVDemo : MonoBehaviour
 {
-    Mat fundMatrix;
+    //Mat fundMatrix;
     // Start is called before the first frame update
     void Start()
     {
+        float FIELD_OF_VIEW = 61.9f;
+        for(int whichPart=1; whichPart <= 8; whichPart++)
+        {
+            float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
+            Debug.Log(angle+":"+Mathf.Sin(angle*Mathf.PI/180));
+        }
+        /*
         bool leftAlready = true;
         bool rightAlready = true;
         if (leftAlready && rightAlready) // 新版距离计算
@@ -52,16 +59,16 @@ public class OpenCVDemo : MonoBehaviour
             Mat leftP = new Mat();
             leftP.Add(left_point);
             Mat epliline = new Mat();
-            /*
-            float a = 368 * fundMatrix.At<float>(0, 0) + 204 * fundMatrix.At<float>(1, 0) + fundMatrix.At<float>(2, 0);
-            float b = 368 * fundMatrix.At<float>(0, 1) + 204 * fundMatrix.At<float>(1, 1) + fundMatrix.At<float>(2, 1);
-            float c = 368 * fundMatrix.At<float>(0, 2) + 204 * fundMatrix.At<float>(1, 2) + fundMatrix.At<float>(2, 2);
-            Debug.Log(a + ":" + b + ":" + c);
+            
+            //float a = 368 * fundMatrix.At<float>(0, 0) + 204 * fundMatrix.At<float>(1, 0) + fundMatrix.At<float>(2, 0);
+            //float b = 368 * fundMatrix.At<float>(0, 1) + 204 * fundMatrix.At<float>(1, 1) + fundMatrix.At<float>(2, 1);
+            //float c = 368 * fundMatrix.At<float>(0, 2) + 204 * fundMatrix.At<float>(1, 2) + fundMatrix.At<float>(2, 2);
+            //Debug.Log(a + ":" + b + ":" + c);
 
-            float y1 = (-a * 0 - c) / b;
-            float y2 = (-a * 100 - c) / b;
-            Debug.Log(y1 + ":" + y2);
-            */
+            //float y1 = (-a * 0 - c) / b;
+            //float y2 = (-a * 100 - c) / b;
+            //Debug.Log(y1 + ":" + y2);
+            
             Cv2.ComputeCorrespondEpilines(leftP, 1, fundMatrix, epliline);
             //Debug.Log(epliline);
             //Debug.Log(epliline.At<Point3d>(0).ToString());
@@ -74,7 +81,7 @@ public class OpenCVDemo : MonoBehaviour
             Cv2.Line(rightImg, new Point(0, -z / y), new Point(1000, (-x * 1000 - z) / y), Scalar.Green);
             Cv2.ImWrite(Application.persistentDataPath + "/1233333.png", rightImg);
             //Debug.Log(fundMatrix.ToString());
-        }
+            */
     }
     // Update is called once per frame
     void Update()

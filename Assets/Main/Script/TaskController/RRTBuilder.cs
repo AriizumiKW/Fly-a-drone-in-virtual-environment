@@ -56,16 +56,16 @@ public class RRTBuilder : MonoBehaviour
             for(int i=1; i<=8; i++)
             {
                 distances[i - 1] = distanceCounter.getDistance(i);
-                if(distances[i - 1] <= 40.0f)
+                if(distances[i - 1] <= 60.0f)
                 {
                     float sightAngle = i * DistanceCounter.FIELD_OF_VIEW / 8 - (DistanceCounter.FIELD_OF_VIEW / 2) - (DistanceCounter.FIELD_OF_VIEW / 16);
                     Vector3 currPosition = this.transform.position + new Vector3(0, 0, 1);
-                    Vector3 direction = Quaternion.AngleAxis(sightAngle + 180.0f, new Vector3(0, 1, 0)) * this.transform.forward;
+                    Vector3 direction = Quaternion.AngleAxis(sightAngle, new Vector3(0, 1, 0)) * this.transform.forward;
                     Vector3 endPoint = currPosition + direction * distances[i - 1];
                     map.setAnObstacle(endPoint);
                 }
             }
-
+            /*
             if (this.flag) // ignore at the first run time
             {
                 float angleInRadian = (float) Math.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
@@ -103,6 +103,7 @@ public class RRTBuilder : MonoBehaviour
 
             //Debug.Log(randomPosition.Item2 - minDisNode.Z() / randomPosition.Item1 - minDisNode.X());
             //Debug.Log(angle);
+            */
         }
     }
     

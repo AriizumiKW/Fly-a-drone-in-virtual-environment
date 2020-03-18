@@ -10,7 +10,7 @@ public class DistanceCounter : MonoBehaviour
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
     public const int SCREEN_WIDTH = 800;
     public const int SCREEN_HEIGHT = 450;
-    public float COEFF = 0.0275f; // coefficient
+    public float COEFF = 0.0233f; // coefficient
     public int test = 0;
     public InterfaceManager uiManager;
     //public Texture2D templateTexture2DFormat;
@@ -205,16 +205,17 @@ public class DistanceCounter : MonoBehaviour
 
     private float calculateDistance(double disparity, int whichPart)
     {
-        //float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
+        float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
         float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / (float)disparity;
-        return distance;
+        return Mathf.Abs(distance / Mathf.Sin(angle * Mathf.PI / 180));
     }
 
     private void drawLineInUnity(float distance, int whichPart)// use for testing only
     {
+        //Debug.Log(distance);
         float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16);
         Vector3 laserPosition = this.transform.position + new Vector3(0, 0, 1);
-        Vector3 direction = Quaternion.AngleAxis(angle+180.0f, new Vector3(0, 1, 0)) * this.transform.forward;
+        Vector3 direction = Quaternion.AngleAxis(angle, new Vector3(0, 1, 0)) * this.transform.forward;
         Vector3 endPoint = laserPosition + direction * distance;
         Debug.DrawLine(laserPosition, endPoint);
     }

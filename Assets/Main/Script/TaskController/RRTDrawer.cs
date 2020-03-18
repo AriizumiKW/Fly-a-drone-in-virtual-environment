@@ -53,38 +53,38 @@ public class RRTDrawer : MonoBehaviour
 
     public void addNode(RRTNode node)
     {
-        int x = (int)node.X();
+        int x = (int)node.X() - 25;
         int y = 400 - (int)node.Z();
         Cv2.Circle(pic, x, y, 3, Scalar.Blue, -1, LineTypes.Link8);
-        int fatherX = (int)node.Father().X();
+        int fatherX = (int)node.Father().X() - 25;
         int fatherZ = 400 - (int)node.Father().Z();
         Cv2.Line(pic, x, y, fatherX, fatherZ, Scalar.Green);
     }
 
     public void addRootNode(RRTNode node)
     {
-        int x = (int)node.X();
+        int x = (int)node.X() - 25;
         int y = 400 - (int)node.Z();
         Cv2.Circle(pic, x, y, 3, Scalar.Blue, -4, LineTypes.Link8);
     }
 
     public void drawWall(int x1, int y1, int x2, int y2)
     {
-        Cv2.Line(pic, x1, 400 - y1, x2, 400 - y2, Scalar.Gray);
+        Cv2.Line(pic, x1 - 25, 400 - y1, x2 - 25, 400 - y2, Scalar.Gray);
     }
 
     public void drawObstacle(int x, int y)
     {
-        Cv2.Circle(pic, x, 400 - y, 5, Scalar.Brown, -1, LineTypes.Link8);
+        Cv2.Circle(pic, x - 25, 400 - y, 5, Scalar.Brown, -1, LineTypes.Link8);
     }
 
     public void drawPoint(int x, int y) // only for test
     {
-        Cv2.Circle(pic, x, 400 - y, 3, Scalar.Red, -1, LineTypes.Link8);
+        Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Red, -1, LineTypes.Link8);
     }
 
     public void drawLine(int x1, int y1, int x2, int y2, Scalar color) // only for test
     {
-        Cv2.Line(pic, x1, 400 - y1, x2, 400 - y2, color);
+        Cv2.Line(pic, x1 - 25, 400 - y1, x2 - 25, 400 - y2, color);
     }
 }

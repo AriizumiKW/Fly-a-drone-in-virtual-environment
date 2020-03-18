@@ -21,7 +21,7 @@ public class LaserLightSimulator : MonoBehaviour
             distance = (r.origin - hitInfo.point).magnitude;
             this.gameObject.GetComponent<Light>().range = distance + 20.0f;
 
-            Debug.Log(distance+"!!!!!!!!!!!");
+            //Debug.Log(distance+"!!!!!!!!!!!");
             //Debug.DrawLine(r.origin, hitInfo.point);
         }
     }

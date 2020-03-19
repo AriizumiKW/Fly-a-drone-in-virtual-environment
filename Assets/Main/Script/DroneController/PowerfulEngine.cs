@@ -6,9 +6,11 @@ public class PowerfulEngine : MonoBehaviour
 {
     // This object: Drone
 
+    public float speed = 10.0f;
     public InterfaceManager uiManager;
     private Rigidbody physics;
     private TiltSimulator flyPose;
+    private RotationSimulator rotation;
 
     private const int FORWARDS = 0;
     private const int BACKWARDS = 1;
@@ -21,12 +23,11 @@ public class PowerfulEngine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        toUp = false;
-        toDown = false;
-        toLeft = false;
-        toRight = false;
+        ifIdle = true;
+        flyLock = true;
         physics = this.GetComponent<Rigidbody>();
         flyPose = this.GetComponent<TiltSimulator>();
+        rotation = this.GetComponent<RotationSimulator>();
         propellerAcce = 5.0f; // 测试用，forceMag can be modified by users
     }
 
@@ -88,56 +89,28 @@ public class PowerfulEngine : MonoBehaviour
             // recover rotation
             flyPose.setRotationZAxis(0);
         }
-        /*
-        if (Input.GetKey(KeyCode.Space))
-        {
-            //physics.AddForce(new Vector3(0,1,0) * mass * 12.0f);
-        }
-        */
     }
 
-    private bool toUp;
-    private bool toDown;
-    private bool toLeft;
-    private bool toRight;
-
+    private float flyAngle;
+    private Vector3 unitDirection;
+    private float waitTime;
+    private float timer;
+    private bool flyLock;
     private void selfDriving_PerFrame()
     {
         // self driving features
-        if (toUp)
+        timer += Time.deltaTime;
+        if (flyLock)
         {
-            float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(0, 0, 1) * propellerAcce * mass * cos);
-            flyPose.setRotationXAxis(cos);
+            timer = 0;
+            return;
         }
-        else if (toDown)
+        rotation.setRotatedAngle(90 - flyAngle);
+        physics.MovePosition(transform.position + unitDirection * speed * Time.deltaTime);
+        if(timer >= waitTime)
         {
-            float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(0, 0, -1) * propellerAcce * mass * cos);
-            flyPose.setRotationXAxis(-cos);
-        }
-        else
-        {
-            // recover rotation
-            flyPose.setRotationXAxis(0);
-        }
-
-        if (toLeft)
-        {
-            float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(-1, 0, 0) * propellerAcce * mass * cos);
-            flyPose.setRotationZAxis(cos);
-        }
-        else if (toRight)
-        {
-            float cos = Mathf.Cos(calculateTiltedAngle());
-            physics.AddForce(new Vector3(1, 0, 0) * propellerAcce * mass * cos);
-            flyPose.setRotationZAxis(-cos);
-        }
-        else
-        {
-            // recover rotation
-            flyPose.setRotationZAxis(0);
+            timer = 0;
+            flyLock = true;
         }
     }
 
@@ -149,27 +122,29 @@ public class PowerfulEngine : MonoBehaviour
         return theta;
     }
 
-    private IEnumerator stateToFalseThread(int whichState, float time)
+    private IEnumerator flyDaemon(List<RRTNode> path)
     {
-        yield return new WaitForSeconds(time); // wait for time seconds
-        switch (whichState)
+        yield return new WaitForSeconds(0.02f); // fixed frame. Each frame = 0.02s
+        for (int i = 0; i < path.Count - 1; i++)
         {
-            case FORWARDS:
-                toUp = false;
-                break;
-            case BACKWARDS:
-                toDown = false;
-                break;
-            case LEFT:
-                toLeft = false;
-                break;
-            case RIGHT:
-                toRight = false;
-                break;
-            default:
-                Debug.LogError("PowerfulEngine: direction_not_found_error");
-                break;
+            float currX = path[i].X();
+            float currZ = path[i].Z();
+            float destX = path[i + 1].X();
+            float destZ = path[i + 1].Z();
+            float radian = Mathf.Atan((destZ - currZ) / (destX - currX));
+            float distance = Mathf.Sqrt(Mathf.Pow(currZ - destZ, 2) + Mathf.Pow(currX - destX, 2));
+            this.flyLock = false;
+            this.waitTime = distance / speed;
+            //Debug.Log(distance);
+            this.timer = 0;
+            this.flyAngle = radian * 180 / Mathf.PI;
+            this.unitDirection = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+            while (! flyLock)
+            {
+                yield return new WaitForSeconds(0.02f);
+            }
         }
+        ifIdle = true;
     }
 
     public void resetDrone(float mass)
@@ -188,31 +163,14 @@ public class PowerfulEngine : MonoBehaviour
         return this.propellerAcce;
     }
 
-    public void goUp(float time)
+    private bool ifIdle;
+    public void letDroneFlyByPath(List<RRTNode> path)
     {
-        this.toUp = true;
-        IEnumerator instance = stateToFalseThread(FORWARDS, time);
-        StartCoroutine(instance);
-    }
-
-    public void goDown(float time)
-    {
-        this.toDown = true;
-        IEnumerator instance = stateToFalseThread(BACKWARDS, time);
-        StartCoroutine(instance);
-    }
-
-    public void goLeft(float time)
-    {
-        this.toLeft = true;
-        IEnumerator instance = stateToFalseThread(LEFT, time);
-        StartCoroutine(instance);
-    }
-
-    public void goRight(float time)
-    {
-        this.toRight = true;
-        IEnumerator instance = stateToFalseThread(RIGHT, time);
-        StartCoroutine(instance);
+        if (ifIdle)
+        {
+            //Debug.Log(path.Count);
+            ifIdle = false;
+            StartCoroutine("flyDaemon", path);
+        }
     }
 }

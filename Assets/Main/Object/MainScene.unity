@@ -535,6 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33dc1229a5b514cb603bd81984ffbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 10
   uiManager: {fileID: 2074612440}
 --- !u!54 &124405991 stripped
 Rigidbody:

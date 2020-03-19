@@ -46,7 +46,7 @@ public class MapBuilder : MonoBehaviour
             Vector3 vertex1 = currPosition + direction1 * distance1;
             Vector3 vertex2 = currPosition + direction2 * distance2;
             checkedRegions.Add(new MapRegion(currPosition, vertex1, vertex2));
-            demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
+            //demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
         }
         for (int i = 1; i <= 8; i++)
         {
@@ -78,6 +78,18 @@ public class MapBuilder : MonoBehaviour
             float y = obstacle.getY();
             float distance = Mathf.Abs(a * x + b * y + c) / Mathf.Sqrt(a * a + b * b);
             if(distance <= MapObstacle.radius)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool ifTargetPointIsChecked(Vector3 _point)
+    {
+        foreach(MapRegion region in checkedRegions)
+        {
+            if (region.IfPointInRegion(_point))
             {
                 return true;
             }

@@ -55,7 +55,7 @@ public class RRTDrawer : MonoBehaviour
     {
         int x = (int)node.X() - 25;
         int y = 400 - (int)node.Z();
-        Cv2.Circle(pic, x, y, 3, Scalar.Blue, -1, LineTypes.Link8);
+        Cv2.Circle(pic, x, y, 2, Scalar.Blue, -1, LineTypes.Link8);
         int fatherX = (int)node.Father().X() - 25;
         int fatherZ = 400 - (int)node.Father().Z();
         Cv2.Line(pic, x, y, fatherX, fatherZ, Scalar.Green);
@@ -65,7 +65,7 @@ public class RRTDrawer : MonoBehaviour
     {
         int x = (int)node.X() - 25;
         int y = 400 - (int)node.Z();
-        Cv2.Circle(pic, x, y, 3, Scalar.Blue, -4, LineTypes.Link8);
+        Cv2.Circle(pic, x, y, 2, Scalar.Blue, -4, LineTypes.Link8);
     }
 
     public void drawWall(int x1, int y1, int x2, int y2)

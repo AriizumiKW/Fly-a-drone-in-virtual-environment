@@ -53,18 +53,28 @@ public class RRTBuilder : MonoBehaviour
             timer = 0;
 
             float[] distances = new float[8];
-            for(int i=1; i<=8; i++)
+            for (int i = 1; i <= 8; i++)
             {
                 distances[i - 1] = distanceCounter.getDistance(i);
-                if(distances[i - 1] <= 60.0f)
+            }
+            map.updateMap(distances, transform.eulerAngles.y, transform.position + new Vector3(0, 0, 1));
+
+            this.randomPosition = randomPoint(); // randomly select a point with distance EPS
+            this.minDisNode = root;
+            float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+            foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
+            {
+                float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+                if (distance < minDistance)
                 {
-                    float sightAngle = i * DistanceCounter.FIELD_OF_VIEW / 8 - (DistanceCounter.FIELD_OF_VIEW / 2) - (DistanceCounter.FIELD_OF_VIEW / 16);
-                    Vector3 currPosition = this.transform.position + new Vector3(0, 0, 1);
-                    Vector3 direction = Quaternion.AngleAxis(sightAngle, new Vector3(0, 1, 0)) * this.transform.forward;
-                    Vector3 endPoint = currPosition + direction * distances[i - 1];
-                    map.setAnObstacle(endPoint);
+                    this.minDisNode = node;
                 }
             }
+            if (! map.ifMeetObstacleAlongTheDirection(randomPosition.Item1, randomPosition.Item2, minDisNode.X(), minDisNode.Z()))
+            {
+                theRRT.Add(minDisNode);
+            }
+
             /*
             if (this.flag) // ignore at the first run time
             {

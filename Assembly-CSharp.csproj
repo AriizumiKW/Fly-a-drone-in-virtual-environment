@@ -85,6 +85,7 @@
     <Compile Include="Assets\Main\Script\StereoCamera\LaserLightSimulator.cs" />
     <Compile Include="Assets\Main\Script\TaskController\MapBuilder.cs" />
     <Compile Include="Assets\Main\Script\TaskController\MapObstacle.cs" />
+    <Compile Include="Assets\Main\Script\TaskController\MapRegion.cs" />
     <Compile Include="Assets\Main\Script\TaskController\RRTBuilder.cs" />
     <Compile Include="Assets\Main\Script\TaskController\RRTDrawer.cs" />
     <Compile Include="Assets\Main\Script\TaskController\RRTNode.cs" />

@@ -78,6 +78,17 @@ public class RRTDrawer : MonoBehaviour
         Cv2.Circle(pic, x - 25, 400 - y, 5, Scalar.Brown, -1, LineTypes.Link8);
     }
 
+    public void drawCheckedArea(Vector3 _ori, Vector3 _p1, Vector3 _p2)
+    {
+        List<List<Point>> listOfListOfPoints = new List<List<Point>>();
+        List<Point> listOfPoints = new List<Point>();
+        listOfPoints.Add(new Point((int)_ori.x - 25, 400 - (int)_ori.z));
+        listOfPoints.Add(new Point((int)_p1.x - 25, 400 - (int)_p1.z));
+        listOfPoints.Add(new Point((int)_p2.x - 25, 400 - (int)_p2.z));
+        listOfListOfPoints.Add(listOfPoints);
+        Cv2.FillPoly(pic, listOfListOfPoints, Scalar.LightGray, LineTypes.Link8);
+    }
+
     public void drawPoint(int x, int y) // only for test
     {
         Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Red, -1, LineTypes.Link8);

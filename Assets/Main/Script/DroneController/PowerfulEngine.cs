@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using OpenCvSharp;
 
 public class PowerfulEngine : MonoBehaviour
 {
@@ -102,16 +103,15 @@ public class PowerfulEngine : MonoBehaviour
     private void selfDriving_PerFrame()
     {
         // self driving features
-        timer += Time.deltaTime;
         if (flyLock)
         {
-            timer = 0;
             return;
         }
+        timer += Time.deltaTime;
         rotation.setRotatedAngle(90 - flyAngle);
         this.transform.position += unitDirection * SPEED * Time.deltaTime; // moving
-        demoGraph.drawPoint((int)this.transform.position.x, (int)this.transform.position.z);
-        if(timer >= waitTime)
+        demoGraph.drawPoint((int)this.transform.position.x, (int)this.transform.position.z, Scalar.Green, 1);
+        if (timer >= waitTime)
         {
             timer = 0;
             flyLock = true;
@@ -128,45 +128,51 @@ public class PowerfulEngine : MonoBehaviour
 
     private IEnumerator flyDaemon(List<RRTNode> path)
     {
-        //StartCoroutine("flyTo", path[0]);
-        //...........................
-        float x0 = this.transform.position.x;
-        float z0 = this.transform.position.z;
-        float x1 = path[0].X();
-        float z1 = path[0].Z();
-        float distance = path[0].distanceTo(x0, z0);
-        if (x0 == x1)
+        foreach(RRTNode node in path)
         {
-            this.flyAngle = 90;
-            this.unitDirection = new Vector3(0, 0, 1);
+            demoGraph.drawPoint((int)node.X(), (int)node.Z(), Scalar.Purple, 2);
         }
-        else
+        for (int i = 0; i < path.Count; i++)
         {
-            float radian = Mathf.Atan((z1 - z0) / (x1 - x0));
-            this.flyAngle = radian * 180 / Mathf.PI;
-            this.unitDirection = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
-        }
-        this.flyLock = false;
-        this.waitTime = distance / SPEED;
-        this.timer = 0;
-        //...........................
-        while (!flyLock)
-        {
-            yield return new WaitForSeconds(0.02f);
-        }
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            float currX = path[i].X();
-            float currZ = path[i].Z();
-            float destX = path[i + 1].X();
-            float destZ = path[i + 1].Z();
-            float distance2 = path[i].distanceTo(path[i + 1]);
-            //demoGraph.drawPoint((int)destX, (int)destZ);
-            float radian = Mathf.Atan((destZ - currZ) / (destX - currX));
-            this.flyAngle = radian * 180 / Mathf.PI;
-            this.unitDirection = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+            float currX;
+            float currZ;
+            float destX;
+            float destZ;
+            if(i != 0)
+            {
+                currX = path[i - 1].X();
+                currZ = path[i - 1].Z();
+                destX = path[i].X();
+                destZ = path[i].Z();
+            }
+            else
+            {
+                currX = this.transform.position.x;
+                currZ = this.transform.position.z;
+                destX = path[0].X();
+                destZ = path[0].Z();
+            }
+            float distance = Mathf.Sqrt(Mathf.Pow(destZ - currZ, 2) + Mathf.Pow(destX - currX, 2));
+            if(currX == destX)
+            {
+                this.flyAngle = 90;
+                this.unitDirection = new Vector3(0, 0, 1);
+            }
+            else
+            {
+                float radian = Mathf.Atan((destZ - currZ) / (destX - currX));
+                this.flyAngle = radian * 180 / Mathf.PI;
+                this.unitDirection = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+            }
             this.flyLock = false;
-            this.waitTime = distance2 / SPEED;
+            this.waitTime = distance / SPEED;
+            Debug.Log(distance);
+            if (true) //测试
+            {
+                demoGraph.drawPoint((int)currX, (int)currZ);
+                //demoGraph.drawPoint((int)currX + 10, (int)currZ);
+                demoGraph.drawPoint((int)destX, (int)destZ);
+            }
             this.timer = 0;
             while (!flyLock)
             {
@@ -174,40 +180,7 @@ public class PowerfulEngine : MonoBehaviour
             }
         }
         ifIdle = true;
-    }
-
-    private float timer2;
-    private bool prepared;
-
-    private IEnumerator flyTo(RRTNode dest)
-    {
-        float currX = this.transform.position.x;
-        float currZ = this.transform.position.z;
-        float destX = dest.X();
-        float destZ = dest.Z();
-        float distance = dest.distanceTo(currX, currZ);
-
-        float radian;
-        Vector3 unitVec;
-        if(destX == currX)
-        {
-            unitVec = new Vector3(0, 0, 1);
-        }
-        else
-        {
-            radian = Mathf.Atan((destZ - currZ) / (destX - currX));
-            unitVec = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
-        }
-        
-        float timeNeedToPrepare = distance / SPEED;
-        this.timer2 = 0;
-        while (timer2 <= timeNeedToPrepare)
-        {
-            timer2 += Time.deltaTime;
-            this.transform.position += unitVec * SPEED * Time.deltaTime; // moving
-            yield return new WaitForSeconds(0.02f);
-        }
-        prepared = true;
+        StopCoroutine("flyDaemon");
     }
 
     public void resetDrone(float mass)
@@ -231,9 +204,14 @@ public class PowerfulEngine : MonoBehaviour
     {
         if (ifIdle)
         {
-            //Debug.Log(path.Count);
+            Debug.Log(path.Count);
             ifIdle = false;
             StartCoroutine("flyDaemon", path);
         }
+    }
+
+    public bool getIfIdle()
+    {
+        return ifIdle;
     }
 }

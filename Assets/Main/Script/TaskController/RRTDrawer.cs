@@ -94,6 +94,11 @@ public class RRTDrawer : MonoBehaviour
         Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Red, -1, LineTypes.Link8);
     }
 
+    public void drawPoint(int x, int y, Scalar s, int radis) // only for test
+    {
+        Cv2.Circle(pic, x - 25, 400 - y, radis, s, -1, LineTypes.Link8);
+    }
+
     public void drawLine(int x1, int y1, int x2, int y2, Scalar color) // only for test
     {
         Cv2.Line(pic, x1 - 25, 400 - y1, x2 - 25, 400 - y2, color);

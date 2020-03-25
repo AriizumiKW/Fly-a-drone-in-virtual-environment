@@ -49,8 +49,12 @@ public class RRTBuilder : MonoBehaviour
         {
             return;
         }
+        if (!drone.getIfIdle())
+        {
+            return;
+        }
         timer += Time.deltaTime;
-        if (timer >= 2) // run per 2 seconds
+        if (timer >= 0.8) // run per 0.8 second
         {
             timer = 0;
 

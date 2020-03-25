@@ -13,7 +13,6 @@ public class OpenCVDemo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*
         mb = GameObject.FindGameObjectWithTag("Player").GetComponent<MapBuilder>();
         root = new RRTNode(50, 75);
         RRTNode a = new RRTNode(1, 1, root);
@@ -24,7 +23,6 @@ public class OpenCVDemo : MonoBehaviour
         {
             Debug.Log(node.X());
         }
-        */
     }
 
     private void FixedUpdate()

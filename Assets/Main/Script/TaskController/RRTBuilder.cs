@@ -36,13 +36,11 @@ public class RRTBuilder : MonoBehaviour
         flag = false;
         randomPosition = (0, 0);
         minDisNode = root;
-        currNode = root;
     }
 
     // Update is called once per frame
 
     private RRTNode minDisNode;
-    private RRTNode currNode;
     private (float, float) randomPosition;
     private bool flag;
     void FixedUpdate()
@@ -52,7 +50,7 @@ public class RRTBuilder : MonoBehaviour
             return;
         }
         timer += Time.deltaTime;
-        if (timer >= 0.5) // run per 0.5 second
+        if (timer >= 2) // run per 2 seconds
         {
             timer = 0;
 
@@ -92,8 +90,9 @@ public class RRTBuilder : MonoBehaviour
                     }
                     else
                     {
-                        letDroneFly(currNode, minDisNode);
-                        //rotation.setRotatedAngle(90 - angle);
+                        RRTNode nearestNode = findNearestNode();
+                        letDroneFly(nearestNode, minDisNode);
+                        rotation.setRotatedAngle(90 - angle);
                         //Debug.Log("fly"+ minDisNode.X()+":"+ minDisNode.Z());
                         break;
                     }
@@ -158,19 +157,17 @@ public class RRTBuilder : MonoBehaviour
     
     private void letDroneFly(RRTNode curr, RRTNode dest)  // curr: current position, dest: destination
     {
-        //(float targetX, float targetZ)
-        //float currY = this.transform.position.y;
-        //this.transform.position = new Vector3(targetX, currY, targetZ);
+        /*
+        float targetX = dest.X();
+        float targetZ = dest.Z();
+        float currY = this.transform.position.y;
+        this.transform.position = new Vector3(targetX, currY, targetZ);
+        */
+        
         List<RRTNode> path = findPathOnRRT(curr, dest);
-        
-        foreach(RRTNode node in path)
-        {
-            Debug.Log(node.X());
-        }
-        Debug.Log("---------------");
-        
         path.Insert(0, curr);
         drone.letDroneFlyByPath(path);
+        
     }
 
     private List<RRTNode> findPathOnRRT(RRTNode curr, RRTNode dest) // curr: current position, dest: destination
@@ -187,6 +184,10 @@ public class RRTBuilder : MonoBehaviour
         ancestors.Add(r);
         while (b) // dont directly use "true", because visual studio will report an unreasonable error
         {
+            if(r == root)
+            {
+                break;
+            }
             r = r.Father();
             if(r == curr)
             {
@@ -194,10 +195,7 @@ public class RRTBuilder : MonoBehaviour
                 return ancestors;
             }
             ancestors.Add(r);
-            if(r == root)
-            {
-                break;
-            }
+            
         }
 
         List<RRTNode> path = new List<RRTNode>();
@@ -228,5 +226,23 @@ public class RRTBuilder : MonoBehaviour
             }
         }
         return path;
+    }
+
+    private RRTNode findNearestNode()
+    {
+        float currX = this.transform.position.x;
+        float currZ = this.transform.position.z;
+        float distance = root.distanceTo(currX, currZ);
+        RRTNode nearest = root;
+        foreach(RRTNode node in theRRT)
+        {
+            float d = node.distanceTo(currX, currZ);
+            if(d < distance && d < EPS)
+            {
+                nearest = node;
+                distance = nearest.distanceTo(currX, currZ);
+            }
+        }
+        return nearest;
     }
 }

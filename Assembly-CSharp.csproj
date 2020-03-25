@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Main\Script\Abandoned Script Backup\ControlUnit.cs" />
+    <Compile Include="Assets\Main\Script\Abandoned Script Backup\LaserLightSimulator.cs" />
     <Compile Include="Assets\Main\Script\Abandoned Script Backup\StableCamera.cs" />
     <Compile Include="Assets\Main\Script\DroneController\PowerfulEngine.cs" />
     <Compile Include="Assets\Main\Script\DroneController\RotationSimulator.cs" />
@@ -80,9 +81,9 @@
     <Compile Include="Assets\Main\Script\ObstacleMaker\MazeMaker.cs" />
     <Compile Include="Assets\Main\Script\ObstacleMaker\Wall.cs" />
     <Compile Include="Assets\Main\Script\OpenCVDemo.cs" />
+    <Compile Include="Assets\Main\Script\StereoCamera\CameraFollowDrone.cs" />
     <Compile Include="Assets\Main\Script\StereoCamera\DistanceCounter.cs" />
     <Compile Include="Assets\Main\Script\StereoCamera\ImageStreamCapturer.cs" />
-    <Compile Include="Assets\Main\Script\StereoCamera\LaserLightSimulator.cs" />
     <Compile Include="Assets\Main\Script\TaskController\MapBuilder.cs" />
     <Compile Include="Assets\Main\Script\TaskController\MapObstacle.cs" />
     <Compile Include="Assets\Main\Script\TaskController\MapRegion.cs" />

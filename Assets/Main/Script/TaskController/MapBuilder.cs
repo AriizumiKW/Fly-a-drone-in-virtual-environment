@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapBuilder : MonoBehaviour
 {
-    public const float EFFECTIVE_DISTANCE = 60.0f;
+    public const float EFFECTIVE_DISTANCE = 50.0f;
     // store a map in memory
     private RRTDrawer demoGraph;
     private List<MapObstacle> obstacles;
@@ -31,19 +31,25 @@ public class MapBuilder : MonoBehaviour
         {
             float distance1 = distances[i - 1];
             float distance2 = distances[i];
+            if(distance1 == DistanceCounter.INVALID_DISPARITY || distance2 == DistanceCounter.INVALID_DISPARITY)
+            {
+                return;
+            }
+
             if(distance1 > EFFECTIVE_DISTANCE)
             {
                 distance1 = EFFECTIVE_DISTANCE;
             }
+            float angle1 = i * DistanceCounter.FIELD_OF_VIEW / 8 - (DistanceCounter.FIELD_OF_VIEW / 2) - (DistanceCounter.FIELD_OF_VIEW / 16);
+            Vector3 direction1 = Quaternion.AngleAxis(angle1, new Vector3(0, 1, 0)) * this.transform.forward;
+            Vector3 vertex1 = currPosition + direction1 * distance1;
+
             if(distance2 > EFFECTIVE_DISTANCE)
             {
                 distance2 = EFFECTIVE_DISTANCE;
             }
-            float angle1 = i * DistanceCounter.FIELD_OF_VIEW / 8 - (DistanceCounter.FIELD_OF_VIEW / 2) - (DistanceCounter.FIELD_OF_VIEW / 16);
             float angle2 = (i+1) * DistanceCounter.FIELD_OF_VIEW / 8 - (DistanceCounter.FIELD_OF_VIEW / 2) - (DistanceCounter.FIELD_OF_VIEW / 16);
-            Vector3 direction1 = Quaternion.AngleAxis(angle1, new Vector3(0, 1, 0)) * this.transform.forward;
             Vector3 direction2 = Quaternion.AngleAxis(angle2, new Vector3(0, 1, 0)) * this.transform.forward;
-            Vector3 vertex1 = currPosition + direction1 * distance1;
             Vector3 vertex2 = currPosition + direction2 * distance2;
             checkedRegions.Add(new MapRegion(currPosition, vertex1, vertex2));
             //demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);

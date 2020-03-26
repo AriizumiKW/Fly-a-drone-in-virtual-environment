@@ -27,7 +27,6 @@ public class PowerfulEngine : MonoBehaviour
     void Start()
     {
         ifIdle = true;
-        flyLock = true;
         physics = this.GetComponent<Rigidbody>();
         flyPose = this.GetComponent<TiltSimulator>();
         rotation = this.GetComponent<RotationSimulator>();
@@ -38,7 +37,6 @@ public class PowerfulEngine : MonoBehaviour
     // FixedUpdate is called once per frame
     void FixedUpdate()
     {
-        //Debug.Log(uiManager.getLock());
         if (!uiManager.getLock())
         {
             // if the game is locked, the drone state will never change
@@ -49,11 +47,23 @@ public class PowerfulEngine : MonoBehaviour
             }
             else if(uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
             {
-                // in self driving mode, the drone will be "controlled" ONLY by self-driving features
-                selfDriving_PerFrame();
+                if (nextStep) // if nextStep=true, means it need flyDaemon to update information about flyAngle, waitTime, unitDirection
+                {
+                    timer = 0;
+                    return;
+                }
+                float deltaTime = Time.deltaTime;
+                timer += deltaTime;
+                if (timer >= waitTime)
+                {
+                    timer = 0;
+                    nextStep = true;
+                }
+                this.transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - flyAngle, transform.eulerAngles.z);
+                this.transform.position += unitDirection * SPEED * deltaTime; // flying
+                demoGraph.drawPoint((int)transform.position.x, (int)transform.position.z, Scalar.YellowGreen, 1); // 测试
             }
         }
-        //Debug.Log(frontRefSubstance.position);
     }
     private void waspFly_PerFrame()
     {
@@ -95,92 +105,80 @@ public class PowerfulEngine : MonoBehaviour
         }
     }
 
-    private float flyAngle;
-    private Vector3 unitDirection;
-    private float waitTime;
-    private float timer;
-    private bool flyLock;
-    private void selfDriving_PerFrame()
-    {
-        // self driving features
-        if (flyLock)
-        {
-            return;
-        }
-        timer += Time.deltaTime;
-        rotation.setRotatedAngle(90 - flyAngle);
-        this.transform.position += unitDirection * SPEED * Time.deltaTime; // moving
-        demoGraph.drawPoint((int)this.transform.position.x, (int)this.transform.position.z, Scalar.Green, 1);
-        if (timer >= waitTime)
-        {
-            timer = 0;
-            flyLock = true;
-        }
-    }
-
     private float calculateTiltedAngle()
     {
         // simulate tilted and return the value of angle
         float theta = Mathf.Atan((float)( 9.8 / propellerAcce)); // accelaration of gravity is 9.8
-        //Debug.Log(theta*180/Mathf.PI);
         return theta;
     }
 
-    private IEnumerator flyDaemon(List<RRTNode> path)
+    private float flyAngle;
+    private Vector3 unitDirection;
+    private float waitTime;
+    private float timer;
+    private bool nextStep;
+
+    private IEnumerator flyDaemon() // multi-thread
     {
-        foreach(RRTNode node in path)
+        for(int i=0; i < path.Count; i++)
         {
-            demoGraph.drawPoint((int)node.X(), (int)node.Z(), Scalar.Purple, 2);
-        }
-        for (int i = 0; i < path.Count; i++)
-        {
+            //this.transform.position = new Vector3(path[i+1].X(), transform.position.y, path[i+1].Z());
             float currX;
             float currZ;
             float destX;
             float destZ;
-            if(i != 0)
-            {
-                currX = path[i - 1].X();
-                currZ = path[i - 1].Z();
-                destX = path[i].X();
-                destZ = path[i].Z();
-            }
-            else
+            if (i == 0)
             {
                 currX = this.transform.position.x;
                 currZ = this.transform.position.z;
                 destX = path[0].X();
                 destZ = path[0].Z();
             }
-            float distance = Mathf.Sqrt(Mathf.Pow(destZ - currZ, 2) + Mathf.Pow(destX - currX, 2));
-            if(currX == destX)
+            else
             {
-                this.flyAngle = 90;
-                this.unitDirection = new Vector3(0, 0, 1);
+                currX = path[i - 1].X();
+                currZ = path[i - 1].Z();
+                destX = path[i].X();
+                destZ = path[i].Z();
+            }
+            float _angle;
+            Vector3 _unitDirection;
+            if(destX == currX)
+            {
+                if(destZ >= currZ)
+                {
+                    _angle = 90;
+                    _unitDirection = new Vector3(0, 0, 1);
+                }
+                else
+                {
+                    _angle = -90;
+                    _unitDirection = new Vector3(0, 0, -1);
+                }
             }
             else
             {
-                float radian = Mathf.Atan((destZ - currZ) / (destX - currX));
-                this.flyAngle = radian * 180 / Mathf.PI;
-                this.unitDirection = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+                _unitDirection = new Vector3(destX - currX, 0, destZ - currZ);
+                _unitDirection = _unitDirection.normalized; // return 3-demensional vector with mag=1
+                _angle = Mathf.Atan(_unitDirection.z / _unitDirection.x) * 180 / Mathf.PI;
             }
-            this.flyLock = false;
-            this.waitTime = distance / SPEED;
-            Debug.Log(distance);
-            if (true) //测试
+            float _distance = Mathf.Sqrt(Mathf.Pow(destZ - currZ, 2) + Mathf.Pow(destX - currX, 2));
+            float _waitTime = _distance / SPEED;
+
+            nextStep = false;
+            this.waitTime = _waitTime;
+            this.unitDirection = _unitDirection;
+            this.flyAngle = _angle;
+            //this.transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - flyAngle, transform.eulerAngles.z);
+            while (!nextStep)
             {
-                demoGraph.drawPoint((int)currX, (int)currZ);
-                //demoGraph.drawPoint((int)currX + 10, (int)currZ);
-                demoGraph.drawPoint((int)destX, (int)destZ);
-            }
-            this.timer = 0;
-            while (!flyLock)
-            {
-                yield return new WaitForSeconds(0.02f);
+                //Debug.Log(waitTime);
+                yield return new WaitForFixedUpdate();
             }
         }
-        ifIdle = true;
+        ifIdle = true; // only allow one flyDaemon running at the same time
         StopCoroutine("flyDaemon");
+        yield break;
     }
 
     public void resetDrone(float mass)
@@ -199,14 +197,15 @@ public class PowerfulEngine : MonoBehaviour
         return this.propellerAcce;
     }
 
-    private bool ifIdle;
+    private bool ifIdle; // if flyDaemon is running
+    private List<RRTNode> path;
     public void letDroneFlyByPath(List<RRTNode> path)
     {
         if (ifIdle)
         {
-            Debug.Log(path.Count);
             ifIdle = false;
-            StartCoroutine("flyDaemon", path);
+            this.path = path;
+            StartCoroutine("flyDaemon");
         }
     }
 

@@ -8,27 +8,52 @@ using OpenCvSharp;
 public class OpenCVDemo : MonoBehaviour
 {
     private MapBuilder mb;
+    public InterfaceManager ui;
 
     private RRTNode root;
+    private PowerfulEngine drone;
     // Start is called before the first frame update
     void Start()
     {
+        test = true;
         mb = GameObject.FindGameObjectWithTag("Player").GetComponent<MapBuilder>();
-        root = new RRTNode(50, 75);
-        RRTNode a = new RRTNode(1, 1, root);
-        RRTNode b = new RRTNode(2, 2, a);
-        RRTNode c = new RRTNode(3, 3, root);
-        List<RRTNode> path = findPathOnRRT(b, c);
-        foreach(RRTNode node in path)
-        {
-            Debug.Log(node.X());
-        }
+        drone = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerfulEngine>();
     }
 
+    bool test;
     private void FixedUpdate()
     {
-        //Vector3 unitDirection = new Vector3(0, 0, 6);
-        //physics.MovePosition(physics.position + unitDirection * Time.deltaTime);
+        /*
+        if(ui.getGameMode() == InterfaceManager.MANUAL_MODE)
+        {
+            if (test)
+            {
+                root = new RRTNode(50, 75);
+                RRTNode a = new RRTNode(50, 85, root);
+                RRTNode b = new RRTNode(60, 85, a);
+                RRTNode c = new RRTNode(60, 75, root);
+                List<RRTNode> path = findPathOnRRT(root, b);
+                path.Insert(0, root);
+                drone.letDroneFlyByPath(path);
+                test = false;
+                return;
+            }
+            
+            bool idle = drone.getIfIdle();
+            if (idle)
+            {
+                root = new RRTNode(50, 75);
+                RRTNode a = new RRTNode(50, 85, root);
+                RRTNode b = new RRTNode(60, 85, a);
+                RRTNode c = new RRTNode(60, 75, root);
+                List<RRTNode> path = findPathOnRRT(b, c);
+                path.Insert(0, b);
+                drone.letDroneFlyByPath(path);
+                test = false;
+                return;
+            }
+        }
+        */
     }
 
     private List<RRTNode> findPathOnRRT(RRTNode curr, RRTNode dest) // curr: current position, dest: destination

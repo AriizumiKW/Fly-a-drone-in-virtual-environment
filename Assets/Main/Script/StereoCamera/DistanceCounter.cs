@@ -10,15 +10,18 @@ public class DistanceCounter : MonoBehaviour
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
     public const int SCREEN_WIDTH = 800;
     public const int SCREEN_HEIGHT = 450;
+    public const int INVALID_DISPARITY = 1000; // an impossible value, means this disparity maybe invalid, so discard the result
     public float COEFF = 0.0233f; // coefficient
-    public int test = 0;
+    public int test = 0; // only used to test, doesnt make sense
     public InterfaceManager uiManager;
     //public Texture2D templateTexture2DFormat;
 
     private float[] distances;
+    private State currentState;
     private Mat leftImg; // 800 * 450 pixels
     private Mat rightImg; // 800 * 450 pixels
     private Mat fundMatrix;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -43,13 +46,12 @@ public class DistanceCounter : MonoBehaviour
             cutLeftImageToEightParts();
             findEplilines();
             double[] disparities = findDisparity();
+            currentState = new State(this.transform.position, this.transform.eulerAngles.y);
             for(int i = 0; i <= 7; i++)
             {
                 distances[i] = calculateDistance(disparities[i], i + 1);
             }
             drawLineInUnity(distances[test], test+1);
-            //Debug.Log(string.Join("", disparities));
-            //Debug.Log(string.Join("",distances));
         }
     }
     private void initFundMatrix() // initialize fundamental matrix
@@ -169,6 +171,13 @@ public class DistanceCounter : MonoBehaviour
         double disparity7 = findMatchPoint(part7, part7_epliline).Item1 - part7_centre.At<Point3d>(0).X;
         double disparity8 = findMatchPoint(part8, part8_epliline).Item1 - part8_centre.At<Point3d>(0).X;
         double[] array = { disparity1, disparity2, disparity3, disparity4, disparity5, disparity6, disparity7, disparity8 };
+        for(int i=0; i<array.Length; i++)
+        {
+            if(array[i] >= SCREEN_WIDTH / 4)
+            {
+                array[i] = INVALID_DISPARITY;
+            }
+        }
         return array;
     }
 
@@ -268,5 +277,10 @@ public class DistanceCounter : MonoBehaviour
     public float getDistance(int whichPart)
     {
         return distances[whichPart - 1];
+    }
+
+    public State getCurrentStateWhileFindingDistance() // get current state, while finding the distance
+    {
+        return currentState;
     }
 }

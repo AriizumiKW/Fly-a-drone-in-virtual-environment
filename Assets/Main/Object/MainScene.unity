@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33dc1229a5b514cb603bd81984ffbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  SPEED: 10
   uiManager: {fileID: 2074612440}
 --- !u!54 &124405991 stripped
 Rigidbody:
@@ -584,6 +584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wantedAngle: 0
+  uiManager: {fileID: 2074612440}
 --- !u!114 &124405995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20281,5 +20282,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5547785442638456269, guid: c89f1278cad8ae543b1732ee06a63a3e,
+        type: 3}
+      propertyPath: ui
+      value: 
+      objectReference: {fileID: 2074612440}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c89f1278cad8ae543b1732ee06a63a3e, type: 3}

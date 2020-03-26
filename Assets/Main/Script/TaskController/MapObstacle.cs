@@ -6,7 +6,7 @@ public class MapObstacle
 {
     private float x;
     private float y;
-    public const float radius = 8.0f;
+    public const float radius = 10.0f;
 
     public MapObstacle(float _x, float _y)
     {

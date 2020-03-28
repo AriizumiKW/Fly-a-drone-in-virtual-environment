@@ -8,7 +8,7 @@ using OpenCvSharp;
 public class RRTBuilder : MonoBehaviour
 {
     // this gameobject: the drone
-    public const float EPS = 12.0f;
+    public const float EPS = 10.0f;
     public InterfaceManager uiManager;
     private DistanceCounter distanceCounter;
     private RotationSimulator rotation;
@@ -50,7 +50,7 @@ public class RRTBuilder : MonoBehaviour
             return;
         }
         timer += Time.deltaTime;
-        if (timer >= 0.8) // run per 0.8 second
+        if (timer >= 0.5) // run per 0.5 second
         {
             timer = 0;
 
@@ -82,7 +82,8 @@ public class RRTBuilder : MonoBehaviour
                 Vector3 afterPosition = beforePosition + (unitVector * EPS);
                 if (! map.ifMeetObstacleAlongTheDirection(afterPosition.x, afterPosition.z, minDisNode.X(), minDisNode.Z()))
                 {
-                    if (map.ifTargetPointIsChecked(new Vector3(afterPosition.x, 1, afterPosition.z)))
+                    Debug.Log(map.ifThisLineIsChecked(beforePosition, afterPosition));
+                    if (map.ifThisLineIsChecked(beforePosition, afterPosition))
                     {
                         RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
                         theRRT.Add(newNode);
@@ -108,7 +109,6 @@ public class RRTBuilder : MonoBehaviour
     private (float,float) randomPoint()
     {
         int randomX = UnityEngine.Random.Range(25, 475); // range: [25,475)
-
         byte[] randomBytes = new byte[4];
         RNGCryptoServiceProvider rngCrypto = new RNGCryptoServiceProvider();
         rngCrypto.GetBytes(randomBytes);
@@ -117,7 +117,26 @@ public class RRTBuilder : MonoBehaviour
 
         return (randomX, randomZ);
     }
-    
+    /*
+    private (Vector3, Vector3) randomPointWithDistanceEPS()
+    {
+        this.minDisNode = root;
+        float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+        foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
+        {
+            float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+            if (distance < minDistance)
+            {
+                this.minDisNode = node;
+            }
+        }
+        float radian = Mathf.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
+        float angle = radian * 180 / Mathf.PI;
+        Vector3 unitVector = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+        Vector3 beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
+        Vector3 afterPosition = beforePosition + (unitVector * EPS);
+    }
+    */
     private void letDroneFly(RRTNode curr, RRTNode dest)  // curr: current position, dest: destination
     {
         /*
@@ -130,7 +149,6 @@ public class RRTBuilder : MonoBehaviour
         List<RRTNode> path = findPathOnRRT(curr, dest);
         path.Insert(0, curr);
         drone.letDroneFlyByPath(path);
-        
     }
 
     private List<RRTNode> findPathOnRRT(RRTNode curr, RRTNode dest) // curr: current position, dest: destination

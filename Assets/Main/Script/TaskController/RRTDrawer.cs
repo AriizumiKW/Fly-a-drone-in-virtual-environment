@@ -75,7 +75,7 @@ public class RRTDrawer : MonoBehaviour
 
     public void drawObstacle(int x, int y)
     {
-        Cv2.Circle(pic, x - 25, 400 - y, 5, Scalar.Brown, -1, LineTypes.Link8);
+        Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Brown, -1, LineTypes.Link8);
     }
 
     public void drawCheckedArea(Vector3 _ori, Vector3 _p1, Vector3 _p2)

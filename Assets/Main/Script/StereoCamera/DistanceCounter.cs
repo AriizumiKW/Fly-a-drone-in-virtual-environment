@@ -11,6 +11,7 @@ public class DistanceCounter : MonoBehaviour
     public const int SCREEN_WIDTH = 800;
     public const int SCREEN_HEIGHT = 450;
     public const int INVALID_DISPARITY = 1000; // an impossible value, means this disparity maybe invalid, so discard the result
+    public const int INVALID_DISTANCE = 1000;
     public float COEFF = 0.0233f; // coefficient
     public int test = 0; // only used to test, doesnt make sense
     public InterfaceManager uiManager;
@@ -20,6 +21,8 @@ public class DistanceCounter : MonoBehaviour
     private State currentState;
     private Mat leftImg; // 800 * 450 pixels
     private Mat rightImg; // 800 * 450 pixels
+    private State leftState;
+    private State rightState;
     private Mat fundMatrix;
     
 
@@ -41,17 +44,30 @@ public class DistanceCounter : MonoBehaviour
         //drawLineInUnity(distance);
         if (leftAlready && rightAlready)
         {
-            leftAlready = false;
-            rightAlready = false;
-            cutLeftImageToEightParts();
-            findEplilines();
-            double[] disparities = findDisparity();
-            currentState = new State(this.transform.position, this.transform.eulerAngles.y);
-            for(int i = 0; i <= 7; i++)
+            bool vaild = State.isVaild(leftState, rightState);
+            if (vaild)
             {
-                distances[i] = calculateDistance(disparities[i], i + 1);
+                leftAlready = false;
+                rightAlready = false;
+                cutLeftImageToEightParts();
+                findEplilines();
+                double[] disparities = findDisparity();
+                //Debug.Log(string.Join(" ", disparities));
+                currentState = new State(this.transform.position, this.transform.eulerAngles.y);
+                for(int i = 0; i <= 7; i++)
+                {
+                    distances[i] = calculateDistance(disparities[i], i + 1);
+                }
+                drawLineInUnity(distances[test], test+1);
             }
-            drawLineInUnity(distances[test], test+1);
+            else
+            {
+                for (int i = 0; i <= 7; i++)
+                {
+                    distances[i] = INVALID_DISTANCE;
+                }
+            }
+            
         }
     }
     private void initFundMatrix() // initialize fundamental matrix
@@ -173,7 +189,7 @@ public class DistanceCounter : MonoBehaviour
         double[] array = { disparity1, disparity2, disparity3, disparity4, disparity5, disparity6, disparity7, disparity8 };
         for(int i=0; i<array.Length; i++)
         {
-            if(array[i] >= SCREEN_WIDTH / 4)
+            if(array[i] >= SCREEN_WIDTH / 10)
             {
                 array[i] = INVALID_DISPARITY;
             }
@@ -214,6 +230,10 @@ public class DistanceCounter : MonoBehaviour
 
     private float calculateDistance(double disparity, int whichPart)
     {
+        if(disparity == INVALID_DISPARITY)
+        {
+            return INVALID_DISTANCE;
+        }
         float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
         float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / (float)disparity;
         return Mathf.Abs(distance / Mathf.Sin(angle * Mathf.PI / 180));
@@ -262,15 +282,17 @@ public class DistanceCounter : MonoBehaviour
 
     private bool leftAlready = false;
     private bool rightAlready = false;
-    public void setLeftImage(Mat image)
+    public void setLeftImage(Mat image, State stateWhileCaptureImage)
     {
         leftImg = image;
+        leftState = stateWhileCaptureImage;
         leftAlready = true;
     }
 
-    public void setRightImage(Mat image)
+    public void setRightImage(Mat image, State stateWhileCaptureImage)
     {
         rightImg = image;
+        rightState = stateWhileCaptureImage;
         rightAlready = true;
     }
 

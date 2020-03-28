@@ -18,6 +18,17 @@ public class OpenCVDemo : MonoBehaviour
         test = true;
         mb = GameObject.FindGameObjectWithTag("Player").GetComponent<MapBuilder>();
         drone = GameObject.FindGameObjectWithTag("Player").GetComponent<PowerfulEngine>();
+        /*
+        GridMap map = new GridMap();
+        map.markAsEdge(43, 46, 146, 16);
+        map.markAsEdge(43, 46, 99, 81);
+        map.markAsEdge(146, 16, 99, 81);
+        map.fillTheTrianglarArea();
+        Debug.Log(map.getPoint(115, 26));
+        Debug.Log(map.getPoint(115, 25));
+        Debug.Log(map.getPoint(115, 24));
+        Debug.Log(map.getPoint(115, 23));
+        */
     }
 
     bool test;

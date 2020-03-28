@@ -22,4 +22,23 @@ public class State
     {
         return orientation;
     }
+
+    public static bool isVaild(State left, State right)
+    {
+        float leftCameraOrientation = left.getCurrentOrientation();
+        float rightCameraOrientation = right.getCurrentOrientation();
+        if(leftCameraOrientation != rightCameraOrientation)
+        {
+            return false;
+        }
+        Vector3 dronePositionWhileLeftCameraCapture = left.getCurrentPosition();
+        Vector3 dronePositionWhileRightCameraCapture = right.getCurrentPosition();
+        Vector3 diff = dronePositionWhileLeftCameraCapture - dronePositionWhileRightCameraCapture;
+        float uncertainty = Mathf.Abs(diff.x) + Mathf.Abs(diff.y) + Mathf.Abs(diff.z);
+        if (uncertainty > 2)
+        {
+            return false;
+        }
+        return true;
+    }
 }

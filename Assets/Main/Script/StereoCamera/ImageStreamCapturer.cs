@@ -18,6 +18,7 @@ public class ImageStreamCapturer : MonoBehaviour
     public DistanceCounter distanceCounter;
 
     private Camera thisStereoCamera;
+    private Transform droneTransform;
     private int cameraType;
     private Mat capturedImage;
     // Start is called before the first frame update
@@ -25,6 +26,7 @@ public class ImageStreamCapturer : MonoBehaviour
     {
         thisStereoCamera = this.gameObject.GetComponent<Camera>();
         thisStereoCamera.focalLength = FOCAL_LENGTH; // by default, focal length = 20.0f (millimeters)
+        droneTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         string name = this.gameObject.name;
         if(name == "StereoCamera-left")
         {
@@ -63,7 +65,7 @@ public class ImageStreamCapturer : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.7f);
+            yield return new WaitForSeconds(0.4f);
             //Debug.Log(uiManager.getLock());
             if (!uiManager.getLock())
             {
@@ -99,13 +101,14 @@ public class ImageStreamCapturer : MonoBehaviour
         // form an image, convert image from "Texture2D" type (A type of image in Unity) to "Mat" type (A type of image in OpenCvSharp)
         this.capturedImage = Mat.FromImageData(bytes);
 
+        State currState = new State(droneTransform.position, droneTransform.eulerAngles.y);
         if (cameraType == LEFT_CAMERA) // send image to DistanceCounter
         {
-            distanceCounter.setLeftImage(capturedImage);
+            distanceCounter.setLeftImage(capturedImage, currState);
         }
         else
         {
-            distanceCounter.setRightImage(capturedImage);
+            distanceCounter.setRightImage(capturedImage, currState);
         }
     }
 

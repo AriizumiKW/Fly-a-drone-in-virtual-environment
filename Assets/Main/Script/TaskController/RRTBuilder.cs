@@ -8,7 +8,7 @@ using OpenCvSharp;
 public class RRTBuilder : MonoBehaviour
 {
     // this gameobject: the drone
-    public const float EPS = 10.0f;
+    public const float EPS = 20.0f;
     public InterfaceManager uiManager;
     private DistanceCounter distanceCounter;
     private RotationSimulator rotation;
@@ -64,31 +64,55 @@ public class RRTBuilder : MonoBehaviour
 
             while (uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
             {
-                this.randomPosition = randomPoint(); // randomly select a point with distance EPS
-                this.minDisNode = root;
-                float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
-                foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
+                float angle;
+                Vector3 beforePosition;
+                Vector3 afterPosition;
+                int deadlockBreaker = 0;
+                while (true)
                 {
-                    float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
-                    if (distance < minDistance)
+                    this.randomPosition = randomPoint(); // randomly select a point with distance EPS
+                    this.minDisNode = root;
+                    float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+                    foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
                     {
-                       this.minDisNode = node;
+                        float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+                        if (distance < minDistance)
+                        {
+                            this.minDisNode = node;
+                        }
+                    }
+                    float radian = Mathf.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
+                    angle = radian * 180 / Mathf.PI;
+                    Vector3 unitVector = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+                    beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
+                    afterPosition = beforePosition + (unitVector * EPS);
+                    if (map.ifThisPointIsChecked(afterPosition))
+                    {
+                        break;
+                    }
+                    if(deadlockBreaker >= 15)// detect deadlock and break
+                    {
+                        rotation.setRotatedAngle(UnityEngine.Random.Range(0.0f, 360.0f));
+                        break;
+                    }
+                    else
+                    {
+                        deadlockBreaker++;
                     }
                 }
-                float radian = Mathf.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
-                float angle = radian * 180 / Mathf.PI;
-                Vector3 unitVector = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
-                Vector3 beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
-                Vector3 afterPosition = beforePosition + (unitVector * EPS);
-                if (! map.ifMeetObstacleAlongTheDirection(afterPosition.x, afterPosition.z, minDisNode.X(), minDisNode.Z()))
+                if (!map.ifThisWayPassable(afterPosition.x, afterPosition.z, beforePosition.x, beforePosition.z)) //时序逻辑问题，带修复
                 {
-                    Debug.Log(map.ifThisLineIsChecked(beforePosition, afterPosition));
+                    //Debug.Log(map.ifThisPointIsChecked(beforePosition));
+                    //Debug.Log(map.ifThisLineIsChecked(beforePosition, afterPosition));
                     if (map.ifThisLineIsChecked(beforePosition, afterPosition))
                     {
-                        RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
-                        theRRT.Add(newNode);
-                        demoGraph.addNode(newNode);
-                        //Debug.Log("in region" + newNode.X() + ":" + newNode.Z());
+                        if (!ifMoreThanSevenNodesInThisArea(afterPosition))
+                        {
+                            RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
+                            theRRT.Add(newNode);
+                            demoGraph.addNode(newNode);
+                        }
+                        break;
                     }
                     else
                     {
@@ -117,26 +141,7 @@ public class RRTBuilder : MonoBehaviour
 
         return (randomX, randomZ);
     }
-    /*
-    private (Vector3, Vector3) randomPointWithDistanceEPS()
-    {
-        this.minDisNode = root;
-        float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
-        foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
-        {
-            float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
-            if (distance < minDistance)
-            {
-                this.minDisNode = node;
-            }
-        }
-        float radian = Mathf.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
-        float angle = radian * 180 / Mathf.PI;
-        Vector3 unitVector = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
-        Vector3 beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
-        Vector3 afterPosition = beforePosition + (unitVector * EPS);
-    }
-    */
+    
     private void letDroneFly(RRTNode curr, RRTNode dest)  // curr: current position, dest: destination
     {
         /*
@@ -225,5 +230,29 @@ public class RRTBuilder : MonoBehaviour
             }
         }
         return nearest;
+    }
+
+    private int[,] nodesCount = new int[9, 7];
+    private bool ifMoreThanSevenNodesInThisArea(Vector3 position)
+    {
+        int areaX = Mathf.FloorToInt((position.x - 25) / 50);
+        int areaY = Mathf.FloorToInt((position.z - 50) / 50);
+        int count = nodesCount[areaX, areaY];
+        if(count >= 7)
+        {
+            return true;
+        }
+        else
+        {
+            nodesCount[areaX, areaY] += 1;
+            return false;
+        }
+    }
+
+    public void resetRRT()
+    {
+        nodesCount = new int[9, 7];
+        theRRT = new List<RRTNode>();
+        map.resetMap();
     }
 }

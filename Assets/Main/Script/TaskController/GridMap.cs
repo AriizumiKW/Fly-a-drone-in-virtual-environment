@@ -16,6 +16,7 @@ public class GridMap
     public GridMap()
     {
         map = new int[450, 350];
+        map[50, 75] = CHECKED;
         demoGraph = GameObject.FindGameObjectWithTag("Player").GetComponent<RRTDrawer>();
     }
 
@@ -274,12 +275,14 @@ public class GridMap
                 direction = new Vector2(-1.0f, (y2 - y1) / (x1 - x2));
             }
         }
+
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
         if (map[x, y] == UNLABEL)
         {
             return false;
         }
+
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
         if (map[x, y] == UNLABEL)
@@ -315,14 +318,22 @@ public class GridMap
 
     public bool ifThisPointIsChecked(float pointX, float pointZ)
     {
-        int x = (int)pointX;
-        int y = (int)pointZ;
-        if (map[x, y] == CHECKED)
+        int x = (int)(pointX - 25);
+        int y = (int)(pointZ - 50);
+        try
         {
-            return true;
+            if (map[x, y] == CHECKED)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        else
+        catch (System.IndexOutOfRangeException e)
         {
+            Debug.Log(x + ":" + y);
             return false;
         }
     }

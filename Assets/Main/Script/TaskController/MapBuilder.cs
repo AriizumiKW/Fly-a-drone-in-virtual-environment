@@ -164,23 +164,18 @@ public class MapBuilder : MonoBehaviour
         map = new GridMap();
     }
 
-    public bool ifMeetObstacleAlongTheDirection(float oriX, float oriY, float endX, float endY)
+    public bool ifThisWayPassable(float oriX, float oriY, float endX, float endY)
     {
         return map.ifMeetAnObstacleAlongThisWay(oriX, oriY, endX, endY);
     }
 
     public bool ifThisLineIsChecked(Vector3 beforePosition, Vector3 afterPosition)
     {
-        bool b = map.ifThisLineIsChecked(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z);
-        b = b && map.ifThisLineIsChecked(beforePosition.x + 5, beforePosition.z, afterPosition.x + 5, afterPosition.z);
-        b = b && map.ifThisLineIsChecked(beforePosition.x - 5, beforePosition.z, afterPosition.x - 5, afterPosition.z);
-        b = b && map.ifThisLineIsChecked(beforePosition.x, beforePosition.z + 5, afterPosition.x, afterPosition.z + 5);
-        b = b && map.ifThisLineIsChecked(beforePosition.x, beforePosition.z - 5, afterPosition.x, afterPosition.z - 5);
-        return b;
+        return map.ifThisLineIsChecked(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z);
     }
 
-    public bool ifThisPointIsChecked(float pointX, float pointZ)
+    public bool ifThisPointIsChecked(Vector3 position)
     {
-        return map.ifThisPointIsChecked(pointX, pointZ);
+        return map.ifThisPointIsChecked(position.x, position.z);
     }
 }

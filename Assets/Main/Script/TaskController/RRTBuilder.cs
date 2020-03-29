@@ -8,7 +8,7 @@ using OpenCvSharp;
 public class RRTBuilder : MonoBehaviour
 {
     // this gameobject: the drone
-    public const float EPS = 20.0f;
+    public const float EPS = 30.0f;
     public InterfaceManager uiManager;
     private DistanceCounter distanceCounter;
     private RotationSimulator rotation;
@@ -100,13 +100,13 @@ public class RRTBuilder : MonoBehaviour
                         deadlockBreaker++;
                     }
                 }
-                if (!map.ifThisWayPassable(afterPosition.x, afterPosition.z, beforePosition.x, beforePosition.z)) //时序逻辑问题，带修复
+                if (!map.ifItIsPossibleThisWayPassable(afterPosition.x, afterPosition.z, beforePosition.x, beforePosition.z))
                 {
                     //Debug.Log(map.ifThisPointIsChecked(beforePosition));
                     //Debug.Log(map.ifThisLineIsChecked(beforePosition, afterPosition));
                     if (map.ifThisLineIsChecked(beforePosition, afterPosition))
                     {
-                        if (!ifMoreThanSevenNodesInThisArea(afterPosition))
+                        if (!ifMoreThanFiveNodesInThisArea(afterPosition))
                         {
                             RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
                             theRRT.Add(newNode);
@@ -233,12 +233,12 @@ public class RRTBuilder : MonoBehaviour
     }
 
     private int[,] nodesCount = new int[9, 7];
-    private bool ifMoreThanSevenNodesInThisArea(Vector3 position)
+    private bool ifMoreThanFiveNodesInThisArea(Vector3 position)
     {
         int areaX = Mathf.FloorToInt((position.x - 25) / 50);
         int areaY = Mathf.FloorToInt((position.z - 50) / 50);
         int count = nodesCount[areaX, areaY];
-        if(count >= 7)
+        if(count >= 5)
         {
             return true;
         }

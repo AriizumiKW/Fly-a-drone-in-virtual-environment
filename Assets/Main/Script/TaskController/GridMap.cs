@@ -16,7 +16,13 @@ public class GridMap
     public GridMap()
     {
         map = new int[450, 350];
-        map[50, 75] = CHECKED;
+        for(int i = 10; i <= 40; i++)
+        {
+            for(int j = 10; j <= 40; j++)
+            {
+                map[i, j] = CHECKED;
+            }
+        }
         demoGraph = GameObject.FindGameObjectWithTag("Player").GetComponent<RRTDrawer>();
     }
 
@@ -331,7 +337,7 @@ public class GridMap
                 return false;
             }
         }
-        catch (System.IndexOutOfRangeException e)
+        catch (System.IndexOutOfRangeException e) // for test
         {
             Debug.Log(x + ":" + y);
             return false;

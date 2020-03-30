@@ -127,8 +127,8 @@ public class DistanceCounter : MonoBehaviour
     Mat part8_epliline;
     private void cutLeftImageToEightParts() // step1, choose the centre region of left image, cut it into 8 equal parts
     {
-        int topHeight = (int)(0.475 * leftImg.Rows);
-        int buttomHeight = (int)(0.525 * leftImg.Rows);
+        int topHeight = (int)(0.45 * leftImg.Rows);
+        int buttomHeight = (int)(0.55 * leftImg.Rows);
         Mat leftImg_roi = leftImg.RowRange(topHeight, buttomHeight); // our region of interest, which is the centre region of left image
         part1 = leftImg_roi.ColRange((int)(0.1 * leftImg.Cols), (int)(0.2 * leftImg.Cols));
         part2 = leftImg_roi.ColRange((int)(0.2 * leftImg.Cols), (int)(0.3 * leftImg.Cols));

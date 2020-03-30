@@ -59,11 +59,11 @@ public class GridMap
         }
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
-        (x, y) = errorFilter(x, y);
+        (x, y) = robustCheck(x, y);
         map[x, y] = CHECKED_AREA_EDGE; // mark start point before loop
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
-        (x, y) = errorFilter(x, y);
+        (x, y) = robustCheck(x, y);
         map[x, y] = CHECKED_AREA_EDGE; // mark end point before loop
         
         while (true)
@@ -84,7 +84,7 @@ public class GridMap
             }
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
-            (x, y) = errorFilter(x, y);
+            (x, y) = robustCheck(x, y);
             map[x, y] = CHECKED_AREA_EDGE;
             start += direction;
         }
@@ -125,7 +125,7 @@ public class GridMap
         }
     }
 
-    private (int, int) errorFilter(int _x, int _y)
+    private (int, int) robustCheck(int _x, int _y)
     {
         int x = _x;
         int y = _y;
@@ -159,7 +159,7 @@ public class GridMap
             {
                 int col = i;
                 int row = j;
-                (col, row) = errorFilter(col, row);
+                (col, row) = robustCheck(col, row);
                 map[col, row] = OBSTACLE;
             }
         }
@@ -213,12 +213,14 @@ public class GridMap
         }
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
+        (x, y) = robustCheck(x, y);
         if (map[x, y] == OBSTACLE)
         {
             return true;
         }
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
+        (x, y) = robustCheck(x, y);
         if (map[x, y] == OBSTACLE)
         {
             return true;
@@ -241,10 +243,12 @@ public class GridMap
             }
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
+            (x, y) = robustCheck(x, y);
             if (map[x, y] == OBSTACLE)
             {
                 return true;
             }
+            
             start += direction;
         }
         return false;
@@ -284,17 +288,19 @@ public class GridMap
 
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
+        (x, y) = robustCheck(x, y);
+        if (map[x, y] == UNLABEL)
+        {
+            return false;
+        }
+        x = Mathf.RoundToInt(end.x);
+        y = Mathf.RoundToInt(end.y);
+        (x, y) = robustCheck(x, y);
         if (map[x, y] == UNLABEL)
         {
             return false;
         }
 
-        x = Mathf.RoundToInt(end.x);
-        y = Mathf.RoundToInt(end.y);
-        if (map[x, y] == UNLABEL)
-        {
-            return false;
-        }
         while (true)
         {
             if (y2 >= y1)
@@ -313,6 +319,7 @@ public class GridMap
             }
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
+            (x, y) = robustCheck(x, y);
             if (map[x, y] == UNLABEL)
             {
                 return false;
@@ -326,20 +333,13 @@ public class GridMap
     {
         int x = (int)(pointX - 25);
         int y = (int)(pointZ - 50);
-        try
+        (x, y) = robustCheck(x, y);
+        if (map[x, y] == CHECKED)
         {
-            if (map[x, y] == CHECKED)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
-        catch (System.IndexOutOfRangeException e) // for test
+        else
         {
-            Debug.Log(x + ":" + y);
             return false;
         }
     }

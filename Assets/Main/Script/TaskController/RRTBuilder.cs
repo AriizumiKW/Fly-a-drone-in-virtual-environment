@@ -33,7 +33,6 @@ public class RRTBuilder : MonoBehaviour
         theRRT.Add(root);
         demoGraph.addRootNode(root);
 
-        flag = false;
         randomPosition = (0, 0);
         minDisNode = root;
     }
@@ -42,7 +41,6 @@ public class RRTBuilder : MonoBehaviour
 
     private RRTNode minDisNode;
     private (float, float) randomPosition;
-    private bool flag;
     void FixedUpdate()
     {
         if (uiManager.getLock()) // if locked, do nothing
@@ -70,7 +68,7 @@ public class RRTBuilder : MonoBehaviour
                 int deadlockBreaker = 0;
                 while (true)
                 {
-                    this.randomPosition = randomPoint(); // randomly select a point with distance EPS
+                    this.randomPosition = randomPoint(); // randomly generate a point
                     this.minDisNode = root;
                     float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
                     foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
@@ -81,16 +79,26 @@ public class RRTBuilder : MonoBehaviour
                             this.minDisNode = node;
                         }
                     }
+                    
                     float radian = Mathf.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
-                    angle = radian * 180 / Mathf.PI;
-                    Vector3 unitVector = new Vector3(Mathf.Cos(radian), 0, Mathf.Sin(radian));
+                    if (randomPosition.Item1 >= minDisNode.X())
+                    {
+                        angle = radian * 180 / Mathf.PI;
+                    }
+                    else
+                    {
+                        angle = radian * 180 / Mathf.PI - 180;
+                    }
+                    Vector3 unitVector = new Vector3(this.randomPosition.Item1 - this.minDisNode.X(), 0, this.randomPosition.Item2 - this.minDisNode.Z());
+                    unitVector = unitVector.normalized;
                     beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
                     afterPosition = beforePosition + (unitVector * EPS);
+                    //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Olive); //测试
                     if (map.ifThisPointIsChecked(afterPosition))
                     {
                         break;
                     }
-                    if(deadlockBreaker >= 15)// detect deadlock and break
+                    if(deadlockBreaker >= 8)// detect deadlock and break
                     {
                         rotation.setRotatedAngle(UnityEngine.Random.Range(0.0f, 360.0f));
                         break;

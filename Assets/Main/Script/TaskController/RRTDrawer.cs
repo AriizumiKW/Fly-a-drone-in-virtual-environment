@@ -55,7 +55,6 @@ public class RRTDrawer : MonoBehaviour
     Mat result = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
     private Mat mergeImageLayer(Mat buttomLayer, Mat upperLayer)
     {
-        Cv2.ImWrite(Application.persistentDataPath + "/buttom.png", buttomLayer);
         Cv2.ImWrite(Application.persistentDataPath + "/upper.png", upperLayer);
         Cv2.CopyTo(upperLayer, result);
         Parallel.For(0, buttomLayer.Rows, row =>
@@ -84,7 +83,6 @@ public class RRTDrawer : MonoBehaviour
                 }
             }
         });
-        Cv2.ImWrite(Application.persistentDataPath + "/reesult.png", result);
         return result;
     }
 

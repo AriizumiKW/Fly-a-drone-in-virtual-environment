@@ -156,11 +156,33 @@ public class PowerfulEngine : MonoBehaviour
                     _unitDirection = new Vector3(0, 0, -1);
                 }
             }
+            else if(destZ == currZ)
+            {
+                if(destX >= currX)
+                {
+                    _angle = 0;
+                    _unitDirection = new Vector3(1, 0, 0);
+                }
+                else
+                {
+                    _angle = 180;
+                    _unitDirection = new Vector3(-1, 0, 0);
+                }
+            }
             else
             {
                 _unitDirection = new Vector3(destX - currX, 0, destZ - currZ);
                 _unitDirection = _unitDirection.normalized; // return 3-demensional vector with mag=1
-                _angle = Mathf.Atan(_unitDirection.z / _unitDirection.x) * 180 / Mathf.PI;
+                if(destX >= currX)
+                {
+                    _angle = Mathf.Atan((destZ - currZ) / (destX - currX)) * 180 / Mathf.PI;
+                }
+                else
+                {
+                    _angle = Mathf.Atan((destZ - currZ) / (destX - currX)) * 180 / Mathf.PI - 180;
+                }
+                //Debug.Log(_angle);
+                //demoGraph.drawPoint((int)destX, (int)destZ);
             }
             float _distance = Mathf.Sqrt(Mathf.Pow(destZ - currZ, 2) + Mathf.Pow(destX - currX, 2));
             float _waitTime = _distance / SPEED;

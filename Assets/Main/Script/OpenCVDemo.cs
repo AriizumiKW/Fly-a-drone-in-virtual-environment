@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Security.Cryptography;
 using System;
 using OpenCvSharp;
+using System.Threading.Tasks;
 
 public class OpenCVDemo : MonoBehaviour
 {
@@ -23,42 +24,42 @@ public class OpenCVDemo : MonoBehaviour
         
         map = new GridMap();
         */
+
+        Mat upper = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
+        Mat buttom = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
+        //Mat result = mergeImageLayer(buttom, upper);
+        //Cv2.ImWrite(Application.persistentDataPath + "/fuck.png", result);
     }
 
-    bool test;
-    private void FixedUpdate()
+    private Mat mergeImageLayer(Mat buttomLayer, Mat upperLayer)
     {
-        /*
-        if(ui.getGameMode() == InterfaceManager.MANUAL_MODE)
+        Mat result = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
+        Cv2.CopyTo(upperLayer, result);
+        for (int row = 0; row < buttomLayer.Rows; row++)
         {
-            if (test)
+            for (int col = 0; col < buttomLayer.Cols; col++)
             {
-                root = new RRTNode(50, 75);
-                RRTNode a = new RRTNode(50, 85, root);
-                RRTNode b = new RRTNode(60, 85, a);
-                RRTNode c = new RRTNode(60, 75, root);
-                List<RRTNode> path = findPathOnRRT(root, b);
-                path.Insert(0, root);
-                drone.letDroneFlyByPath(path);
-                test = false;
-                return;
-            }
-            
-            bool idle = drone.getIfIdle();
-            if (idle)
-            {
-                root = new RRTNode(50, 75);
-                RRTNode a = new RRTNode(50, 85, root);
-                RRTNode b = new RRTNode(60, 85, a);
-                RRTNode c = new RRTNode(60, 75, root);
-                List<RRTNode> path = findPathOnRRT(b, c);
-                path.Insert(0, b);
-                drone.letDroneFlyByPath(path);
-                test = false;
-                return;
+                Debug.Log(row + ": " + col);
+                int blue = buttomLayer.At<Vec3b>(row, col).Item0;
+                int green = buttomLayer.At<Vec3b>(row, col).Item1;
+                int red = buttomLayer.At<Vec3b>(row, col).Item2; // RGB value
+                if (blue == 255 && green == 255 && red == 255) // white
+                {
+                    int blue2 = upperLayer.At<Vec3b>(row, col).Item0;
+                    int green2 = upperLayer.At<Vec3b>(row, col).Item1;
+                    int red2 = upperLayer.At<Vec3b>(row, col).Item2;
+                    if (blue2 == 211 && green2 == 211 && red2 == 211) // light-grey
+                    {
+                        result.Set<Vec3b>(row, col, new Vec3b(255, 255, 255));
+                    }
+                }
+                else if (blue == 144 && green == 238 && red == 144) // light-green
+                {
+                    result.Set<Vec3b>(row, col, new Vec3b(144, 238, 144));
+                }
             }
         }
-        */
+        return result;
     }
 
     private List<RRTNode> findPathOnRRT(RRTNode curr, RRTNode dest) // curr: current position, dest: destination

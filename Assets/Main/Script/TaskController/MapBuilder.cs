@@ -133,7 +133,7 @@ public class MapBuilder : MonoBehaviour
             Vector3 direction2 = Quaternion.AngleAxis(angle2, new Vector3(0, 1, 0)) * this.transform.forward;
             Vector3 vertex2 = currPosition + direction2 * distance2;
             map.setCheckedArea(currPosition, vertex1, vertex2);
-            //demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
+            demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
         }
 
         List<Vector3> endPoints = new List<Vector3>();

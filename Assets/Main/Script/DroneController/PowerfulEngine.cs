@@ -61,7 +61,7 @@ public class PowerfulEngine : MonoBehaviour
                 }
                 this.transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90 - flyAngle, transform.eulerAngles.z);
                 this.transform.position += unitDirection * SPEED * deltaTime; // flying
-                demoGraph.drawPoint((int)transform.position.x, (int)transform.position.z, Scalar.YellowGreen, 1); // 测试
+                demoGraph.drawTrace(this.transform.position); // for testing
             }
         }
     }

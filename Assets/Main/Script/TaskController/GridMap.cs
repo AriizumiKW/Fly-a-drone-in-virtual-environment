@@ -139,23 +139,23 @@ public class GridMap
         int y = _y;
         if (_x < 0)
         {
-            Debug.Log("x: " + _x);
+            //Debug.Log("x: " + _x);
             x = 0;
         }
         else if (_x > X_RANGE - 1)
         {
-            Debug.Log("x: " + _x);
+            //Debug.Log("x: " + _x);
             x = X_RANGE - 1;
         }
 
         if (_y < 0)
         {
-            Debug.Log("y: " + _y);
+            //Debug.Log("y: " + _y);
             y = 0;
         }
         else if (_y > Y_RANGE - 1)
         {
-            Debug.Log("y: " + _y);
+            //Debug.Log("y: " + _y);
             y = Y_RANGE - 1;
         }
         return (x, y);

@@ -8,7 +8,7 @@ using OpenCvSharp;
 public class RRTBuilder : MonoBehaviour
 {
     // this gameobject: the drone
-    public const float EPS = 20.0f;
+    public const float EPS = 25.0f;
     public InterfaceManager uiManager;
     private DistanceCounter distanceCounter;
     private RotationSimulator rotation;
@@ -101,7 +101,7 @@ public class RRTBuilder : MonoBehaviour
     {
         while (uiManager.getLock() == false && uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
         {
-            yield return new WaitForSeconds(0.1f); // try to add a branch each 0.1 seconds
+            yield return new WaitForSeconds(0.05f); // try to add a branch each 0.05 seconds
             Vector3 afterPosition = generateRandomPointWithDistanceEPStoMinDisNode();
             Vector3 beforePosition = new Vector3(this.minDisNode.X(), 0, this.minDisNode.Z());
             //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Red);
@@ -112,6 +112,7 @@ public class RRTBuilder : MonoBehaviour
                 {
                     RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
                     theRRT.Add(newNode);
+                    //demoGraph.drawPoint((int)rp.Item1, (int)rp.Item2, Scalar.Red, 2);
                     demoGraph.addNode(newNode);
                 }
                 else
@@ -120,7 +121,9 @@ public class RRTBuilder : MonoBehaviour
                 }
             }
         }
-    } 
+    }
+
+    //private (float, float) rp; // uesd to test
 
     private Vector3 generateRandomPointWithDistanceEPStoMinDisNode()
     {
@@ -171,6 +174,7 @@ public class RRTBuilder : MonoBehaviour
                 deadlockBreaker++;
             }
         }
+        //rp = randomPosition;
         return afterPosition;
     }
     

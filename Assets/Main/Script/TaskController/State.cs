@@ -23,7 +23,7 @@ public class State
         return orientation;
     }
 
-    public static bool isVaild(State left, State right)
+    public static bool isEqual(State left, State right)
     {
         float leftCameraOrientation = left.getCurrentOrientation();
         float rightCameraOrientation = right.getCurrentOrientation();

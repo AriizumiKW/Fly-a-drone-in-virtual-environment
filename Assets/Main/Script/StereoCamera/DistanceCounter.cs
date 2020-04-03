@@ -44,7 +44,7 @@ public class DistanceCounter : MonoBehaviour
         //drawLineInUnity(distance);
         if (leftAlready && rightAlready)
         {
-            bool vaild = State.isVaild(leftState, rightState);
+            bool vaild = State.isEqual(leftState, rightState);
             if (vaild)
             {
                 leftAlready = false;

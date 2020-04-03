@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapBuilder : MonoBehaviour
 {
-    public const float EFFECTIVE_DISTANCE = 60.0f;
+    public const float EFFECTIVE_DISTANCE = 65.0f;
     // store a map in memory
     private RRTDrawer demoGraph;
     private GridMap map;

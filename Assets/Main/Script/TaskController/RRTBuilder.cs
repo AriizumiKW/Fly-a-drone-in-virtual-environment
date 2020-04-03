@@ -8,7 +8,7 @@ using OpenCvSharp;
 public class RRTBuilder : MonoBehaviour
 {
     // this gameobject: the drone
-    public const float EPS = 25.0f;
+    public const float EPS = 22.0f;
     public InterfaceManager uiManager;
     private DistanceCounter distanceCounter;
     private RotationSimulator rotation;
@@ -34,7 +34,7 @@ public class RRTBuilder : MonoBehaviour
         demoGraph.addRootNode(root);
 
         minDisNode = root;
-        requestList = new List<(RRTNode, Vector3)>();
+        requestList = new LinkedList<(RRTNode, Vector3)>();
         b = true;
     }
 
@@ -75,10 +75,23 @@ public class RRTBuilder : MonoBehaviour
                     if (requestList.Count != 0)
                     {
                         RRTNode nearestNode = findNearestNode();
-                        RRTNode nearestNodeInRequestList = requestList[0].Item1;
+                        RRTNode nearestNodeInRequestList = requestList.First.Value.Item1;
                         float minDistance = nearestNodeInRequestList.distanceTo(this.transform.position.x, this.transform.position.z);
-                        foreach ((RRTNode before, Vector3 after) in requestList)
+                        //foreach ((RRTNode before, Vector3 after) in requestList)
+                        var node = requestList.First;
+                        while (node != null)
                         {
+                            (RRTNode before, Vector3 after) = node.Value;
+                            var next = node.Next;
+                            if (map.ifThisPointIsChecked(after))
+                            {
+                                requestList.Remove(node);
+                            }
+                            node = next;
+                        }
+                        for (var item = requestList.First; item != null; item = item.Next)
+                        {
+                            (RRTNode before, Vector3 after) = item.Value;
                             float distance = before.distanceTo(this.transform.position.x, this.transform.position.z);
                             if(distance < minDistance)
                             {
@@ -95,13 +108,13 @@ public class RRTBuilder : MonoBehaviour
         }
     }
 
-    private List<(RRTNode, Vector3)> requestList; // Item1: node in RRT. Item2: the node we want to add into RRT, but perhaps this way is not passable. Request to check
+    private LinkedList<(RRTNode, Vector3)> requestList; // Item1: node in RRT. Item2: the node we want to add into RRT, but perhaps this way is not passable. Request to check
 
     private IEnumerator buildingRRT()
     {
         while (uiManager.getLock() == false && uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
         {
-            yield return new WaitForSeconds(0.01f); // try to add a branch each 0.01 seconds
+            yield return new WaitForSeconds(0.03f); // try to add a branch each 0.03 seconds
             Vector3 afterPosition = generateRandomPointWithDistanceEPStoMinDisNode();
             Vector3 beforePosition = new Vector3(this.minDisNode.X(), 0, this.minDisNode.Z());
 
@@ -135,7 +148,7 @@ public class RRTBuilder : MonoBehaviour
                 }
                 else
                 {
-                    requestList.Add((minDisNode, afterPosition));
+                    requestList.AddLast((minDisNode, afterPosition));
                 }
             }
             else if (!map.ifMeetAnObstacleAlongThisWay(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z)) // feasible condition
@@ -156,7 +169,7 @@ public class RRTBuilder : MonoBehaviour
                 }
                 else
                 {
-                    requestList.Add((minDisNode, afterPosition));
+                    requestList.AddLast((minDisNode, afterPosition));
                 }
             }
         }
@@ -219,13 +232,13 @@ public class RRTBuilder : MonoBehaviour
 
     private float thresholdFunction(int x)
     {
-        if(x >= 10)
+        if(x >= 15)
         {
             return 0.1f;
         }
         else
         {
-            float y = -0.09f * (float)x + 1; // choose linear function (Occam's Razor)
+            float y = -0.06f * (float)x + 1; // choose linear function (Occam's Razor)
             return y;
         }
     }

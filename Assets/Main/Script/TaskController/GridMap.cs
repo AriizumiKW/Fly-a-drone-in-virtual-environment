@@ -175,7 +175,11 @@ public class GridMap
                 map[col, row] = OBSTACLE;
             }
         }
-        demoGraph.drawObstacle(x + 25, y + 50);
+        (x, y) = robustCheck(x, y);
+        if(map[x, y] != CHECKED && map[x + 4, y] != CHECKED && map[x, y + 4] != CHECKED)
+        {
+            demoGraph.drawObstacle(x + 25, y + 50);
+        }
     }
 
     public void setCheckedArea(Vector3 pointA, Vector3 pointB, Vector3 pointC) // all points in trianglar ABC, change to "CHECKED"

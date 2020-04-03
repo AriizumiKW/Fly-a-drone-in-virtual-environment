@@ -55,7 +55,7 @@ public class RRTDrawer : MonoBehaviour
     Mat result = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
     private Mat mergeImageLayer(Mat buttomLayer, Mat upperLayer)
     {
-        //Cv2.ImWrite(Application.persistentDataPath + "/buttom.png", buttomLayer);
+        Cv2.ImWrite(Application.persistentDataPath + "/upper.png", upperLayer);
         Cv2.CopyTo(upperLayer, result);
         Parallel.For(0, buttomLayer.Rows, row =>
         {
@@ -130,11 +130,6 @@ public class RRTDrawer : MonoBehaviour
         listOfPoints.Add(new Point((int)_p2.x - 25, 400 - (int)_p2.z));
         listOfListOfPoints.Add(listOfPoints);
         Cv2.FillPoly(checkedArea, listOfListOfPoints, Scalar.White, LineTypes.Link8);
-    }
-
-    public void drawCheckedArea(int x, int y)
-    {
-        Cv2.Circle(checkedArea, x - 25, 400 - y, 1, Scalar.White, -1, LineTypes.Link8);
     }
 
     public void drawPoint(int x, int y) // only for test

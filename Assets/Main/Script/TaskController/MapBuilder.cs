@@ -133,7 +133,7 @@ public class MapBuilder : MonoBehaviour
             Vector3 direction2 = Quaternion.AngleAxis(angle2, new Vector3(0, 1, 0)) * this.transform.forward;
             Vector3 vertex2 = currPosition + direction2 * distance2;
             map.setCheckedArea(currPosition, vertex1, vertex2);
-            //demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
+            demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
         }
 
         List<Vector3> endPoints = new List<Vector3>();
@@ -151,7 +151,7 @@ public class MapBuilder : MonoBehaviour
 
         //Debug.Log("distance:" + string.Join(" ", distances));
         //Debug.Log("before:" + string.Join(" ", endPoints));
-        //endPoints = smoothObstacles(endPoints); // enable smooth
+        endPoints = smoothObstacles(endPoints);
         //Debug.Log("after:" + string.Join(" ", endPoints));
         foreach(Vector3 endPoint in endPoints)
         {
@@ -164,7 +164,7 @@ public class MapBuilder : MonoBehaviour
         map = new GridMap();
     }
 
-    public bool ifMeetAnObstacleAlongThisWay(float oriX, float oriY, float endX, float endY)
+    public bool ifItIsPossibleThisWayPassable(float oriX, float oriY, float endX, float endY)
     {
         return map.ifMeetAnObstacleAlongThisWay(oriX, oriY, endX, endY);
     }

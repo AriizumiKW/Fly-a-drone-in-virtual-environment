@@ -15,16 +15,15 @@ public class GridMap
 
     public GridMap()
     {
-        demoGraph = GameObject.FindGameObjectWithTag("Player").GetComponent<RRTDrawer>();
         map = new int[450, 350];
         for(int i = 10; i <= 40; i++)
         {
             for(int j = 10; j <= 40; j++)
             {
                 map[i, j] = CHECKED;
-                demoGraph.drawCheckedArea(i + 25, j + 50);
             }
         }
+        demoGraph = GameObject.FindGameObjectWithTag("Player").GetComponent<RRTDrawer>();
     }
 
     private void markAsEdge(float _x1, float _y1, float _x2, float _y2) // Bresenham Algorithm. Draw a line in a grid (mark as CHECKED_AREA_EDGE)
@@ -95,7 +94,7 @@ public class GridMap
     {
         for(int i=0; i<X_RANGE; i++)
         {
-            int buttomRow = -1; // impossible index: -1
+            int buttomRow = -1;
             int upperRow = -1;
             for(int j=0; j<Y_RANGE; j++)
             {
@@ -114,22 +113,15 @@ public class GridMap
                     }
                 }
             }
-            if(buttomRow != -1 && upperRow != -1) // pass two edge through this vertical line
+            for(int k=buttomRow; k<upperRow; k++)
             {
-                for(int k=buttomRow; k<upperRow; k++)
+                if(map[i, k] == UNLABEL)
                 {
-                    if(map[i, k] == UNLABEL)
-                    {
-                        map[i, k] = CHECKED;
-                        demoGraph.drawCheckedArea(i + 25, k + 50);
-                    }
+                    map[i, k] = CHECKED;
                 }
             }
-            else if(buttomRow != -1 && upperRow == -1) // the vertex of trianglar
-            {
-                map[i, buttomRow] = CHECKED;
-                demoGraph.drawCheckedArea(i + 25, buttomRow + 50);
-            }
+            buttomRow = -1;
+            upperRow = -1;
         }
     }
 
@@ -139,23 +131,19 @@ public class GridMap
         int y = _y;
         if (_x < 0)
         {
-            Debug.Log("x: " + _x);
             x = 0;
         }
         else if (_x > X_RANGE - 1)
         {
-            Debug.Log("x: " + _x);
             x = X_RANGE - 1;
         }
 
         if (_y < 0)
         {
-            Debug.Log("y: " + _y);
             y = 0;
         }
         else if (_y > Y_RANGE - 1)
         {
-            Debug.Log("y: " + _y);
             y = Y_RANGE - 1;
         }
         return (x, y);
@@ -301,14 +289,14 @@ public class GridMap
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
         (x, y) = robustCheck(x, y);
-        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE)
+        if (map[x, y] == UNLABEL)
         {
             return false;
         }
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
         (x, y) = robustCheck(x, y);
-        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE)
+        if (map[x, y] == UNLABEL)
         {
             return false;
         }
@@ -332,7 +320,7 @@ public class GridMap
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
             (x, y) = robustCheck(x, y);
-            if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE)
+            if (map[x, y] == UNLABEL)
             {
                 return false;
             }

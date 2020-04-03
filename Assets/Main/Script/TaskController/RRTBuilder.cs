@@ -8,7 +8,7 @@ using OpenCvSharp;
 public class RRTBuilder : MonoBehaviour
 {
     // this gameobject: the drone
-    public const float EPS = 20.0f;
+    public const float EPS = 30.0f;
     public InterfaceManager uiManager;
     private DistanceCounter distanceCounter;
     private RotationSimulator rotation;
@@ -33,17 +33,14 @@ public class RRTBuilder : MonoBehaviour
         theRRT.Add(root);
         demoGraph.addRootNode(root);
 
+        randomPosition = (0, 0);
         minDisNode = root;
-        requestList = new List<(RRTNode, Vector3)>();
-        b = true;
     }
 
     // Update is called once per frame
 
-    private float flyAngle;
     private RRTNode minDisNode;
-
-    private bool b;
+    private (float, float) randomPosition;
     void FixedUpdate()
     {
         if (uiManager.getLock()) // if locked, do nothing
@@ -63,118 +60,85 @@ public class RRTBuilder : MonoBehaviour
             State currState = distanceCounter.getCurrentStateWhileFindingDistance();
             map.updateMap(distances, currState.getCurrentOrientation(), currState.getCurrentPosition() + new Vector3(0, 0, 1));
 
-            if (uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
+            while (uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
             {
-                if (b)
+                float angle;
+                Vector3 beforePosition;
+                Vector3 afterPosition;
+                int deadlockBreaker = 0;
+                while (true)
                 {
-                    b = false;
-                    StartCoroutine("buildingRRT");
-                }
-                if (drone.getIfIdle())
-                {
-                    if (requestList.Count != 0)
+                    this.randomPosition = randomPoint(); // randomly generate a point
+                    this.minDisNode = root;
+                    float minDistance = this.minDisNode.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+                    foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
                     {
-                        RRTNode nearestNode = findNearestNode();
-                        RRTNode nearestNodeInRequestList = requestList[0].Item1;
-                        float minDistance = nearestNodeInRequestList.distanceTo(this.transform.position.x, this.transform.position.z);
-                        foreach ((RRTNode before, Vector3 after) in requestList)
+                        float distance = node.distanceTo(this.randomPosition.Item1, this.randomPosition.Item2);
+                        if (distance < minDistance)
                         {
-                            float distance = before.distanceTo(this.transform.position.x, this.transform.position.z);
-                            if(distance < minDistance)
-                            {
-                                minDistance = distance;
-                                nearestNodeInRequestList = before;
-                            }
+                            this.minDisNode = node;
                         }
-                        letDroneFly(nearestNode, nearestNodeInRequestList);
-                        requestList.Clear();
-                        //rotation.setRotatedAngle(90 - flyAngle);
+                    }
+                    
+                    float radian = Mathf.Atan((this.randomPosition.Item2 - this.minDisNode.Z()) / (this.randomPosition.Item1 - this.minDisNode.X()));
+                    if (randomPosition.Item1 >= minDisNode.X())
+                    {
+                        angle = radian * 180 / Mathf.PI;
+                    }
+                    else
+                    {
+                        angle = radian * 180 / Mathf.PI - 180;
+                    }
+                    Vector3 unitVector = new Vector3(this.randomPosition.Item1 - this.minDisNode.X(), 0, this.randomPosition.Item2 - this.minDisNode.Z());
+                    unitVector = unitVector.normalized;
+                    beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
+                    afterPosition = beforePosition + (unitVector * EPS);
+                    //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Olive); //测试
+                    if (map.ifThisPointIsChecked(afterPosition))
+                    {
+                        break;
+                    }
+                    if(deadlockBreaker >= 8)// detect deadlock and break
+                    {
+                        rotation.setRotatedAngle(UnityEngine.Random.Range(0.0f, 360.0f));
+                        break;
+                    }
+                    else
+                    {
+                        deadlockBreaker++;
+                    }
+                }
+                if (!map.ifItIsPossibleThisWayPassable(afterPosition.x, afterPosition.z, beforePosition.x, beforePosition.z))
+                {
+                    //Debug.Log(map.ifThisPointIsChecked(beforePosition));
+                    //Debug.Log(map.ifThisLineIsChecked(beforePosition, afterPosition));
+                    if (map.ifThisLineIsChecked(beforePosition, afterPosition))
+                    {
+                        if (!ifMoreThanFiveNodesInThisArea(afterPosition))
+                        {
+                            RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
+                            theRRT.Add(newNode);
+                            demoGraph.addNode(newNode);
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        if (drone.getIfIdle())
+                        {
+                            RRTNode nearestNode = findNearestNode();
+                            letDroneFly(nearestNode, minDisNode);
+                            rotation.setRotatedAngle(90 - angle);
+                        }
+                        //Debug.Log("fly"+ minDisNode.X()+":"+ minDisNode.Z());
+                        break;
                     }
                 }
             }
         }
     }
-
-    private List<(RRTNode, Vector3)> requestList; // Item1: node in RRT. Item2: the node we want to add into RRT, but perhaps this way is not passable. Request to check
-
-    private IEnumerator buildingRRT()
-    {
-        while (uiManager.getLock() == false && uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
-        {
-            yield return new WaitForSeconds(0.1f); // try to add a branch each 0.1 seconds
-            Vector3 afterPosition = generateRandomPointWithDistanceEPStoMinDisNode();
-            Vector3 beforePosition = new Vector3(this.minDisNode.X(), 0, this.minDisNode.Z());
-            //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Red);
-            if (!map.ifMeetAnObstacleAlongThisWay(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z))
-            {
-                //Debug.Log(beforePosition + ":  " + afterPosition);
-                if (map.ifThisLineIsChecked(beforePosition, afterPosition)) // we can go this way, just add it into RRT
-                {
-                    RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
-                    theRRT.Add(newNode);
-                    demoGraph.addNode(newNode);
-                }
-                else
-                {
-                    requestList.Add((minDisNode, afterPosition));
-                }
-            }
-        }
-    } 
-
-    private Vector3 generateRandomPointWithDistanceEPStoMinDisNode()
-    {
-        Vector3 beforePosition;
-        Vector3 afterPosition;
-        (float, float) randomPosition;
-        int deadlockBreaker = 0;
-        while (true)
-        {
-            randomPosition = randomPoint(); // randomly generate a point
-            this.minDisNode = root;
-            float minDistance = this.minDisNode.distanceTo(randomPosition.Item1, randomPosition.Item2);
-            foreach (RRTNode node in theRRT) // find the node in RRT which has the min distance to the random point
-            {
-                float distance = node.distanceTo(randomPosition.Item1, randomPosition.Item2);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    this.minDisNode = node;
-                }
-            }
-
-            float radian = Mathf.Atan((randomPosition.Item2 - this.minDisNode.Z()) / (randomPosition.Item1 - this.minDisNode.X()));
-            if (randomPosition.Item1 >= minDisNode.X())
-            {
-                this.flyAngle = radian * 180 / Mathf.PI;
-            }
-            else
-            {
-                this.flyAngle = radian * 180 / Mathf.PI - 180;
-            }
-            Vector3 unitVector = new Vector3(randomPosition.Item1 - this.minDisNode.X(), 0, randomPosition.Item2 - this.minDisNode.Z());
-            unitVector = unitVector.normalized;
-            beforePosition = new Vector3(minDisNode.X(), 0, minDisNode.Z());
-            afterPosition = beforePosition + (unitVector * EPS);
-            //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Olive); //测试
-            if (map.ifThisPointIsChecked(afterPosition))
-            {
-                break;
-            }
-            if (deadlockBreaker >= 8)// detect deadlock and break
-            {
-                rotation.setRotatedAngle(UnityEngine.Random.Range(0.0f, 360.0f));
-                break;
-            }
-            else
-            {
-                deadlockBreaker++;
-            }
-        }
-        return afterPosition;
-    }
     
-    private (float,float) randomPoint() // real random num
+    private (float,float) randomPoint()
     {
         int randomX = UnityEngine.Random.Range(25, 475); // range: [25,475)
         byte[] randomBytes = new byte[4];

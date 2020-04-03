@@ -139,23 +139,23 @@ public class GridMap
         int y = _y;
         if (_x < 0)
         {
-            Debug.Log("x: " + _x);
+            //Debug.Log("x: " + _x);
             x = 0;
         }
         else if (_x > X_RANGE - 1)
         {
-            Debug.Log("x: " + _x);
+            //Debug.Log("x: " + _x);
             x = X_RANGE - 1;
         }
 
         if (_y < 0)
         {
-            Debug.Log("y: " + _y);
+            //Debug.Log("y: " + _y);
             y = 0;
         }
         else if (_y > Y_RANGE - 1)
         {
-            Debug.Log("y: " + _y);
+            //Debug.Log("y: " + _y);
             y = Y_RANGE - 1;
         }
         return (x, y);
@@ -163,19 +163,21 @@ public class GridMap
 
     public void setAnObstacle(float _x, float _y)
     {
+        demoGraph.drawObstacle((int)_x, (int)_y);
         int x = Mathf.RoundToInt(_x - 25);
         int y = Mathf.RoundToInt(_y - 50);
-        for(int i = x - 8; i < x + 8; i++)
+        for(int i = x - 15; i < x + 15; i++) // 5: obstacle "side length"
         {
-            for(int j = y - 8; j < y + 8; j++)
+            for(int j = y - 15; j < y + 15; j++)
             {
                 int col = i;
                 int row = j;
                 (col, row) = robustCheck(col, row);
-                map[col, row] = OBSTACLE;
+                if(map[col, row] == UNLABEL){
+                    map[col, row] = OBSTACLE;
+                }
             }
         }
-        demoGraph.drawObstacle(x + 25, y + 50);
     }
 
     public void setCheckedArea(Vector3 pointA, Vector3 pointB, Vector3 pointC) // all points in trianglar ABC, change to "CHECKED"

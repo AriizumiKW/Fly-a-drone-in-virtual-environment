@@ -166,14 +166,20 @@ public class MapBuilder : MonoBehaviour
 
     public bool ifMeetAnObstacleAlongThisWay(float oriX, float oriY, float endX, float endY)
     {
-        return map.ifMeetAnObstacleAlongThisWay(oriX, oriY, endX, endY);
+        bool b = map.ifMeetAnObstacleAlongThisWay(oriX, oriY, endX, endY);
+        b = b & map.ifMeetAnObstacleAlongThisWay(oriX + 3, oriY, endX + 3, endY);
+        b = b & map.ifMeetAnObstacleAlongThisWay(oriX - 3, oriY, endX - 3, endY);
+        b = b & map.ifMeetAnObstacleAlongThisWay(oriX, oriY + 3, endX, endY + 3);
+        b = b & map.ifMeetAnObstacleAlongThisWay(oriX, oriY - 3, endX, endY - 3);
+        return b;
     }
 
     public bool ifThisLineIsChecked(Vector3 beforePosition, Vector3 afterPosition)
     {
-        bool b = map.ifThisLineIsChecked(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z);
-        b = b & map.ifThisLineIsChecked(beforePosition.x + 4, beforePosition.z, afterPosition.x - 4, afterPosition.z);
-        b = b & map.ifThisLineIsChecked(beforePosition.x, beforePosition.z + 4, afterPosition.x, afterPosition.z - 4);
+        bool b = map.ifThisLineIsChecked(beforePosition.x - 3, beforePosition.z, afterPosition.x - 3, afterPosition.z);
+        b = b & map.ifThisLineIsChecked(beforePosition.x + 3, beforePosition.z, afterPosition.x + 3, afterPosition.z);
+        b = b & map.ifThisLineIsChecked(beforePosition.x, beforePosition.z + 3, afterPosition.x, afterPosition.z + 3);
+        b = b & map.ifThisLineIsChecked(beforePosition.x, beforePosition.z - 3, afterPosition.x, afterPosition.z - 3);
         return b;
     }
 

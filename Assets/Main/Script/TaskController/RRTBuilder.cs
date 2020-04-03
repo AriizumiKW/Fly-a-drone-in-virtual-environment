@@ -101,7 +101,7 @@ public class RRTBuilder : MonoBehaviour
     {
         while (uiManager.getLock() == false && uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
         {
-            yield return new WaitForSeconds(0.1f); // try to add a branch each 0.1 seconds
+            yield return new WaitForSeconds(0.05f); // try to add a branch each 0.1 seconds
             Vector3 afterPosition = generateRandomPointWithDistanceEPStoMinDisNode();
             Vector3 beforePosition = new Vector3(this.minDisNode.X(), 0, this.minDisNode.Z());
             //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Red);
@@ -110,6 +110,10 @@ public class RRTBuilder : MonoBehaviour
                 //Debug.Log(beforePosition + ":  " + afterPosition);
                 if (map.ifThisLineIsChecked(beforePosition, afterPosition)) // we can go this way, just add it into RRT
                 {
+                    if (this.ifMoreThanSixNodesInThisArea(afterPosition))
+                    {
+                        continue;
+                    }
                     RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
                     theRRT.Add(newNode);
                     demoGraph.addNode(newNode);
@@ -142,6 +146,8 @@ public class RRTBuilder : MonoBehaviour
                     this.minDisNode = node;
                 }
             }
+            //demoGraph.drawPoint((int)minDisNode.X(), (int)minDisNode.Z(), Scalar.Orange, 2);
+            //demoGraph.drawPoint((int)randomPosition.Item1, (int)randomPosition.Item2, Scalar.Black, 2);
 
             float radian = Mathf.Atan((randomPosition.Item2 - this.minDisNode.Z()) / (randomPosition.Item1 - this.minDisNode.X()));
             if (randomPosition.Item1 >= minDisNode.X())
@@ -277,12 +283,12 @@ public class RRTBuilder : MonoBehaviour
     }
 
     private int[,] nodesCount = new int[9, 7];
-    private bool ifMoreThanFiveNodesInThisArea(Vector3 position)
+    private bool ifMoreThanSixNodesInThisArea(Vector3 position)
     {
         int areaX = Mathf.FloorToInt((position.x - 25) / 50);
         int areaY = Mathf.FloorToInt((position.z - 50) / 50);
         int count = nodesCount[areaX, areaY];
-        if(count >= 5)
+        if(count >= 6)
         {
             return true;
         }

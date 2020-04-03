@@ -86,8 +86,8 @@ public class RRTBuilder : MonoBehaviour
                                 nearestNodeInRequestList = before;
                             }
                         }
-                        letDroneFly(nearestNode, nearestNodeInRequestList);
                         requestList.Clear();
+                        letDroneFly(nearestNode, nearestNodeInRequestList);
                         //rotation.setRotatedAngle(90 - flyAngle);
                     }
                 }
@@ -101,19 +101,58 @@ public class RRTBuilder : MonoBehaviour
     {
         while (uiManager.getLock() == false && uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
         {
-            yield return new WaitForSeconds(0.05f); // try to add a branch each 0.05 seconds
+            yield return new WaitForSeconds(0.01f); // try to add a branch each 0.01 seconds
             Vector3 afterPosition = generateRandomPointWithDistanceEPStoMinDisNode();
             Vector3 beforePosition = new Vector3(this.minDisNode.X(), 0, this.minDisNode.Z());
-            //demoGraph.drawLine((int)beforePosition.x, (int)beforePosition.z, (int)afterPosition.x, (int)afterPosition.z, Scalar.Red);
-            if (!map.ifMeetAnObstacleAlongThisWay(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z))
+
+            RRTNode minDisNodeToAfterPosition = root;
+            float dis = root.distanceTo(afterPosition.x, afterPosition.z);
+            foreach(RRTNode node in theRRT)
             {
-                //Debug.Log(beforePosition + ":  " + afterPosition);
+                float dis2 = node.distanceTo(afterPosition.x, afterPosition.z);
+                if(dis2 < dis)
+                {
+                    dis = dis2;
+                    minDisNodeToAfterPosition = node;
+                }
+            }
+            Vector3 minDisNodeToAfterPositionExpressedByVector3 = new Vector3(minDisNodeToAfterPosition.X(), 0, minDisNodeToAfterPosition.Z());
+            if (!map.ifMeetAnObstacleAlongThisWay(minDisNodeToAfterPositionExpressedByVector3.x, minDisNodeToAfterPositionExpressedByVector3.z, afterPosition.x, afterPosition.z)) // feasible condition
+            {
+                if (map.ifThisLineIsChecked(minDisNodeToAfterPositionExpressedByVector3, afterPosition)) // we can go this way, just add it into RRT
+                {
+                    float randomNum = UnityEngine.Random.Range(0, 1.0f);
+                    int howManyPointInThisArea = findHowManyNodesInThisArea(afterPosition);
+                    float threshold = thresholdFunction(howManyPointInThisArea);
+                    if(randomNum <= threshold)
+                    {
+                        RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNodeToAfterPosition);
+                        theRRT.Add(newNode);
+                        nodesCountPlusOne(afterPosition);
+                        //demoGraph.drawPoint((int)rp.Item1, (int)rp.Item2, Scalar.Red, 2);
+                        demoGraph.addNode(newNode);
+                    }
+                }
+                else
+                {
+                    requestList.Add((minDisNode, afterPosition));
+                }
+            }
+            else if (!map.ifMeetAnObstacleAlongThisWay(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z)) // feasible condition
+            {
                 if (map.ifThisLineIsChecked(beforePosition, afterPosition)) // we can go this way, just add it into RRT
                 {
-                    RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNode);
-                    theRRT.Add(newNode);
-                    //demoGraph.drawPoint((int)rp.Item1, (int)rp.Item2, Scalar.Red, 2);
-                    demoGraph.addNode(newNode);
+                    float randomNum = UnityEngine.Random.Range(0, 1.0f);
+                    int howManyPointInThisArea = findHowManyNodesInThisArea(afterPosition);
+                    float threshold = thresholdFunction(howManyPointInThisArea);
+                    if (randomNum <= threshold)
+                    {
+                        RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNodeToAfterPosition);
+                        theRRT.Add(newNode);
+                        nodesCountPlusOne(afterPosition);
+                        //demoGraph.drawPoint((int)rp.Item1, (int)rp.Item2, Scalar.Red, 2);
+                        demoGraph.addNode(newNode);
+                    }
                 }
                 else
                 {
@@ -176,6 +215,19 @@ public class RRTBuilder : MonoBehaviour
         }
         //rp = randomPosition;
         return afterPosition;
+    }
+
+    private float thresholdFunction(int x)
+    {
+        if(x >= 10)
+        {
+            return 0.1f;
+        }
+        else
+        {
+            float y = -0.09f * (float)x + 1; // choose linear function (Occam's Razor)
+            return y;
+        }
     }
     
     private (float,float) randomPoint() // real random num
@@ -281,20 +333,19 @@ public class RRTBuilder : MonoBehaviour
     }
 
     private int[,] nodesCount = new int[9, 7];
-    private bool ifMoreThanFiveNodesInThisArea(Vector3 position)
+    private int findHowManyNodesInThisArea(Vector3 position)
     {
         int areaX = Mathf.FloorToInt((position.x - 25) / 50);
         int areaY = Mathf.FloorToInt((position.z - 50) / 50);
         int count = nodesCount[areaX, areaY];
-        if(count >= 5)
-        {
-            return true;
-        }
-        else
-        {
-            nodesCount[areaX, areaY] += 1;
-            return false;
-        }
+        return count;
+    }
+
+    private void nodesCountPlusOne(Vector3 position)
+    {
+        int areaX = Mathf.FloorToInt((position.x - 25) / 50);
+        int areaY = Mathf.FloorToInt((position.z - 50) / 50);
+        nodesCount[areaX, areaY] += 1;
     }
 
     public void resetRRT()

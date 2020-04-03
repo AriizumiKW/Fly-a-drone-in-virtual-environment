@@ -5,5 +5,7 @@
  
  
  代码架构有点混乱，如果没有CV和三维重建的知识，我保证你不可能看得懂我在干什么。  
+ 
+ 简单地讲，这是一个Motion Planning + 三维重建， written within Unity3D.
 
- 除了cv2.findfundamentalmatrix，都是从头开始搭轮子
+ 除了cv2.findfundamentalmatrix，都是从头开始搭轮子。

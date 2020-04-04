@@ -131,6 +131,10 @@ public class GridMap
                 {
                     if(map[i, k] == UNLABEL)
                     {
+                        map[i, k] = POSSIBLE_CHECKED;
+                    }
+                    else if(map[i, k] == POSSIBLE_CHECKED)
+                    {
                         map[i, k] = CHECKED;
                         demoGraph.drawCheckedArea(i + 25, k + 50);
                     }
@@ -139,6 +143,10 @@ public class GridMap
             else if(buttomRow != -1 && upperRow == -1) // the vertex of trianglar
             {
                 if (map[i, buttomRow] == UNLABEL)
+                {
+                    map[i, buttomRow] = POSSIBLE_CHECKED;
+                }
+                else if (map[i, buttomRow] == POSSIBLE_CHECKED)
                 {
                     map[i, buttomRow] = CHECKED;
                     demoGraph.drawCheckedArea(i + 25, buttomRow + 50);
@@ -197,9 +205,9 @@ public class GridMap
     }
 
     public const int TEMP_checked_before = 6;
-    //public const int TEMP_possible_checked_before = 7;
+    public const int TEMP_possible_checked_before = 7;
     public const int TEMP_unlabel_before = 8;
-    public const int TEMP_obstacle_before = 9; 
+    public const int TEMP_obstacle_before = 9;
     public const int TEMP_possible_obstacle_before = 10; // used to recover the state before
     public const int OBSTACLE_radius = 4;
 
@@ -233,6 +241,10 @@ public class GridMap
                     {
                         map[col, row] = TEMP_checked_before;
                     }
+                    else if (map[col, row] == POSSIBLE_CHECKED)
+                    {
+                        map[col, row] = TEMP_possible_checked_before;
+                    }
                 }
             }
         }
@@ -249,7 +261,7 @@ public class GridMap
                     if (i >= 0 && j >= 0 && i <= X_RANGE - 1 && j <= Y_RANGE - 1)
                     {
                         if (map[i, j] == OBSTACLE || map[i, j] == TEMP_unlabel_before || map[i, j] == TEMP_obstacle_before || 
-                            map[i, j] == TEMP_possible_obstacle_before || map[i, j] == TEMP_checked_before)
+                            map[i, j] == TEMP_possible_obstacle_before || map[i, j] == TEMP_checked_before || map[i, j] == TEMP_possible_checked_before)
                         {
                             belief_itIsObstacle += 1;
                         }
@@ -290,6 +302,10 @@ public class GridMap
                     else if (map[col, row] == TEMP_checked_before)
                     {
                         map[col, row] = CHECKED;
+                    }
+                    else if (map[col, row] == TEMP_possible_checked_before)
+                    {
+                        map[col, row] = POSSIBLE_CHECKED;
                     }
                 }
             }
@@ -446,14 +462,14 @@ public class GridMap
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
         (x, y) = robustCheck(x, y);
-        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE)
+        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE || map[x, y] == POSSIBLE_CHECKED)
         {
             return false;
         }
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
         (x, y) = robustCheck(x, y);
-        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE)
+        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE || map[x, y] == POSSIBLE_CHECKED)
         {
             return false;
         }
@@ -477,7 +493,7 @@ public class GridMap
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
             (x, y) = robustCheck(x, y);
-            if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE)
+            if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE || map[x, y] == POSSIBLE_CHECKED)
             {
                 return false;
             }
@@ -485,7 +501,7 @@ public class GridMap
             {
                 int x0 = Mathf.RoundToInt(start.x);
                 int y0 = Mathf.RoundToInt(k);
-                if (map[x0, y0] == UNLABEL || map[x0, y0] == OBSTACLE || map[x0, y0] == POSSIBLE_OBSTACLE)
+                if (map[x0, y0] == UNLABEL || map[x0, y0] == OBSTACLE || map[x0, y0] == POSSIBLE_OBSTACLE || map[x0, y0] == POSSIBLE_CHECKED)
                 {
                     return false;
                 }

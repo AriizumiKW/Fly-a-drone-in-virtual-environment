@@ -108,6 +108,7 @@ public class MapBuilder : MonoBehaviour
 
     public void updateMap(float[] distances, float currOrientation, Vector3 currPosition)
     {
+        
         for (int i = 1; i <= 7; i++)
         {
             float distance1 = distances[i - 1];
@@ -135,7 +136,7 @@ public class MapBuilder : MonoBehaviour
             map.setCheckedArea(currPosition, vertex1, vertex2);
             //demoGraph.drawCheckedArea(currPosition, vertex1, vertex2);
         }
-
+        
         List<Vector3> endPoints = new List<Vector3>();
         for (int i = 1; i <= 8; i++)
         {
@@ -153,10 +154,16 @@ public class MapBuilder : MonoBehaviour
         //Debug.Log("before:" + string.Join(" ", endPoints));
         //endPoints = smoothObstacles(endPoints); // enable smooth
         //Debug.Log("after:" + string.Join(" ", endPoints));
-        foreach(Vector3 endPoint in endPoints)
+        List<Vector3> inliers = map.setObstacles(endPoints); // outliers filter
+        /*
+        for(int i=1; i<inliers.Count; i++)
         {
-            setAnObstacle(endPoint);
+            Vector3 vertex1 = inliers[i - 1];
+            demoGraph.drawPoint((int)vertex1.x, (int)vertex1.z,OpenCvSharp.Scalar.Red, 1);
+            Vector3 vertex2 = inliers[i];
+            map.setCheckedArea(currPosition, vertex1, vertex2);
         }
+        */
     }
 
     public void resetMap()
@@ -172,8 +179,10 @@ public class MapBuilder : MonoBehaviour
     public bool ifThisLineIsChecked(Vector3 beforePosition, Vector3 afterPosition)
     {
         bool b = map.ifThisLineIsChecked(beforePosition.x, beforePosition.z, afterPosition.x, afterPosition.z);
-        b = b & map.ifThisLineIsChecked(beforePosition.x + 4, beforePosition.z, afterPosition.x - 4, afterPosition.z);
-        b = b & map.ifThisLineIsChecked(beforePosition.x, beforePosition.z + 4, afterPosition.x, afterPosition.z - 4);
+        b = b && map.ifThisLineIsChecked(beforePosition.x + 4, beforePosition.z, afterPosition.x + 4, afterPosition.z);
+        b = b && map.ifThisLineIsChecked(beforePosition.x, beforePosition.z + 4, afterPosition.x, afterPosition.z + 4);
+        b = b && map.ifThisLineIsChecked(beforePosition.x - 4, beforePosition.z, afterPosition.x - 4, afterPosition.z);
+        b = b && map.ifThisLineIsChecked(beforePosition.x, beforePosition.z - 4, afterPosition.x, afterPosition.z - 4);
         return b;
     }
 

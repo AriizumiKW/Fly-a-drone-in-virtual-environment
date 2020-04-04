@@ -337,20 +337,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Main/Script/StereoCamera
+    - Assets/Main/Script/TaskController
   m_ViewMode: 1
   m_StartGridSize: 56
   m_LastFolders:
-  - Assets/Main/Script/StereoCamera
+  - Assets/Main/Script/TaskController
   m_LastFoldersGridSize: 56
   m_LastProjectPath: D:\workplace\Fly-a-drone-in-virtual-environment
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 79}
-    m_SelectedIDs: 2e330000
-    m_LastClickedID: 13102
-    m_ExpandedIDs: 00000000e0310000fc32000068370000ca3c0000da420000e8500000ea500000ec50000000ca9a3b
+    m_SelectedIDs: fe350000
+    m_LastClickedID: 13822
+    m_ExpandedIDs: 00000000dc310000f832000064370000c63c0000d6420000e8500000ea500000ec50000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -378,7 +378,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e0310000fc320000ca3c0000da420000e8500000ea500000ec500000
+    m_ExpandedIDs: 00000000dc310000f8320000c63c0000d6420000e8500000ea500000ec500000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -501,8 +501,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 8e2e0000
-      m_LastClickedID: 0
+      m_SelectedIDs: 0c480000
+      m_LastClickedID: 18444
       m_ExpandedIDs: 66fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -548,8 +548,8 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: -25276
-    y: -25569.6
+    x: 331.2
+    y: 80.8
     width: 755
     height: 423
   m_ViewDataDictionary: {fileID: 0}
@@ -563,9 +563,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 107.55356, y: 18.623177, z: 92.09288}
+    m_Target: {x: 68.49632, y: 16.866673, z: 220.55435}
     speed: 2
-    m_Value: {x: 107.55356, y: 18.623177, z: 92.09288}
+    m_Value: {x: 68.49632, y: 16.866673, z: 220.55435}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -594,13 +594,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.24454659, y: 0.45015925, z: -0.13620658, w: 0.8485012}
+    m_Target: {x: -0.22041726, y: -0.0847645, z: 0.025084311, w: -0.9718841}
     speed: 2
-    m_Value: {x: 0.2416834, y: 0.45162463, z: -0.13515195, w: 0.8481499}
+    m_Value: {x: -0.22176875, y: -0.084686205, z: 0.02519962, w: -0.97108793}
   m_Size:
-    m_Target: 11.741827
+    m_Target: 117.11576
     speed: 2
-    m_Value: 18.346603
+    m_Value: 122.63431
   m_Ortho:
     m_Target: 0
     speed: 2

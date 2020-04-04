@@ -350,6 +350,22 @@ public class RRTBuilder : MonoBehaviour
     {
         int areaX = Mathf.FloorToInt((position.x - 25) / 50);
         int areaY = Mathf.FloorToInt((position.z - 50) / 50);
+        if(areaX < 0)
+        {
+            areaX = 0;
+        }
+        else if(areaX > 8)
+        {
+            areaX = 8;
+        }
+        if(areaY < 0)
+        {
+            areaY = 0;
+        }
+        else if(areaY > 6)
+        {
+            areaY = 6;
+        }
         int count = nodesCount[areaX, areaY];
         return count;
     }
@@ -358,6 +374,22 @@ public class RRTBuilder : MonoBehaviour
     {
         int areaX = Mathf.FloorToInt((position.x - 25) / 50);
         int areaY = Mathf.FloorToInt((position.z - 50) / 50);
+        if (areaX < 0)
+        {
+            areaX = 0;
+        }
+        else if (areaX > 8)
+        {
+            areaX = 8;
+        }
+        if (areaY < 0)
+        {
+            areaY = 0;
+        }
+        else if (areaY > 6)
+        {
+            areaY = 6;
+        }
         nodesCount[areaX, areaY] += 1;
     }
 

@@ -850,7 +850,7 @@ GameObject:
   - component: {fileID: 159373805}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1217,7 +1217,7 @@ GameObject:
   - component: {fileID: 192326435}
   m_Layer: 0
   m_Name: horizontal-wall-1 (2)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1510,6 +1510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224232982}
   - component: {fileID: 224232983}
+  - component: {fileID: 224232984}
   m_Layer: 0
   m_Name: maze
   m_TagString: Untagged
@@ -1550,6 +1551,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44691cd98a5018c49933fc75cf71ea13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &224232984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224232981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe170aae825b404598c525a1e50e1b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ifUseRandomTexture: 0
+  pictures:
+  - {fileID: 2100000, guid: 7d0fe7fba5cc90f4898c60c41d1a709f, type: 2}
+  - {fileID: 2100000, guid: 16fe6a368e749b249972d786cbd6d465, type: 2}
+  - {fileID: 2100000, guid: 7074723fc13ef1244a2b8cef7d2dc121, type: 2}
+  - {fileID: 2100000, guid: e32fa2fcdf8b95d4b8dbf8d890692af5, type: 2}
+  - {fileID: 2100000, guid: 410d2109e47e9044c992ccbb0586ff80, type: 2}
+  - {fileID: 2100000, guid: 9bb5965dc921e4e409fb20d2947472ea, type: 2}
+  - {fileID: 2100000, guid: 8bc11f22b210140419511abf931b2ac4, type: 2}
+  - {fileID: 2100000, guid: c8a3f8134789eca42a3bd70df8bee5e7, type: 2}
+  - {fileID: 2100000, guid: c40b0049b6d43b348adc6b4930f2a6aa, type: 2}
+  - {fileID: 2100000, guid: 46307fac4c7e29b46a57cdf7171cf268, type: 2}
+  - {fileID: 2100000, guid: e1dd513ceec551243a9eb05e9fadf102, type: 2}
+  - {fileID: 2100000, guid: cc6023c10e82ad1478c89c48fb6c3459, type: 2}
+  - {fileID: 2100000, guid: f3e1baf415981f14098ccdb45a9a79ec, type: 2}
+  - {fileID: 2100000, guid: d5f169c590030ac42a05f88b417138b4, type: 2}
+  - {fileID: 2100000, guid: 1789502bbcb4ea24fb47d9c2975eccd5, type: 2}
+  - {fileID: 2100000, guid: e2ab6ff79edd6c740896d051900a2fb4, type: 2}
+  - {fileID: 2100000, guid: a7e9341875e89ed4fb4cb59ad6e9eca1, type: 2}
+  - {fileID: 2100000, guid: f88e8928e8bc4ec459305685155e438b, type: 2}
+  - {fileID: 2100000, guid: ae561b5c9bb672b44906dc66f0f7a7f1, type: 2}
+  - {fileID: 2100000, guid: 268038714a83f1e4d83119235cc69e61, type: 2}
+  - {fileID: 2100000, guid: b8189ce4c2ca2a440877cdab22cadb42, type: 2}
+  - {fileID: 2100000, guid: 58c0730f913f66c4eb6a9010317d9750, type: 2}
 --- !u!1 &230651931
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,7 +2744,7 @@ GameObject:
   - component: {fileID: 371060090}
   m_Layer: 0
   m_Name: horizontal-wall-1 (1)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2891,7 +2928,7 @@ GameObject:
   - component: {fileID: 381532809}
   m_Layer: 0
   m_Name: horizontal-wall-1 (4)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3075,7 +3112,7 @@ GameObject:
   - component: {fileID: 392368848}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4137,7 +4174,7 @@ GameObject:
   - component: {fileID: 531771826}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5384,7 +5421,7 @@ GameObject:
   - component: {fileID: 637804097}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6129,7 +6166,7 @@ GameObject:
   - component: {fileID: 730466155}
   m_Layer: 0
   m_Name: horizontal-wall (3)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6221,7 +6258,7 @@ GameObject:
   - component: {fileID: 736571613}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7237,7 +7274,7 @@ GameObject:
   - component: {fileID: 873896483}
   m_Layer: 0
   m_Name: horizontal-wall (4)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8660,7 +8697,7 @@ GameObject:
   - component: {fileID: 1060420783}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9197,7 +9234,7 @@ GameObject:
   - component: {fileID: 1095192587}
   m_Layer: 0
   m_Name: horizontal-wall-1 (5)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9428,7 +9465,7 @@ GameObject:
   - component: {fileID: 1110531438}
   m_Layer: 0
   m_Name: horizontal-wall-1 (7)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9796,7 +9833,7 @@ GameObject:
   - component: {fileID: 1123178504}
   m_Layer: 0
   m_Name: horizontal-wall-1 (6)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10094,7 +10131,7 @@ GameObject:
   - component: {fileID: 1161012325}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10554,7 +10591,7 @@ GameObject:
   - component: {fileID: 1229140316}
   m_Layer: 0
   m_Name: horizontal-wall-1 (3)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10830,7 +10867,7 @@ GameObject:
   - component: {fileID: 1250485892}
   m_Layer: 0
   m_Name: horizontal-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11941,7 +11978,7 @@ GameObject:
   - component: {fileID: 1372320048}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12840,7 +12877,7 @@ GameObject:
   - component: {fileID: 1453712769}
   m_Layer: 0
   m_Name: horizontal-wall (8)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13212,7 +13249,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98dba079e719dac46871ab111a42fe40, type: 2}
+  - {fileID: 2100000, guid: 58c0730f913f66c4eb6a9010317d9750, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13255,7 +13292,7 @@ GameObject:
   - component: {fileID: 1500675209}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13699,6 +13736,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1544049734}
+  - component: {fileID: 1544049735}
   m_Layer: 0
   m_Name: maze-edge
   m_TagString: Untagged
@@ -13752,6 +13790,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1544049735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544049733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe170aae825b404598c525a1e50e1b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ifUseRandomTexture: 0
+  pictures:
+  - {fileID: 2100000, guid: 7d0fe7fba5cc90f4898c60c41d1a709f, type: 2}
+  - {fileID: 2100000, guid: 16fe6a368e749b249972d786cbd6d465, type: 2}
+  - {fileID: 2100000, guid: 7074723fc13ef1244a2b8cef7d2dc121, type: 2}
+  - {fileID: 2100000, guid: e32fa2fcdf8b95d4b8dbf8d890692af5, type: 2}
+  - {fileID: 2100000, guid: 410d2109e47e9044c992ccbb0586ff80, type: 2}
+  - {fileID: 2100000, guid: 9bb5965dc921e4e409fb20d2947472ea, type: 2}
+  - {fileID: 2100000, guid: 8bc11f22b210140419511abf931b2ac4, type: 2}
+  - {fileID: 2100000, guid: c8a3f8134789eca42a3bd70df8bee5e7, type: 2}
+  - {fileID: 2100000, guid: c40b0049b6d43b348adc6b4930f2a6aa, type: 2}
+  - {fileID: 2100000, guid: 46307fac4c7e29b46a57cdf7171cf268, type: 2}
+  - {fileID: 2100000, guid: e1dd513ceec551243a9eb05e9fadf102, type: 2}
+  - {fileID: 2100000, guid: cc6023c10e82ad1478c89c48fb6c3459, type: 2}
+  - {fileID: 2100000, guid: f3e1baf415981f14098ccdb45a9a79ec, type: 2}
+  - {fileID: 2100000, guid: d5f169c590030ac42a05f88b417138b4, type: 2}
+  - {fileID: 2100000, guid: 1789502bbcb4ea24fb47d9c2975eccd5, type: 2}
+  - {fileID: 2100000, guid: e2ab6ff79edd6c740896d051900a2fb4, type: 2}
+  - {fileID: 2100000, guid: a7e9341875e89ed4fb4cb59ad6e9eca1, type: 2}
+  - {fileID: 2100000, guid: f88e8928e8bc4ec459305685155e438b, type: 2}
+  - {fileID: 2100000, guid: ae561b5c9bb672b44906dc66f0f7a7f1, type: 2}
+  - {fileID: 2100000, guid: 268038714a83f1e4d83119235cc69e61, type: 2}
+  - {fileID: 2100000, guid: b8189ce4c2ca2a440877cdab22cadb42, type: 2}
+  - {fileID: 2100000, guid: 58c0730f913f66c4eb6a9010317d9750, type: 2}
 --- !u!1 &1557594903
 GameObject:
   m_ObjectHideFlags: 0
@@ -13963,7 +14037,7 @@ GameObject:
   - component: {fileID: 1573130064}
   m_Layer: 0
   m_Name: horizontal-wall (6)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14132,7 +14206,7 @@ GameObject:
   - component: {fileID: 1576130114}
   m_Layer: 0
   m_Name: horizontal-wall-1 (8)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14990,7 +15064,7 @@ GameObject:
   - component: {fileID: 1671437209}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15266,7 +15340,7 @@ GameObject:
   - component: {fileID: 1711546849}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15688,7 +15762,7 @@ GameObject:
   - component: {fileID: 1737168539}
   m_Layer: 0
   m_Name: horizontal-wall (5)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16520,7 +16594,7 @@ GameObject:
   - component: {fileID: 1818572824}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17012,7 +17086,7 @@ GameObject:
   - component: {fileID: 1851663503}
   m_Layer: 0
   m_Name: vertical-wall (9)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -17104,7 +17178,7 @@ GameObject:
   - component: {fileID: 1853118015}
   m_Layer: 0
   m_Name: horizontal-wall (1)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18335,7 +18409,7 @@ GameObject:
   - component: {fileID: 2016878840}
   m_Layer: 0
   m_Name: horizontal-wall (2)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18519,7 +18593,7 @@ GameObject:
   - component: {fileID: 2035151660}
   m_Layer: 0
   m_Name: horizontal-wall (7)
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18720,7 +18794,7 @@ GameObject:
   - component: {fileID: 2044002660}
   m_Layer: 0
   m_Name: vertical-wall
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18904,7 +18978,7 @@ GameObject:
   - component: {fileID: 2051797126}
   m_Layer: 0
   m_Name: horizontal-wall-1
-  m_TagString: Untagged
+  m_TagString: edge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

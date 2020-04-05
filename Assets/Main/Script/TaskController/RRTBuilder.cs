@@ -114,7 +114,7 @@ public class RRTBuilder : MonoBehaviour
     {
         while (uiManager.getLock() == false && uiManager.getGameMode() == InterfaceManager.SELF_DRIVING_MODE)
         {
-            yield return new WaitForSeconds(0.03f); // try to add a branch each 0.03 seconds
+            yield return new WaitForSeconds(0.02f); // try to add a branch each 0.02 seconds
             Vector3 afterPosition = generateRandomPointWithDistanceEPStoMinDisNode();
             Vector3 beforePosition = new Vector3(this.minDisNode.X(), 0, this.minDisNode.Z());
 
@@ -123,12 +123,13 @@ public class RRTBuilder : MonoBehaviour
             foreach(RRTNode node in theRRT)
             {
                 float dis2 = node.distanceTo(afterPosition.x, afterPosition.z);
-                if(dis2 < dis)
+                if(dis2 < dis && dis2 > EPS/3)
                 {
                     dis = dis2;
                     minDisNodeToAfterPosition = node;
                 }
             }
+            //demoGraph.drawPoint((int)afterPosition.x, (int)afterPosition.z);
             Vector3 minDisNodeToAfterPositionExpressedByVector3 = new Vector3(minDisNodeToAfterPosition.X(), 0, minDisNodeToAfterPosition.Z());
             if (!map.ifMeetAnObstacleAlongThisWay(minDisNodeToAfterPositionExpressedByVector3.x, minDisNodeToAfterPositionExpressedByVector3.z, afterPosition.x, afterPosition.z)) // feasible condition
             {

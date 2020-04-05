@@ -485,6 +485,7 @@ public class GridMap
             {
                 int x0 = Mathf.RoundToInt(start.x);
                 int y0 = Mathf.RoundToInt(k);
+                (x0, y0) = robustCheck(x0, y0);
                 if (map[x0, y0] == UNLABEL || map[x0, y0] == OBSTACLE || map[x0, y0] == POSSIBLE_OBSTACLE)
                 {
                     return false;

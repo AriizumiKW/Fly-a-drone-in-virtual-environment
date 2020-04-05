@@ -93,6 +93,7 @@
     <Compile Include="Assets\Main\Script\TaskController\RRTNode.cs" />
     <Compile Include="Assets\Main\Script\TaskController\State.cs" />
     <Compile Include="Assets\Main\Script\ViewController\ViewController.cs" />
+    <Compile Include="Assets\Main\Script\WallPicture.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\CameraTeleportEffect.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\ColliderProxy.cs" />
     <Compile Include="Assets\ProfessionalAssets\DronePack\Scripts\DroneDistanceLimit.cs" />

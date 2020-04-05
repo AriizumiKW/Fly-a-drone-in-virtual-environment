@@ -108,7 +108,6 @@ public class MapBuilder : MonoBehaviour
 
     public void updateMap(float[] distances, float currOrientation, Vector3 currPosition)
     {
-        
         for (int i = 1; i <= 7; i++)
         {
             float distance1 = distances[i - 1];
@@ -117,7 +116,8 @@ public class MapBuilder : MonoBehaviour
             {
                 return;
             }
-
+            distance1 -= 5.0f;
+            distance2 -= 5.0f; // increase robust
             if(distance1 > EFFECTIVE_DISTANCE)
             {
                 distance1 = EFFECTIVE_DISTANCE;

@@ -314,7 +314,7 @@ public class GridMap
                     else
                     {
                         map[col, row] = POSSIBLE_OBSTACLE;
-
+                        //demoGraph.drawPossibleObstacle(x + 25, y + 50);
                     }
                 }
             }
@@ -492,6 +492,10 @@ public class GridMap
                 }
             }
             start += direction;
+        }
+        if(demoGraph.checkWall(_x1, _y1, _x2, _y2) == false) // test
+        {
+            return false;
         }
         return true;
     }

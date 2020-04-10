@@ -31,6 +31,34 @@ public class RRTDrawer : MonoBehaviour
         */
     }
 
+    private (int, int) robustCheck(int _x, int _y) // 0-450,0-350, only for test
+    {
+        int x = _x;
+        int y = _y;
+        if (_x < 0)
+        {
+            //Debug.Log("x: " + _x);
+            x = 0;
+        }
+        else if (_x > 449)
+        {
+            //Debug.Log("x: " + _x);
+            x = 449;
+        }
+
+        if (_y < 0)
+        {
+            //Debug.Log("y: " + _y);
+            y = 0;
+        }
+        else if (_y > 349)
+        {
+            //Debug.Log("y: " + _y);
+            y = 349;
+        }
+        return (x, y);
+    }
+
     private IEnumerator showGraph() // Coroutine
     {
         while (true)
@@ -120,6 +148,10 @@ public class RRTDrawer : MonoBehaviour
     {
         Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Brown, -1, LineTypes.Link8);
     }
+    public void drawPossibleObstacle(int x, int y)
+    {
+        Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Red, -1, LineTypes.Link8);
+    }
 
     public void drawCheckedArea(Vector3 _ori, Vector3 _p1, Vector3 _p2)
     {
@@ -151,4 +183,102 @@ public class RRTDrawer : MonoBehaviour
     {
         Cv2.Line(pic, x1 - 25, 400 - y1, x2 - 25, 400 - y2, color);
     }
+
+    public bool checkWall(float _x1, float _y1, float _x2, float _y2) // for test
+    {
+        float x1 = Mathf.Round(_x1 + 25);
+        float y1 = Mathf.Round(_y1 + 50);
+        float x2 = Mathf.Round(_x2 + 25);
+        float y2 = Mathf.Round(_y2 + 50);
+        Vector2 start = new Vector2(x1, y1);
+        Vector2 end = new Vector2(x2, y2);
+        Vector2 direction;
+        if (x1 == x2)
+        {
+            if (y2 >= y1)
+            {
+                direction = new Vector2(0, 1.0f);
+            }
+            else
+            {
+                direction = new Vector2(0, -1.0f);
+            }
+        }
+        else
+        {
+            if (x2 >= x1)
+            {
+                direction = new Vector2(1.0f, (y2 - y1) / (x2 - x1));
+            }
+            else
+            {
+                direction = new Vector2(-1.0f, (y2 - y1) / (x1 - x2));
+            }
+        }
+
+        int x = Mathf.RoundToInt(start.x);
+        int y = Mathf.RoundToInt(start.y);
+        (x, y) = robustCheck(x, y);
+        int blue = pic.At<Vec3b>(x, y).Item0;
+        int green = pic.At<Vec3b>(x, y).Item1;
+        int red = pic.At<Vec3b>(x, y).Item2;
+        if (blue == 0 && green == 0 && red == 0)
+        {
+            return false;
+        }
+        x = Mathf.RoundToInt(end.x);
+        y = Mathf.RoundToInt(end.y);
+        (x, y) = robustCheck(x, y);
+        blue = pic.At<Vec3b>(x, y).Item0;
+        green = pic.At<Vec3b>(x, y).Item1;
+        red = pic.At<Vec3b>(x, y).Item2;
+        if (blue == 0 && green == 0 && red == 0)
+        {
+            return false;
+        }
+
+        while (true)
+        {
+            if (y2 >= y1)
+            {
+                if (start.y >= end.y)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                if (start.y <= end.y)
+                {
+                    break;
+                }
+            }
+            x = Mathf.RoundToInt(start.x);
+            y = Mathf.RoundToInt(start.y);
+            (x, y) = robustCheck(x, y);
+            blue = pic.At<Vec3b>(x, y).Item0;
+            green = pic.At<Vec3b>(x, y).Item1;
+            red = pic.At<Vec3b>(x, y).Item2;
+            if (blue == 0 && green == 0 && red == 0)
+            {
+                return false;
+            }
+            for (float k = start.y; k <= (start + direction).y; k += 1.0f)
+            {
+                int x0 = Mathf.RoundToInt(start.x);
+                int y0 = Mathf.RoundToInt(k);
+                (x0, y0) = robustCheck(x0, y0);
+                blue = pic.At<Vec3b>(x, y).Item0;
+                green = pic.At<Vec3b>(x, y).Item1;
+                red = pic.At<Vec3b>(x, y).Item2;
+                if (blue == 0 && green == 0 && red == 0)
+                {
+                    return false;
+                }
+            }
+            start += direction;
+        }
+        return true;
+    }
+
 }

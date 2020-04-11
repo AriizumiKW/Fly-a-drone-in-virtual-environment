@@ -408,6 +408,10 @@ public class GridMap
             
             start += direction;
         }
+        if (demoGraph.checkWall(x1 + 25, y1 + 50, x2 + 25, y2 + 50) == false) // for test
+        {
+            return false;
+        }
         return false;
     }
 
@@ -492,10 +496,6 @@ public class GridMap
                 }
             }
             start += direction;
-        }
-        if(demoGraph.checkWall(_x1, _y1, _x2, _y2) == false) // test
-        {
-            return false;
         }
         return true;
     }

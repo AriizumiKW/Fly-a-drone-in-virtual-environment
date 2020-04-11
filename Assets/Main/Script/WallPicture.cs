@@ -10,7 +10,7 @@ public class WallPicture : MonoBehaviour
     LinkedList<GameObject> walls;
     void Start()
     {
-        ifUseRandomTexture = false;
+        //ifUseRandomTexture = true;
         walls = new LinkedList<GameObject>();
         Transform[] children = GetComponentsInChildren<Transform>();
         foreach (Transform child in children) // get reference of wall-object

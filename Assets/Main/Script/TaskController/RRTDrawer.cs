@@ -186,10 +186,10 @@ public class RRTDrawer : MonoBehaviour
 
     public bool checkWall(float _x1, float _y1, float _x2, float _y2) // for test
     {
-        float x1 = Mathf.Round(_x1 + 25);
-        float y1 = Mathf.Round(_y1 + 50);
-        float x2 = Mathf.Round(_x2 + 25);
-        float y2 = Mathf.Round(_y2 + 50);
+        float x1 = Mathf.Round(_x1 - 25);
+        float y1 = Mathf.Round(400 - _y1);
+        float x2 = Mathf.Round(_x2 - 25);
+        float y2 = Mathf.Round(400 - _y2 );
         Vector2 start = new Vector2(x1, y1);
         Vector2 end = new Vector2(x2, y2);
         Vector2 direction;
@@ -268,9 +268,9 @@ public class RRTDrawer : MonoBehaviour
                 int x0 = Mathf.RoundToInt(start.x);
                 int y0 = Mathf.RoundToInt(k);
                 (x0, y0) = robustCheck(x0, y0);
-                blue = pic.At<Vec3b>(x, y).Item0;
-                green = pic.At<Vec3b>(x, y).Item1;
-                red = pic.At<Vec3b>(x, y).Item2;
+                blue = pic.At<Vec3b>(x0, y0).Item0;
+                green = pic.At<Vec3b>(x0, y0).Item1;
+                red = pic.At<Vec3b>(x0, y0).Item2;
                 if (blue == 0 && green == 0 && red == 0)
                 {
                     return false;

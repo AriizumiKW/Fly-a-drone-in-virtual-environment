@@ -30,7 +30,7 @@ public class RRTDrawer : MonoBehaviour
         Debug.Log(blue + ":" + green + ":" + red);
         */
     }
-
+    
     private (int, int) robustCheck(int _x, int _y) // 0-450,0-350, only for test
     {
         int x = _x;
@@ -83,20 +83,21 @@ public class RRTDrawer : MonoBehaviour
     Mat result = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
     private Mat mergeImageLayer(Mat buttomLayer, Mat upperLayer)
     {
-        //Cv2.ImWrite(Application.persistentDataPath + "/buttom.png", buttomLayer);
+        Cv2.ImWrite(Application.persistentDataPath + "/buttom.png", buttomLayer); // checkedArea
+        Cv2.ImWrite(Application.persistentDataPath + "/upper.png", upperLayer); // pic
         Cv2.CopyTo(upperLayer, result);
         Parallel.For(0, buttomLayer.Rows, row =>
         {
             for(int col=0; col<buttomLayer.Cols; col++)
             {
-                int blue = buttomLayer.At<Vec3b>(row, col).Item0;
-                int green = buttomLayer.At<Vec3b>(row, col).Item1;
-                int red = buttomLayer.At<Vec3b>(row, col).Item2; // RGB value
+                int blue = buttomLayer.Get<Vec3b>(row, col).Item0;
+                int green = buttomLayer.Get<Vec3b>(row, col).Item1;
+                int red = buttomLayer.Get<Vec3b>(row, col).Item2; // RGB value
                 if(blue == 255 && green == 255 && red == 255) // white
                 {
-                    int blue2 = upperLayer.At<Vec3b>(row, col).Item0;
-                    int green2 = upperLayer.At<Vec3b>(row, col).Item1;
-                    int red2 = upperLayer.At<Vec3b>(row, col).Item2;
+                    int blue2 = upperLayer.Get<Vec3b>(row, col).Item0;
+                    int green2 = upperLayer.Get<Vec3b>(row, col).Item1;
+                    int red2 = upperLayer.Get<Vec3b>(row, col).Item2;
                     if(blue2 == 211 && green2 == 211 && red2 == 211) // light-grey
                     {
                         result.Set<Vec3b>(row, col, new Vec3b(255, 255, 255));
@@ -104,9 +105,9 @@ public class RRTDrawer : MonoBehaviour
                 }
                 else if(blue == 144 && green == 238 && red == 144) // light-green
                 {
-                    int blue2 = upperLayer.At<Vec3b>(row, col).Item0;
-                    int green2 = upperLayer.At<Vec3b>(row, col).Item1;
-                    int red2 = upperLayer.At<Vec3b>(row, col).Item2;
+                    int blue2 = upperLayer.Get<Vec3b>(row, col).Item0;
+                    int green2 = upperLayer.Get<Vec3b>(row, col).Item1;
+                    int red2 = upperLayer.Get<Vec3b>(row, col).Item2;
                     result.Set<Vec3b>(row, col, new Vec3b(144, 238, 144));
                 }
             }
@@ -150,7 +151,7 @@ public class RRTDrawer : MonoBehaviour
     }
     public void drawPossibleObstacle(int x, int y)
     {
-        Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Red, -1, LineTypes.Link8);
+        Cv2.Circle(pic, x - 25, 400 - y, 3, Scalar.Orange, -1, LineTypes.Link8);
     }
 
     public void drawCheckedArea(Vector3 _ori, Vector3 _p1, Vector3 _p2)
@@ -189,7 +190,7 @@ public class RRTDrawer : MonoBehaviour
         float x1 = Mathf.Round(_x1 - 25);
         float y1 = Mathf.Round(400 - _y1);
         float x2 = Mathf.Round(_x2 - 25);
-        float y2 = Mathf.Round(400 - _y2 );
+        float y2 = Mathf.Round(400 - _y2);
         Vector2 start = new Vector2(x1, y1);
         Vector2 end = new Vector2(x2, y2);
         Vector2 direction;
@@ -219,26 +220,33 @@ public class RRTDrawer : MonoBehaviour
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
         (x, y) = robustCheck(x, y);
-        int blue = pic.At<Vec3b>(x, y).Item0;
-        int green = pic.At<Vec3b>(x, y).Item1;
-        int red = pic.At<Vec3b>(x, y).Item2;
-        if (blue == 0 && green == 0 && red == 0)
+        int blue = pic.Get<Vec3b>(y, x).Item0;
+        int green = pic.Get<Vec3b>(y, x).Item1;
+        int red = pic.Get<Vec3b>(y, x).Item2;
+        int blue2 = checkedArea.Get<Vec3b>(y, x).Item0;
+        int green2 = checkedArea.Get<Vec3b>(y, x).Item1;
+        int red2 = checkedArea.Get<Vec3b>(y, x).Item2;
+        if ((blue == 0 && green == 0 && red == 0) || (blue2 == 211 && green2 == 211 && red2 == 211))
         {
             return false;
         }
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
         (x, y) = robustCheck(x, y);
-        blue = pic.At<Vec3b>(x, y).Item0;
-        green = pic.At<Vec3b>(x, y).Item1;
-        red = pic.At<Vec3b>(x, y).Item2;
-        if (blue == 0 && green == 0 && red == 0)
+        blue = pic.Get<Vec3b>(y, x).Item0;
+        green = pic.Get<Vec3b>(y, x).Item1;
+        red = pic.Get<Vec3b>(y, x).Item2;
+        blue2 = checkedArea.Get<Vec3b>(y, x).Item0;
+        green2 = checkedArea.Get<Vec3b>(y, x).Item1;
+        red2 = checkedArea.Get<Vec3b>(y, x).Item2;
+        if ((blue == 0 && green == 0 && red == 0) || (blue2 == 211 && green2 == 211 && red2 == 211))
         {
             return false;
         }
 
         while (true)
         {
+            //drawPoint((int)start.x + 25, 400 - (int)start.y, Scalar.Red, 1);
             if (y2 >= y1)
             {
                 if (start.y >= end.y)
@@ -256,10 +264,13 @@ public class RRTDrawer : MonoBehaviour
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
             (x, y) = robustCheck(x, y);
-            blue = pic.At<Vec3b>(x, y).Item0;
-            green = pic.At<Vec3b>(x, y).Item1;
-            red = pic.At<Vec3b>(x, y).Item2;
-            if (blue == 0 && green == 0 && red == 0)
+            blue = pic.Get<Vec3b>(y, x).Item0;
+            green = pic.Get<Vec3b>(y, x).Item1;
+            red = pic.Get<Vec3b>(y, x).Item2;
+            blue2 = checkedArea.Get<Vec3b>(y, x).Item0;
+            green2 = checkedArea.Get<Vec3b>(y, x).Item1;
+            red2 = checkedArea.Get<Vec3b>(y, x).Item2;
+            if ((blue == 0 && green == 0 && red == 0) || (blue2 == 211 && green2 == 211 && red2 == 211))
             {
                 return false;
             }
@@ -268,10 +279,13 @@ public class RRTDrawer : MonoBehaviour
                 int x0 = Mathf.RoundToInt(start.x);
                 int y0 = Mathf.RoundToInt(k);
                 (x0, y0) = robustCheck(x0, y0);
-                blue = pic.At<Vec3b>(x0, y0).Item0;
-                green = pic.At<Vec3b>(x0, y0).Item1;
-                red = pic.At<Vec3b>(x0, y0).Item2;
-                if (blue == 0 && green == 0 && red == 0)
+                blue = pic.Get<Vec3b>(y0, x0).Item0;
+                green = pic.Get<Vec3b>(y0, x0).Item1;
+                red = pic.Get<Vec3b>(y0, x0).Item2;
+                blue2 = checkedArea.Get<Vec3b>(y0, x0).Item0;
+                green2 = checkedArea.Get<Vec3b>(y0, x0).Item1;
+                red2 = checkedArea.Get<Vec3b>(y0, x0).Item2;
+                if ((blue == 0 && green == 0 && red == 0) || (blue2 == 211 && green2 == 211 && red2 == 211))
                 {
                     return false;
                 }

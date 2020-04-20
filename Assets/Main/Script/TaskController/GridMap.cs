@@ -201,7 +201,7 @@ public class GridMap
     public const int TEMP_unlabel_before = 8;
     public const int TEMP_obstacle_before = 9; 
     public const int TEMP_possible_obstacle_before = 10; // used to recover the state before
-    public const int OBSTACLE_radius = 4;
+    public const int OBSTACLE_radius = 3;
 
     public List<Vector3> setObstacles(List<Vector3> obstacles) // outlier filter
     {
@@ -242,9 +242,9 @@ public class GridMap
             int x = Mathf.RoundToInt(obstacle.x - 25);
             int y = Mathf.RoundToInt(obstacle.z - 50);
             int belief_itIsObstacle = 0;
-            for (int i = x - 12; i <= x + 12; i++)
+            for (int i = x - 7; i <= x + 7; i++)
             {
-                for (int j = y - 12; j <= y + 12; j++)
+                for (int j = y - 7; j <= y + 7; j++)
                 {
                     if (i >= 0 && j >= 0 && i <= X_RANGE - 1 && j <= Y_RANGE - 1)
                     {
@@ -257,7 +257,7 @@ public class GridMap
                     //demoGraph.drawPoint(i + 25, j + 50, OpenCvSharp.Scalar.LightGreen, 1);
                 }
             }
-            if (belief_itIsObstacle >= 120) // more than 180 grids are obstacle in neigbour, so it is an inlier
+            if (belief_itIsObstacle >= 70) // more than 70 grids are obstacle, it is an inlier
             {
                 //Debug.Log(belief_itIsObstacle);
                 inliers.Add(obstacle);
@@ -306,7 +306,7 @@ public class GridMap
                     int col = i;
                     int row = j;
                     (col, row) = robustCheck(col, row);
-                    if(map[col, row] == POSSIBLE_OBSTACLE)
+                    if(map[col, row] == POSSIBLE_OBSTACLE || map[col, row] == OBSTACLE)
                     {
                         map[col, row] = OBSTACLE;
                         demoGraph.drawObstacle(x + 25, y + 50);
@@ -314,7 +314,7 @@ public class GridMap
                     else
                     {
                         map[col, row] = POSSIBLE_OBSTACLE;
-                        //demoGraph.drawPossibleObstacle(x + 25, y + 50);
+                        demoGraph.drawPossibleObstacle(x + 25, y + 50);
                     }
                 }
             }
@@ -410,7 +410,7 @@ public class GridMap
         }
         if (demoGraph.checkWall(x1 + 25, y1 + 50, x2 + 25, y2 + 50) == false) // for test
         {
-            return false;
+            return true;
         }
         return false;
     }

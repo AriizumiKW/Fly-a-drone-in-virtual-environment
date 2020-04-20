@@ -116,8 +116,8 @@ public class MapBuilder : MonoBehaviour
             {
                 return;
             }
-            distance1 -= 5.0f;
-            distance2 -= 5.0f; // increase robust
+            distance1 -= 8.0f;
+            distance2 -= 8.0f; // increase robust
             if(distance1 > EFFECTIVE_DISTANCE)
             {
                 distance1 = EFFECTIVE_DISTANCE;
@@ -174,6 +174,12 @@ public class MapBuilder : MonoBehaviour
     public bool ifMeetAnObstacleAlongThisWay(float oriX, float oriY, float endX, float endY)
     {
         return map.ifMeetAnObstacleAlongThisWay(oriX, oriY, endX, endY);
+        /*
+        bool b = map.ifMeetAnObstacleAlongThisWay(oriX, oriY, endX, endY);
+        b = b || map.ifMeetAnObstacleAlongThisWay(oriX + 2, oriY, endX + 2, endY);
+        b = b || map.ifMeetAnObstacleAlongThisWay(oriX, oriY + 2, endX, endY + 2);
+        return b;
+        */
     }
 
     public bool ifThisLineIsChecked(Vector3 beforePosition, Vector3 afterPosition)

@@ -28,7 +28,7 @@ public class OpenCVDemo : MonoBehaviour
         Mat upper = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
         Mat buttom = new Mat(350, 450, MatType.CV_8UC3, Scalar.LightGray);
         //Mat result = mergeImageLayer(buttom, upper);
-        //Cv2.ImWrite(Application.persistentDataPath + "/fuck.png", result);
+        //Cv2.ImWrite(Application.persistentDataPath + "/gshsrttjj.png", result);
     }
 
     private Mat mergeImageLayer(Mat buttomLayer, Mat upperLayer)

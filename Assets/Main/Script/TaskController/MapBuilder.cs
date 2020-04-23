@@ -22,100 +22,18 @@ public class MapBuilder : MonoBehaviour
         map.setAnObstacle(x, y);
     }
 
-    private List<Vector3> smoothObstacles(List<Vector3> _endPoints)
-    {
-        if(_endPoints.Count <= 1)
-        {
-            return _endPoints;
-        }
-        float y_variance = 0;
-        float x_variance = 0;
-        float x_max = _endPoints[0].x;
-        float x_min = _endPoints[0].x;
-        float y_max = _endPoints[0].z;
-        float y_min = _endPoints[0].z;
-        float x_mean = 0;
-        float y_mean = 0;
-        int counter = 0; // how many points are vaild
-
-        foreach(Vector3 point in _endPoints)
-        {
-            if(point.x == DistanceCounter.INVALID_DISTANCE || point.z == DistanceCounter.INVALID_DISTANCE)
-            {
-                continue;
-            }
-            x_mean += point.x;
-            y_mean += point.z;
-            counter++;
-            if(point.x > x_max)
-            {
-                x_max = point.x;
-            }
-            else if(point.x < x_min)
-            {
-                x_min = point.x;
-            }
-            if(point.z > y_max)
-            {
-                y_max = point.z;
-            }
-            else if(point.z < y_min)
-            {
-                y_min = point.z;
-            }
-        }
-        x_mean /= counter;
-        y_mean /= counter;
-        foreach(Vector3 point in _endPoints)
-        {
-            if (point.x == DistanceCounter.INVALID_DISTANCE || point.z == DistanceCounter.INVALID_DISTANCE)
-            {
-                continue;
-            }
-            x_variance += Mathf.Pow(point.x - x_mean, 2);
-            y_variance += Mathf.Pow(point.z - y_mean, 2);
-        }
-        x_variance -= Mathf.Pow(x_max - x_mean, 2); // get rid of max and min while counting variance
-        x_variance -= Mathf.Pow(x_min - x_mean, 2);
-        y_variance -= Mathf.Pow(y_max - y_mean, 2);
-        y_variance -= Mathf.Pow(y_min - y_mean, 2);
-
-        List<Vector3> pointsAfterSmooth = new List<Vector3>(); 
-        if (x_variance > y_variance) // it should be horizontal wall
-        {
-            foreach(Vector3 point in _endPoints)
-            {
-                if (point.x == DistanceCounter.INVALID_DISTANCE || point.z == DistanceCounter.INVALID_DISTANCE)
-                {
-                    continue;
-                }
-                pointsAfterSmooth.Add(new Vector3(point.x, 0, y_mean));
-            }
-        }
-        else // it should be vertical wall
-        {
-            foreach (Vector3 point in _endPoints)
-            {
-                if (point.x == DistanceCounter.INVALID_DISTANCE || point.z == DistanceCounter.INVALID_DISTANCE)
-                {
-                    continue;
-                }
-                pointsAfterSmooth.Add(new Vector3(x_mean, 0, point.z));
-            }
-        }
-        return pointsAfterSmooth;
-    }
-
     public void updateMap(float[] distances, float currOrientation, Vector3 currPosition)
     {
         for (int i = 1; i <= 7; i++)
         {
             float distance1 = distances[i - 1];
             float distance2 = distances[i];
+            /*
             if(distance1 == DistanceCounter.INVALID_DISTANCE || distance2 == DistanceCounter.INVALID_DISTANCE)
             {
                 return;
             }
+            */
             distance1 -= 8.0f;
             distance2 -= 8.0f; // increase robust
             if(distance1 > EFFECTIVE_DISTANCE)
@@ -147,23 +65,11 @@ public class MapBuilder : MonoBehaviour
                 Vector3 endPoint = currPosition + direction * distances[i - 1];
                 endPoints.Add(endPoint);
                 //setAnObstacle(endPoint);
+                demoGraph.drawPoint((int)endPoint.x, (int)endPoint.z, OpenCvSharp.Scalar.Yellow, 3);
             }
         }
 
-        //Debug.Log("distance:" + string.Join(" ", distances));
-        //Debug.Log("before:" + string.Join(" ", endPoints));
-        //endPoints = smoothObstacles(endPoints); // enable smooth
-        //Debug.Log("after:" + string.Join(" ", endPoints));
         List<Vector3> inliers = map.setObstacles(endPoints); // outliers filter
-        /*
-        for(int i=1; i<inliers.Count; i++)
-        {
-            Vector3 vertex1 = inliers[i - 1];
-            demoGraph.drawPoint((int)vertex1.x, (int)vertex1.z,OpenCvSharp.Scalar.Red, 1);
-            Vector3 vertex2 = inliers[i];
-            map.setCheckedArea(currPosition, vertex1, vertex2);
-        }
-        */
     }
 
     public void resetMap()

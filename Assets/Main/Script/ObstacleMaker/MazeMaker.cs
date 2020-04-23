@@ -22,12 +22,6 @@ public class MazeMaker : MonoBehaviour
         resetMaze();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private int getNodeID(int rowNum, int columnNum)
     {
         return (rowNum - 1) * 9 + columnNum;
@@ -125,7 +119,15 @@ public class MazeMaker : MonoBehaviour
 
         foreach (Transform child in children)
         {
-            child.gameObject.SetActive(true);
+            if(child.position.x == 75.0f && child.position.z == 75.0f) // (75, 75) wall sometimes bring an error
+            {
+                child.gameObject.SetActive(false);
+                //Debug.Log(child.gameObject.name);
+            }
+            else
+            {
+                child.gameObject.SetActive(true);
+            }
         }
 
         walls.Clear();

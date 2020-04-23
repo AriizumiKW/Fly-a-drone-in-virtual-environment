@@ -10,6 +10,7 @@ public class GridMap
     public const int CHECKED_AREA_EDGE = 3;
     public const int OBSTACLE = 4;
     public const int POSSIBLE_OBSTACLE = 5; // probably there is an obstacle, but the belief is less than the case that we can ensure
+    public const int MAYBE_OBSTACLE = 2;
     /*
      * We need to double check a grid if it is checked or if it is an obstacle.
      * It is to avoid outliers as far as possible.
@@ -200,7 +201,8 @@ public class GridMap
     //public const int TEMP_possible_checked_before = 7;
     public const int TEMP_unlabel_before = 8;
     public const int TEMP_obstacle_before = 9; 
-    public const int TEMP_possible_obstacle_before = 10; // used to recover the state before
+    public const int TEMP_possible_obstacle_before = 10;
+    public const int TEMP_maybe_obstacle_before = 10;// used to recover the state before
     public const int OBSTACLE_radius = 3;
 
     public List<Vector3> setObstacles(List<Vector3> obstacles) // outlier filter
@@ -233,6 +235,10 @@ public class GridMap
                     {
                         map[col, row] = TEMP_checked_before;
                     }
+                    else if(map[col, row] == MAYBE_OBSTACLE)
+                    {
+                        map[col, row] = TEMP_maybe_obstacle_before;
+                    }
                 }
             }
         }
@@ -257,7 +263,7 @@ public class GridMap
                     //demoGraph.drawPoint(i + 25, j + 50, OpenCvSharp.Scalar.LightGreen, 1);
                 }
             }
-            if (belief_itIsObstacle >= 70) // more than 70 grids are obstacle, it is an inlier
+            if (belief_itIsObstacle >= 40) // more than 40 grids are obstacle, it is an inlier
             {
                 //Debug.Log(belief_itIsObstacle);
                 inliers.Add(obstacle);
@@ -290,6 +296,10 @@ public class GridMap
                     else if (map[col, row] == TEMP_checked_before)
                     {
                         map[col, row] = CHECKED;
+                    }
+                    else
+                    {
+                        map[col, row] = MAYBE_OBSTACLE;
                     }
                 }
             }
@@ -337,7 +347,7 @@ public class GridMap
         fillTheTrianglarArea(mapCopy);
     }
 
-    public bool ifMeetAnObstacleAlongThisWay(float currX, float currZ, float destX, float destZ)
+    public bool ifMeetAnObstacleAlongThisWay(float currX, float currZ, float destX, float destZ) // feasible condition-1
     {
         float x1 = Mathf.Round(currX - 25);
         float y1 = Mathf.Round(currZ - 50);
@@ -415,7 +425,7 @@ public class GridMap
         return false;
     }
 
-    public bool ifThisLineIsChecked(float _x1, float _y1, float _x2, float _y2)
+    public bool ifThisLineIsChecked(float _x1, float _y1, float _x2, float _y2) // feasible condition-2
     {
         float x1 = Mathf.Round(_x1 - 25);
         float y1 = Mathf.Round(_y1 - 50);
@@ -450,14 +460,14 @@ public class GridMap
         int x = Mathf.RoundToInt(start.x);
         int y = Mathf.RoundToInt(start.y);
         (x, y) = robustCheck(x, y);
-        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE)
+        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE || map[x, y] == MAYBE_OBSTACLE)
         {
             return false;
         }
         x = Mathf.RoundToInt(end.x);
         y = Mathf.RoundToInt(end.y);
         (x, y) = robustCheck(x, y);
-        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE)
+        if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE || map[x, y] == MAYBE_OBSTACLE)
         {
             return false;
         }
@@ -481,7 +491,7 @@ public class GridMap
             x = Mathf.RoundToInt(start.x);
             y = Mathf.RoundToInt(start.y);
             (x, y) = robustCheck(x, y);
-            if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE)
+            if (map[x, y] == UNLABEL || map[x, y] == OBSTACLE || map[x, y] == POSSIBLE_OBSTACLE || map[x, y] == MAYBE_OBSTACLE)
             {
                 return false;
             }
@@ -490,7 +500,7 @@ public class GridMap
                 int x0 = Mathf.RoundToInt(start.x);
                 int y0 = Mathf.RoundToInt(k);
                 (x0, y0) = robustCheck(x0, y0);
-                if (map[x0, y0] == UNLABEL || map[x0, y0] == OBSTACLE || map[x0, y0] == POSSIBLE_OBSTACLE)
+                if (map[x0, y0] == UNLABEL || map[x0, y0] == OBSTACLE || map[x0, y0] == POSSIBLE_OBSTACLE || map[x, y] == MAYBE_OBSTACLE)
                 {
                     return false;
                 }

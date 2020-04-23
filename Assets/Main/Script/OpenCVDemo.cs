@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 public class OpenCVDemo : MonoBehaviour
 {
+    // used for testing my algorithm, it is nonsense
     private MapBuilder mb;
     public InterfaceManager ui;
 

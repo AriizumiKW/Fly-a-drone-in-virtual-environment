@@ -83,7 +83,7 @@ public class RRTBuilder : MonoBehaviour
                         {
                             (RRTNode before, Vector3 after) = node.Value;
                             var next = node.Next;
-                            if (map.ifThisPointIsChecked(after))
+                            if (map.ifThisPointIsChecked(after)) // so the drone tend to fly to unchecked area
                             {
                                 requestList.Remove(node);
                             }

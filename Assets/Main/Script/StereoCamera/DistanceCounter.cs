@@ -10,8 +10,8 @@ public class DistanceCounter : MonoBehaviour
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
     public const int SCREEN_WIDTH = 800;
     public const int SCREEN_HEIGHT = 450;
-    public const int INVALID_DISPARITY = 1000; // an impossible value, means this disparity maybe invalid, so discard the result
-    public const int INVALID_DISTANCE = 1000;
+    //public const int INVALID_DISPARITY = 1000; // an impossible value, means this disparity maybe invalid, so discard the result
+    //public const int INVALID_DISTANCE = 1000;
     public float COEFF = 0.0233f; // coefficient
     public int test = 0; // only used to test, doesnt make sense
     public InterfaceManager uiManager;
@@ -44,22 +44,20 @@ public class DistanceCounter : MonoBehaviour
         //drawLineInUnity(distance);
         if (leftAlready && rightAlready)
         {
-            bool vaild = State.isEqual(leftState, rightState);
-            if (vaild)
+            //if (vaild)
+            leftAlready = false;
+            rightAlready = false;
+            cutLeftImageToEightParts();
+            findEplilines();
+            double[] disparities = findDisparity();
+            //Debug.Log(string.Join(" ", disparities));
+            currentState = new State(this.transform.position, this.transform.eulerAngles.y);
+            for (int i = 0; i <= 7; i++)
             {
-                leftAlready = false;
-                rightAlready = false;
-                cutLeftImageToEightParts();
-                findEplilines();
-                double[] disparities = findDisparity();
-                //Debug.Log(string.Join(" ", disparities));
-                currentState = new State(this.transform.position, this.transform.eulerAngles.y);
-                for(int i = 0; i <= 7; i++)
-                {
-                    distances[i] = calculateDistance(disparities[i], i + 1);
-                }
-                drawLineInUnity(distances[test], test+1);
+                distances[i] = calculateDistance(disparities[i], i + 1);
             }
+            drawLineInUnity(distances[test], test + 1);
+            /*
             else
             {
                 for (int i = 0; i <= 7; i++)
@@ -67,7 +65,8 @@ public class DistanceCounter : MonoBehaviour
                     distances[i] = INVALID_DISTANCE;
                 }
             }
-            
+            */
+
         }
     }
     private void initFundMatrix() // initialize fundamental matrix
@@ -187,6 +186,7 @@ public class DistanceCounter : MonoBehaviour
         double disparity7 = findMatchPoint(part7, part7_epliline).Item1 - part7_centre.At<Point3d>(0).X;
         double disparity8 = findMatchPoint(part8, part8_epliline).Item1 - part8_centre.At<Point3d>(0).X;
         double[] array = { disparity1, disparity2, disparity3, disparity4, disparity5, disparity6, disparity7, disparity8 };
+        /*
         for(int i=0; i<array.Length; i++)
         {
             if(array[i] >= SCREEN_WIDTH / 10)
@@ -194,6 +194,7 @@ public class DistanceCounter : MonoBehaviour
                 array[i] = INVALID_DISPARITY;
             }
         }
+        */
         return array;
     }
 
@@ -230,10 +231,12 @@ public class DistanceCounter : MonoBehaviour
 
     private float calculateDistance(double disparity, int whichPart)
     {
+        /*
         if(disparity == INVALID_DISPARITY)
         {
             return INVALID_DISTANCE;
         }
+        */
         float angle = whichPart * FIELD_OF_VIEW / 8 - (FIELD_OF_VIEW / 2) - (FIELD_OF_VIEW / 16) + 90;
         float distance = COEFF * FOCAL_LENGTH * BASELINE_LENGTH / (float)disparity;
         return Mathf.Abs(distance / Mathf.Sin(angle * Mathf.PI / 180));

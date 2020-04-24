@@ -249,7 +249,7 @@ public class DistanceCounter : MonoBehaviour
         Vector3 laserPosition = this.transform.position + new Vector3(0, 0, 1);
         Vector3 direction = Quaternion.AngleAxis(angle, new Vector3(0, 1, 0)) * this.transform.forward;
         Vector3 endPoint = laserPosition + direction * distance;
-        Debug.DrawLine(laserPosition, endPoint);
+        //Debug.DrawLine(laserPosition, endPoint);
     }
 
     private void outputImageFile(Mat image, Point center, int type)// use for testing only

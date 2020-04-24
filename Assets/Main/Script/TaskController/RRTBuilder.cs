@@ -231,11 +231,11 @@ public class RRTBuilder : MonoBehaviour
         return afterPosition;
     }
 
-    private float thresholdFunction(int x)
+    private float thresholdFunction(int x) // if the number of nodes near new node is bigger than 15, the probability will only be 0.04, otherwise p = -0.06x + 1
     {
         if(x >= 15)
         {
-            return 0.1f;
+            return 0.04f;
         }
         else
         {

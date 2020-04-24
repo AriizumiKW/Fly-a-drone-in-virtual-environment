@@ -7,7 +7,7 @@ public class PowerfulEngine : MonoBehaviour
 {
     // This object: Drone
 
-    public float SPEED = 10.0f;
+    public float SPEED = 20.0f;
     public InterfaceManager uiManager;
     private Rigidbody physics;
     private TiltSimulator flyPose;

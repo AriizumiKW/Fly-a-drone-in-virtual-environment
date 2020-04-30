@@ -74,6 +74,7 @@
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonBackToGameInESCMenu.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonBackToMenuInESCMenu.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonExit.cs" />
+    <Compile Include="Assets\Main\Script\InterfaceManager\ButtonRecord.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonSetting.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ButtonStart.cs" />
     <Compile Include="Assets\Main\Script\InterfaceManager\ChoiceboxSky.cs" />

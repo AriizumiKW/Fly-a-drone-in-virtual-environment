@@ -108,7 +108,7 @@ public class PowerfulEngine : MonoBehaviour
     private float calculateTiltedAngle()
     {
         // simulate tilted and return the value of angle
-        float theta = Mathf.Atan((float)( 9.8 / propellerAcce)); // accelaration of gravity is 9.8
+        float theta = Mathf.Atan((float)(propellerAcce/9.8)); // accelaration of gravity is 9.8
         return theta;
     }
 

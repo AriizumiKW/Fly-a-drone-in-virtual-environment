@@ -6,22 +6,23 @@ public class GridMap
 {
     public const int UNLABEL = 0;
     public const int CHECKED = 1;
-    //public const int POSSIBLE_CHECKED = 2;
-    public const int CHECKED_AREA_EDGE = 3;
-    public const int OBSTACLE = 4;
-    public const int POSSIBLE_OBSTACLE = 5; // probably there is an obstacle, but the belief is less than the case that we can ensure
+    public const int CHECKED_AREA_EDGE = 2;
+    public const int OBSTACLE = 3;
+    public const int POSSIBLE_OBSTACLE = 4; // probably there is an obstacle
+    private int[,] map; // a 2d array, represent the environment
+
+    public const int X_RANGE = 450; // x-coor: 25-475
+    public const int Y_RANGE = 350; // y-coor: 50-400
+    private RRTDrawer demoGraph;
+
     /*
      * We need to double check a grid if it is checked or if it is an obstacle.
      * It is to avoid outliers as far as possible.
      * 
      * e.g.
-     * DistanceCounter find there is a wall. Then mark it with "5".
-     * If DistanceCounter find there is a wall twice, Then mark it with "4". We ensure it isnt an outlier.
+     * DistanceCounter find there is a wall. Then mark it with "4".
+     * If DistanceCounter find there is a wall twice, Then mark it with "3". We ensure it isnt an outlier.
      */
-    public const int X_RANGE = 450; // x-coor: 25-475
-    public const int Y_RANGE = 350; // y-coor: 50-400
-    private int[,] map;
-    private RRTDrawer demoGraph;
 
     public GridMap()
     {

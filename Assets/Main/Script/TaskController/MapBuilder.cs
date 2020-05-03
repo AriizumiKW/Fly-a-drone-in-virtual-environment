@@ -28,14 +28,14 @@ public class MapBuilder : MonoBehaviour
         {
             float distance1 = distances[i - 1];
             float distance2 = distances[i];
-            /*
+            
             if(distance1 == DistanceCounter.INVALID_DISTANCE || distance2 == DistanceCounter.INVALID_DISTANCE)
             {
                 return;
             }
-            */
-            distance1 -= 8.0f;
-            distance2 -= 8.0f; // increase robust
+            
+            distance1 -= 5.0f;
+            distance2 -= 5.0f; // increase robust
             if(distance1 > EFFECTIVE_DISTANCE)
             {
                 distance1 = EFFECTIVE_DISTANCE;

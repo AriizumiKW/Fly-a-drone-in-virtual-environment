@@ -10,8 +10,8 @@ public class DistanceCounter : MonoBehaviour
     public const float BASELINE_LENGTH = 1000.0f; // millimeters
     public const int SCREEN_WIDTH = 800;
     public const int SCREEN_HEIGHT = 450;
-    //public const int INVALID_DISPARITY = 1000; // an impossible value, means this disparity maybe invalid, so discard the result
-    //public const int INVALID_DISTANCE = 1000;
+    public const int INVALID_DISPARITY = 1000; // an impossible value, means this disparity maybe invalid, so discard the result
+    public const int INVALID_DISTANCE = 1000;
     public float COEFF = 0.0233f; // coefficient
     public int test = 0; // only used to test, doesnt make sense
     public InterfaceManager uiManager;
@@ -44,6 +44,15 @@ public class DistanceCounter : MonoBehaviour
         //drawLineInUnity(distance);
         if (leftAlready && rightAlready)
         {
+            if(! State.isEqual(leftState, rightState))
+            {
+                for (int i = 0; i <= 7; i++)
+                {
+                    distances[i] = INVALID_DISTANCE;
+                }
+            }
+            //outputImageFile(leftImg, new Point(0, 0), 1);
+            //outputImageFile(rightImg, new Point(0, 0), 2);
             //if (vaild)
             leftAlready = false;
             rightAlready = false;
@@ -126,8 +135,8 @@ public class DistanceCounter : MonoBehaviour
     Mat part8_epliline;
     private void cutLeftImageToEightParts() // step1, choose the centre region of left image, cut it into 8 equal parts
     {
-        int topHeight = (int)(0.45 * leftImg.Rows);
-        int buttomHeight = (int)(0.55 * leftImg.Rows);
+        int topHeight = (int)(0.475 * leftImg.Rows);
+        int buttomHeight = (int)(0.525 * leftImg.Rows);
         Mat leftImg_roi = leftImg.RowRange(topHeight, buttomHeight); // our region of interest, which is the centre region of left image
         part1 = leftImg_roi.ColRange((int)(0.1 * leftImg.Cols), (int)(0.2 * leftImg.Cols));
         part2 = leftImg_roi.ColRange((int)(0.2 * leftImg.Cols), (int)(0.3 * leftImg.Cols));
@@ -256,7 +265,7 @@ public class DistanceCounter : MonoBehaviour
     {
         // type=1, left image. type=2, right image
         Mat image2 = image;
-        Cv2.Circle(image2, center, 2, new Scalar(0, 255, 0));
+        //Cv2.Circle(image2, center, 2, new Scalar(0, 255, 0));
 
         string filename;
         if (type == 1)

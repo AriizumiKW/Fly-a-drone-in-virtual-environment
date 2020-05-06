@@ -44,6 +44,7 @@ public class DistanceCounter : MonoBehaviour
         //drawLineInUnity(distance);
         if (leftAlready && rightAlready)
         {
+            
             if(! State.isEqual(leftState, rightState))
             {
                 for (int i = 0; i <= 7; i++)
@@ -51,6 +52,7 @@ public class DistanceCounter : MonoBehaviour
                     distances[i] = INVALID_DISTANCE;
                 }
             }
+            
             //outputImageFile(leftImg, new Point(0, 0), 1);
             //outputImageFile(rightImg, new Point(0, 0), 2);
             //if (vaild)

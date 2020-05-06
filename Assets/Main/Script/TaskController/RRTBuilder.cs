@@ -83,21 +83,13 @@ public class RRTBuilder : MonoBehaviour
                         {
                             (RRTNode before, Vector3 after) = node.Value;
                             var next = node.Next;
-                            if (map.ifThisPointIsChecked(after)) // so the drone tend to fly to unchecked area
-                            {
-                                requestList.Remove(node);
-                            }
-                            node = next;
-                        }
-                        for (var item = requestList.First; item != null; item = item.Next)
-                        {
-                            (RRTNode before, Vector3 after) = item.Value;
                             float distance = before.distanceTo(this.transform.position.x, this.transform.position.z);
-                            if(distance < minDistance)
+                            if (distance < minDistance)
                             {
                                 minDistance = distance;
                                 nearestNodeInRequestList = before;
                             }
+                            node = next;
                         }
                         requestList.Clear();
                         letDroneFly(nearestNode, nearestNodeInRequestList);
@@ -129,25 +121,24 @@ public class RRTBuilder : MonoBehaviour
                     minDisNodeToAfterPosition = node;
                 }
             }
-            //demoGraph.drawPoint((int)afterPosition.x, (int)afterPosition.z);
             Vector3 minDisNodeToAfterPositionExpressedByVector3 = new Vector3(minDisNodeToAfterPosition.X(), 0, minDisNodeToAfterPosition.Z());
-            if (!map.ifMeetAnObstacleAlongThisWay(minDisNodeToAfterPositionExpressedByVector3.x, minDisNodeToAfterPositionExpressedByVector3.z, afterPosition.x, afterPosition.z)) // feasible condition
+            if (!map.ifMeetAnObstacleAlongThisWay(minDisNodeToAfterPositionExpressedByVector3.x, minDisNodeToAfterPositionExpressedByVector3.z, 
+                afterPosition.x, afterPosition.z)) // feasible condition
             {
                 if (map.ifThisLineIsChecked(minDisNodeToAfterPositionExpressedByVector3, afterPosition)) // we can go this way, just add it into RRT
                 {
                     float randomNum = UnityEngine.Random.Range(0, 1.0f);
                     int howManyPointInThisArea = findHowManyNodesInThisArea(afterPosition);
                     float threshold = thresholdFunction(howManyPointInThisArea);
-                    if(randomNum <= threshold)
+                    if(randomNum <= threshold) // neighborhood checking
                     {
                         RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNodeToAfterPosition);
                         theRRT.Add(newNode);
                         nodesCountPlusOne(afterPosition);
-                        //demoGraph.drawPoint((int)rp.Item1, (int)rp.Item2, Scalar.Red, 2);
                         demoGraph.addNode(newNode);
                     }
                 }
-                else
+                else // can not go, add it into requestlist
                 {
                     requestList.AddLast((minDisNode, afterPosition));
                 }
@@ -159,16 +150,15 @@ public class RRTBuilder : MonoBehaviour
                     float randomNum = UnityEngine.Random.Range(0, 1.0f);
                     int howManyPointInThisArea = findHowManyNodesInThisArea(afterPosition);
                     float threshold = thresholdFunction(howManyPointInThisArea);
-                    if (randomNum <= threshold)
+                    if (randomNum <= threshold) // neighborhood checking
                     {
                         RRTNode newNode = new RRTNode(afterPosition.x, afterPosition.z, minDisNodeToAfterPosition);
                         theRRT.Add(newNode);
                         nodesCountPlusOne(afterPosition);
-                        //demoGraph.drawPoint((int)rp.Item1, (int)rp.Item2, Scalar.Red, 2);
                         demoGraph.addNode(newNode);
                     }
                 }
-                else
+                else // can not go, add it into requestlist
                 {
                     requestList.AddLast((minDisNode, afterPosition));
                 }

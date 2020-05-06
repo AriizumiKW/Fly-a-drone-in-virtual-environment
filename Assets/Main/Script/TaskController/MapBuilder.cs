@@ -64,7 +64,6 @@ public class MapBuilder : MonoBehaviour
                 Vector3 direction = Quaternion.AngleAxis(sightAngle, new Vector3(0, 1, 0)) * this.transform.forward;
                 Vector3 endPoint = currPosition + direction * distances[i - 1];
                 endPoints.Add(endPoint);
-                //setAnObstacle(endPoint);
                 demoGraph.drawPoint((int)endPoint.x, (int)endPoint.z, OpenCvSharp.Scalar.Yellow, 3);
             }
         }

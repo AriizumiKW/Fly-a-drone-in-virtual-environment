@@ -185,5 +185,6 @@ public class MazeMaker : MonoBehaviour
                 demoGraph.drawWall(info.Item1, info.Item2, info.Item3, info.Item4);
             }
         }
+        demoGraph.drawLine(75, 50, 75, 100, OpenCvSharp.Scalar.LightGray); // manually delete vertical-wall (0,0)
     }
 }

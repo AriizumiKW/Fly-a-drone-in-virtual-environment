@@ -243,9 +243,9 @@ public class GridMap
             int x = Mathf.RoundToInt(obstacle.x - 25);
             int y = Mathf.RoundToInt(obstacle.z - 50);
             int belief_itIsObstacle = 0;
-            for (int i = x - 7; i <= x + 7; i++)
+            for (int i = x - 5; i <= x + 5; i++)
             {
-                for (int j = y - 7; j <= y + 7; j++)
+                for (int j = y - 5; j <= y + 5; j++)
                 {
                     if (i >= 0 && j >= 0 && i <= X_RANGE - 1 && j <= Y_RANGE - 1)
                     {
@@ -255,12 +255,10 @@ public class GridMap
                             belief_itIsObstacle += 1;
                         }
                     }
-                    //demoGraph.drawPoint(i + 25, j + 50, OpenCvSharp.Scalar.LightGreen, 1);
                 }
             }
             if (belief_itIsObstacle >= 40) // more than 40 grids are obstacle, it is an inlier
             {
-                //Debug.Log(belief_itIsObstacle);
                 inliers.Add(obstacle);
             }
         }
